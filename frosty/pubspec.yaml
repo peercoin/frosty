@@ -1,0 +1,19 @@
+name: frosty
+description: FROST threshold Schnorr signatures using an underlying Rust library
+version: 1.0.0
+repository: https://github.com/peercoin/frosty
+
+environment:
+  sdk: ^3.2.0
+
+dependencies:
+  ffi: ^2.1.0
+  flutter_rust_bridge: ^1.82.4
+  path: ^1.8.3
+  coinlib: ^2.0.0-rc.9
+
+dev_dependencies:
+  # FRB requires v9 or it fails
+  ffigen: ^9.0.0
+  lints: ^3.0.0
+  test: ^1.24.0
