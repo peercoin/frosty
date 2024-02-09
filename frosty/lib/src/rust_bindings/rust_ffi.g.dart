@@ -27,9 +27,60 @@ abstract class FrostyRust {
 
   FlutterRustBridgeTaskConstMeta get kIdentifierToBytesConstMeta;
 
+  (
+    DkgRound1SecretPackage,
+    DkgRound1Package
+  ) dkgPart1({required FrostIdentifier identifier, required int maxSigners, required int minSigners, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kDkgPart1ConstMeta;
+
+  DkgRound1Package publicCommitmentFromBytes({required Uint8List bytes, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kPublicCommitmentFromBytesConstMeta;
+
+  Uint8List publicCommitmentToBytes({required DkgRound1Package commitment, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kPublicCommitmentToBytesConstMeta;
+
+  DropFnType get dropOpaqueDkgRound1Package;
+  ShareFnType get shareOpaqueDkgRound1Package;
+  OpaqueTypeFinalizer get DkgRound1PackageFinalizer;
+
+  DropFnType get dropOpaqueDkgRound1SecretPackage;
+  ShareFnType get shareOpaqueDkgRound1SecretPackage;
+  OpaqueTypeFinalizer get DkgRound1SecretPackageFinalizer;
+
   DropFnType get dropOpaqueFrostIdentifier;
   ShareFnType get shareOpaqueFrostIdentifier;
   OpaqueTypeFinalizer get FrostIdentifierFinalizer;
+}
+
+@sealed
+class DkgRound1Package extends FrbOpaque {
+  final FrostyRust bridge;
+  DkgRound1Package.fromRaw(int ptr, int size, this.bridge) : super.unsafe(ptr, size);
+  @override
+  DropFnType get dropFn => bridge.dropOpaqueDkgRound1Package;
+
+  @override
+  ShareFnType get shareFn => bridge.shareOpaqueDkgRound1Package;
+
+  @override
+  OpaqueTypeFinalizer get staticFinalizer => bridge.DkgRound1PackageFinalizer;
+}
+
+@sealed
+class DkgRound1SecretPackage extends FrbOpaque {
+  final FrostyRust bridge;
+  DkgRound1SecretPackage.fromRaw(int ptr, int size, this.bridge) : super.unsafe(ptr, size);
+  @override
+  DropFnType get dropFn => bridge.dropOpaqueDkgRound1SecretPackage;
+
+  @override
+  ShareFnType get shareFn => bridge.shareOpaqueDkgRound1SecretPackage;
+
+  @override
+  OpaqueTypeFinalizer get staticFinalizer => bridge.DkgRound1SecretPackageFinalizer;
 }
 
 @sealed
@@ -137,6 +188,86 @@ class FrostyRustImpl implements FrostyRust {
         ],
       );
 
+  (
+    DkgRound1SecretPackage,
+    DkgRound1Package
+  ) dkgPart1({required FrostIdentifier identifier, required int maxSigners, required int minSigners, dynamic hint}) {
+    var arg0 = _platform.api2wire_FrostIdentifier(identifier);
+    var arg1 = api2wire_u16(maxSigners);
+    var arg2 = api2wire_u16(minSigners);
+    return _platform.executeSync(FlutterRustBridgeSyncTask(
+      callFfi: () => _platform.inner.wire_dkg_part_1(arg0, arg1, arg2),
+      parseSuccessData: _wire2api___record__DkgRound1SecretPackage_DkgRound1Package,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kDkgPart1ConstMeta,
+      argValues: [
+        identifier,
+        maxSigners,
+        minSigners
+      ],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kDkgPart1ConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "dkg_part_1",
+        argNames: [
+          "identifier",
+          "maxSigners",
+          "minSigners"
+        ],
+      );
+
+  DkgRound1Package publicCommitmentFromBytes({required Uint8List bytes, dynamic hint}) {
+    var arg0 = _platform.api2wire_uint_8_list(bytes);
+    return _platform.executeSync(FlutterRustBridgeSyncTask(
+      callFfi: () => _platform.inner.wire_public_commitment_from_bytes(arg0),
+      parseSuccessData: _wire2api_DkgRound1Package,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kPublicCommitmentFromBytesConstMeta,
+      argValues: [
+        bytes
+      ],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kPublicCommitmentFromBytesConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "public_commitment_from_bytes",
+        argNames: [
+          "bytes"
+        ],
+      );
+
+  Uint8List publicCommitmentToBytes({required DkgRound1Package commitment, dynamic hint}) {
+    var arg0 = _platform.api2wire_DkgRound1Package(commitment);
+    return _platform.executeSync(FlutterRustBridgeSyncTask(
+      callFfi: () => _platform.inner.wire_public_commitment_to_bytes(arg0),
+      parseSuccessData: _wire2api_uint_8_list,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kPublicCommitmentToBytesConstMeta,
+      argValues: [
+        commitment
+      ],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kPublicCommitmentToBytesConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "public_commitment_to_bytes",
+        argNames: [
+          "commitment"
+        ],
+      );
+
+  DropFnType get dropOpaqueDkgRound1Package => _platform.inner.drop_opaque_DkgRound1Package;
+  ShareFnType get shareOpaqueDkgRound1Package => _platform.inner.share_opaque_DkgRound1Package;
+  OpaqueTypeFinalizer get DkgRound1PackageFinalizer => _platform.DkgRound1PackageFinalizer;
+
+  DropFnType get dropOpaqueDkgRound1SecretPackage => _platform.inner.drop_opaque_DkgRound1SecretPackage;
+  ShareFnType get shareOpaqueDkgRound1SecretPackage => _platform.inner.share_opaque_DkgRound1SecretPackage;
+  OpaqueTypeFinalizer get DkgRound1SecretPackageFinalizer => _platform.DkgRound1SecretPackageFinalizer;
+
   DropFnType get dropOpaqueFrostIdentifier => _platform.inner.drop_opaque_FrostIdentifier;
   ShareFnType get shareOpaqueFrostIdentifier => _platform.inner.share_opaque_FrostIdentifier;
   OpaqueTypeFinalizer get FrostIdentifierFinalizer => _platform.FrostIdentifierFinalizer;
@@ -145,6 +276,14 @@ class FrostyRustImpl implements FrostyRust {
     _platform.dispose();
   }
 // Section: wire2api
+
+  DkgRound1Package _wire2api_DkgRound1Package(dynamic raw) {
+    return DkgRound1Package.fromRaw(raw[0], raw[1], this);
+  }
+
+  DkgRound1SecretPackage _wire2api_DkgRound1SecretPackage(dynamic raw) {
+    return DkgRound1SecretPackage.fromRaw(raw[0], raw[1], this);
+  }
 
   FrbAnyhowException _wire2api_FrbAnyhowException(dynamic raw) {
     return FrbAnyhowException(raw as String);
@@ -156,6 +295,20 @@ class FrostyRustImpl implements FrostyRust {
 
   String _wire2api_String(dynamic raw) {
     return raw as String;
+  }
+
+  (
+    DkgRound1SecretPackage,
+    DkgRound1Package
+  ) _wire2api___record__DkgRound1SecretPackage_DkgRound1Package(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      _wire2api_DkgRound1SecretPackage(arr[0]),
+      _wire2api_DkgRound1Package(arr[1]),
+    );
   }
 
   int _wire2api_u8(dynamic raw) {
@@ -187,6 +340,13 @@ class FrostyRustPlatform extends FlutterRustBridgeBase<FrostyRustWire> {
 // Section: api2wire
 
   @protected
+  wire_DkgRound1Package api2wire_DkgRound1Package(DkgRound1Package raw) {
+    final ptr = inner.new_DkgRound1Package();
+    _api_fill_to_wire_DkgRound1Package(raw, ptr);
+    return ptr;
+  }
+
+  @protected
   wire_FrostIdentifier api2wire_FrostIdentifier(FrostIdentifier raw) {
     final ptr = inner.new_FrostIdentifier();
     _api_fill_to_wire_FrostIdentifier(raw, ptr);
@@ -206,9 +366,17 @@ class FrostyRustPlatform extends FlutterRustBridgeBase<FrostyRustWire> {
   }
 // Section: finalizer
 
+  late final OpaqueTypeFinalizer _DkgRound1PackageFinalizer = OpaqueTypeFinalizer(inner._drop_opaque_DkgRound1PackagePtr);
+  OpaqueTypeFinalizer get DkgRound1PackageFinalizer => _DkgRound1PackageFinalizer;
+  late final OpaqueTypeFinalizer _DkgRound1SecretPackageFinalizer = OpaqueTypeFinalizer(inner._drop_opaque_DkgRound1SecretPackagePtr);
+  OpaqueTypeFinalizer get DkgRound1SecretPackageFinalizer => _DkgRound1SecretPackageFinalizer;
   late final OpaqueTypeFinalizer _FrostIdentifierFinalizer = OpaqueTypeFinalizer(inner._drop_opaque_FrostIdentifierPtr);
   OpaqueTypeFinalizer get FrostIdentifierFinalizer => _FrostIdentifierFinalizer;
 // Section: api_fill_to_wire
+
+  void _api_fill_to_wire_DkgRound1Package(DkgRound1Package apiObj, wire_DkgRound1Package wireObj) {
+    wireObj.ptr = apiObj.shareOrMove();
+  }
 
   void _api_fill_to_wire_FrostIdentifier(FrostIdentifier apiObj, wire_FrostIdentifier wireObj) {
     wireObj.ptr = apiObj.shareOrMove();
@@ -335,6 +503,50 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
   late final _wire_identifier_to_bytesPtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(wire_FrostIdentifier)>>('wire_identifier_to_bytes');
   late final _wire_identifier_to_bytes = _wire_identifier_to_bytesPtr.asFunction<WireSyncReturn Function(wire_FrostIdentifier)>();
 
+  WireSyncReturn wire_dkg_part_1(
+    wire_FrostIdentifier identifier,
+    int max_signers,
+    int min_signers,
+  ) {
+    return _wire_dkg_part_1(
+      identifier,
+      max_signers,
+      min_signers,
+    );
+  }
+
+  late final _wire_dkg_part_1Ptr = _lookup<ffi.NativeFunction<WireSyncReturn Function(wire_FrostIdentifier, ffi.Uint16, ffi.Uint16)>>('wire_dkg_part_1');
+  late final _wire_dkg_part_1 = _wire_dkg_part_1Ptr.asFunction<WireSyncReturn Function(wire_FrostIdentifier, int, int)>();
+
+  WireSyncReturn wire_public_commitment_from_bytes(
+    ffi.Pointer<wire_uint_8_list> bytes,
+  ) {
+    return _wire_public_commitment_from_bytes(
+      bytes,
+    );
+  }
+
+  late final _wire_public_commitment_from_bytesPtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(ffi.Pointer<wire_uint_8_list>)>>('wire_public_commitment_from_bytes');
+  late final _wire_public_commitment_from_bytes = _wire_public_commitment_from_bytesPtr.asFunction<WireSyncReturn Function(ffi.Pointer<wire_uint_8_list>)>();
+
+  WireSyncReturn wire_public_commitment_to_bytes(
+    wire_DkgRound1Package commitment,
+  ) {
+    return _wire_public_commitment_to_bytes(
+      commitment,
+    );
+  }
+
+  late final _wire_public_commitment_to_bytesPtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(wire_DkgRound1Package)>>('wire_public_commitment_to_bytes');
+  late final _wire_public_commitment_to_bytes = _wire_public_commitment_to_bytesPtr.asFunction<WireSyncReturn Function(wire_DkgRound1Package)>();
+
+  wire_DkgRound1Package new_DkgRound1Package() {
+    return _new_DkgRound1Package();
+  }
+
+  late final _new_DkgRound1PackagePtr = _lookup<ffi.NativeFunction<wire_DkgRound1Package Function()>>('new_DkgRound1Package');
+  late final _new_DkgRound1Package = _new_DkgRound1PackagePtr.asFunction<wire_DkgRound1Package Function()>();
+
   wire_FrostIdentifier new_FrostIdentifier() {
     return _new_FrostIdentifier();
   }
@@ -352,6 +564,50 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
 
   late final _new_uint_8_list_0Ptr = _lookup<ffi.NativeFunction<ffi.Pointer<wire_uint_8_list> Function(ffi.Int32)>>('new_uint_8_list_0');
   late final _new_uint_8_list_0 = _new_uint_8_list_0Ptr.asFunction<ffi.Pointer<wire_uint_8_list> Function(int)>();
+
+  void drop_opaque_DkgRound1Package(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _drop_opaque_DkgRound1Package(
+      ptr,
+    );
+  }
+
+  late final _drop_opaque_DkgRound1PackagePtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>('drop_opaque_DkgRound1Package');
+  late final _drop_opaque_DkgRound1Package = _drop_opaque_DkgRound1PackagePtr.asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  ffi.Pointer<ffi.Void> share_opaque_DkgRound1Package(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _share_opaque_DkgRound1Package(
+      ptr,
+    );
+  }
+
+  late final _share_opaque_DkgRound1PackagePtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>>('share_opaque_DkgRound1Package');
+  late final _share_opaque_DkgRound1Package = _share_opaque_DkgRound1PackagePtr.asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
+
+  void drop_opaque_DkgRound1SecretPackage(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _drop_opaque_DkgRound1SecretPackage(
+      ptr,
+    );
+  }
+
+  late final _drop_opaque_DkgRound1SecretPackagePtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>('drop_opaque_DkgRound1SecretPackage');
+  late final _drop_opaque_DkgRound1SecretPackage = _drop_opaque_DkgRound1SecretPackagePtr.asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  ffi.Pointer<ffi.Void> share_opaque_DkgRound1SecretPackage(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _share_opaque_DkgRound1SecretPackage(
+      ptr,
+    );
+  }
+
+  late final _share_opaque_DkgRound1SecretPackagePtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>>('share_opaque_DkgRound1SecretPackage');
+  late final _share_opaque_DkgRound1SecretPackage = _share_opaque_DkgRound1SecretPackagePtr.asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
 
   void drop_opaque_FrostIdentifier(
     ffi.Pointer<ffi.Void> ptr,
@@ -397,6 +653,10 @@ final class wire_uint_8_list extends ffi.Struct {
 }
 
 final class wire_FrostIdentifier extends ffi.Struct {
+  external ffi.Pointer<ffi.Void> ptr;
+}
+
+final class wire_DkgRound1Package extends ffi.Struct {
   external ffi.Pointer<ffi.Void> ptr;
 }
 

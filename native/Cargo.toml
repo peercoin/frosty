@@ -10,6 +10,7 @@ crate-type = ["staticlib", "cdylib"]
 flutter_rust_bridge_codegen = "1.82.*"
 
 [dependencies]
+rand = "0.8.4"
 anyhow = "1.0.75"
 flutter_rust_bridge = "1.82.*"
 frost-secp256k1 = "0.7.0"

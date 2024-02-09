@@ -24,27 +24,27 @@ rust.FrostIdentifier _handleGetIdentifier(rust.FrostIdentifier Function() f) {
 /// generated from strings using [fromString].
 class Identifier {
 
-  final rust.FrostIdentifier _underlying;
+  final rust.FrostIdentifier underlying;
 
   /// Creates an identifier from a non-zero 16-bit integer
-  Identifier.fromUint16(int i) : _underlying = _handleGetIdentifier(
+  Identifier.fromUint16(int i) : underlying = _handleGetIdentifier(
     () => rust.rustApi.identifierFromU16(i: i),
   );
 
   /// Creates an identifier from an arbitrary string
-  Identifier.fromString(String s) : _underlying = _handleGetIdentifier(
+  Identifier.fromString(String s) : underlying = _handleGetIdentifier(
     () => rust.rustApi.identifierFromString(s: s),
   );
 
   /// Creates an identifier from a 32-byte non-zero secp256k1 scalar in
   /// big-endian
-  Identifier.fromBytes(Uint8List data) : _underlying = _handleGetIdentifier(
+  Identifier.fromBytes(Uint8List data) : underlying = _handleGetIdentifier(
     () => rust.rustApi.identifierFromBytes(bytes: data),
   );
 
   /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
   Uint8List toBytes() => rust.rustApi.identifierToBytes(
-    identifier: _underlying,
+    identifier: underlying,
   );
 
 }
