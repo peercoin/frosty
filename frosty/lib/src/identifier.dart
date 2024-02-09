@@ -21,7 +21,7 @@ rust.FrostIdentifier _handleGetIdentifier(rust.FrostIdentifier Function() f) {
 ///
 /// The FROST spec specifies that identifiers should be in the range 1 to n, but
 /// any set of unique non-zero secp256k1 scalars can be accepted and may be
-/// generated from strings using [fromString].
+/// generated from strings using [fromString()].
 class Identifier {
 
   final rust.FrostIdentifier underlying;
