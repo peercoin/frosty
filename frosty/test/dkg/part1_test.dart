@@ -2,7 +2,7 @@ import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("DkgRound1", () {
+  group("DkgPart1", () {
 
     late Identifier id;
     setUp(() async {
@@ -12,14 +12,14 @@ void main() {
 
     test("is different each time", () {
       expect(
-        DkgRound1(identifier: id, threshold: 2, n: 3).public.toBytes(),
-        isNot(DkgRound1(identifier: id, threshold: 2, n: 3).public.toBytes()),
+        DkgPart1(identifier: id, threshold: 2, n: 3).public.toBytes(),
+        isNot(DkgPart1(identifier: id, threshold: 2, n: 3).public.toBytes()),
       );
     });
 
     test("commitment scales with threshold", () {
 
-      int getLen(int t, int n) => DkgRound1(
+      int getLen(int t, int n) => DkgPart1(
         identifier: id, threshold: t, n: n,
       ).public.toBytes().length;
 
@@ -34,7 +34,7 @@ void main() {
 
     test("invalid round 1", () {
       void expectError(int threshold, int n) => expect(
-        () => DkgRound1(identifier: id, threshold: threshold, n: n),
+        () => DkgPart1(identifier: id, threshold: threshold, n: n),
         throwsArgumentError,
       );
       expectError(1, 2);

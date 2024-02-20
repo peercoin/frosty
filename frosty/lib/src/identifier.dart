@@ -1,3 +1,4 @@
+import "package:coinlib/coinlib.dart";
 import "package:flutter_rust_bridge/flutter_rust_bridge.dart";
 import "rust_bindings/rust_api.dart" as rust;
 
@@ -22,9 +23,13 @@ rust.FrostIdentifier _handleGetIdentifier(rust.FrostIdentifier Function() f) {
 /// The FROST spec specifies that identifiers should be in the range 1 to n, but
 /// any set of unique non-zero secp256k1 scalars can be accepted and may be
 /// generated from strings using [fromString()].
+///
+/// Identifiers can be compared for equality with `==`.
 class Identifier {
 
   final rust.FrostIdentifier underlying;
+
+  Identifier.fromUnderlying(this.underlying);
 
   /// Creates an identifier from a non-zero 16-bit integer
   Identifier.fromUint16(int i) : underlying = _handleGetIdentifier(
@@ -43,8 +48,20 @@ class Identifier {
   );
 
   /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
-  Uint8List toBytes() => rust.rustApi.identifierToBytes(
+  Uint8List? bytesCache;
+  Uint8List toBytes() => bytesCache ??= rust.rustApi.identifierToBytes(
     identifier: underlying,
   );
+
+  @override
+  bool operator ==(Object other)
+    => (other is Identifier) && bytesEqual(toBytes(), other.toBytes());
+
+  @override
+  int get hashCode
+    => toBytes()[1]
+    | toBytes()[2] << 8
+    | toBytes()[3] << 16
+    | toBytes()[4] << 24;
 
 }

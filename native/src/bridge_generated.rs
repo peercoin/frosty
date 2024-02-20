@@ -129,6 +129,53 @@ fn wire_public_commitment_to_bytes_impl(
         },
     )
 }
+fn wire_dkg_part_2_impl(
+    round_1_secret: impl Wire2Api<RustOpaque<dkg::round1::SecretPackage>> + UnwindSafe,
+    round_1_commitments: impl Wire2Api<Vec<DkgCommitmentForIdentifier>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "dkg_part_2",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_round_1_secret = round_1_secret.wire2api();
+            let api_round_1_commitments = round_1_commitments.wire2api();
+            dkg_part_2(api_round_1_secret, api_round_1_commitments)
+        },
+    )
+}
+fn wire_shared_secret_from_bytes_impl(
+    bytes: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "shared_secret_from_bytes",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_bytes = bytes.wire2api();
+            shared_secret_from_bytes(api_bytes)
+        },
+    )
+}
+fn wire_shared_secret_to_bytes_impl(
+    secret: impl Wire2Api<RustOpaque<dkg::round2::Package>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "shared_secret_to_bytes",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_secret = secret.wire2api();
+            shared_secret_to_bytes(api_secret)
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -164,6 +211,18 @@ impl Wire2Api<u8> for u8 {
 }
 
 // Section: impl IntoDart
+
+impl support::IntoDart for DkgRound2SecretToShare {
+    fn into_dart(self) -> support::DartAbi {
+        vec![self.identifier.into_dart(), self.secret.into_dart()].into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for DkgRound2SecretToShare {}
+impl rust2dart::IntoIntoDart<DkgRound2SecretToShare> for DkgRound2SecretToShare {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
 
 // Section: executor
 
@@ -225,6 +284,28 @@ mod io {
         wire_public_commitment_to_bytes_impl(commitment)
     }
 
+    #[no_mangle]
+    pub extern "C" fn wire_dkg_part_2(
+        round_1_secret: wire_DkgRound1SecretPackage,
+        round_1_commitments: *mut wire_list_dkg_commitment_for_identifier,
+    ) -> support::WireSyncReturn {
+        wire_dkg_part_2_impl(round_1_secret, round_1_commitments)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn wire_shared_secret_from_bytes(
+        bytes: *mut wire_uint_8_list,
+    ) -> support::WireSyncReturn {
+        wire_shared_secret_from_bytes_impl(bytes)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn wire_shared_secret_to_bytes(
+        secret: wire_DkgRound2Package,
+    ) -> support::WireSyncReturn {
+        wire_shared_secret_to_bytes_impl(secret)
+    }
+
     // Section: allocate functions
 
     #[no_mangle]
@@ -233,8 +314,32 @@ mod io {
     }
 
     #[no_mangle]
+    pub extern "C" fn new_DkgRound1SecretPackage() -> wire_DkgRound1SecretPackage {
+        wire_DkgRound1SecretPackage::new_with_null_ptr()
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_DkgRound2Package() -> wire_DkgRound2Package {
+        wire_DkgRound2Package::new_with_null_ptr()
+    }
+
+    #[no_mangle]
     pub extern "C" fn new_FrostIdentifier() -> wire_FrostIdentifier {
         wire_FrostIdentifier::new_with_null_ptr()
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_list_dkg_commitment_for_identifier_0(
+        len: i32,
+    ) -> *mut wire_list_dkg_commitment_for_identifier {
+        let wrap = wire_list_dkg_commitment_for_identifier {
+            ptr: support::new_leak_vec_ptr(
+                <wire_DkgCommitmentForIdentifier>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        support::new_leak_box_ptr(wrap)
     }
 
     #[no_mangle]
@@ -279,6 +384,36 @@ mod io {
     }
 
     #[no_mangle]
+    pub extern "C" fn drop_opaque_DkgRound2Package(ptr: *const c_void) {
+        unsafe {
+            Arc::<dkg::round2::Package>::decrement_strong_count(ptr as _);
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn share_opaque_DkgRound2Package(ptr: *const c_void) -> *const c_void {
+        unsafe {
+            Arc::<dkg::round2::Package>::increment_strong_count(ptr as _);
+            ptr
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn drop_opaque_DkgRound2SecretPackage(ptr: *const c_void) {
+        unsafe {
+            Arc::<dkg::round2::SecretPackage>::decrement_strong_count(ptr as _);
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn share_opaque_DkgRound2SecretPackage(ptr: *const c_void) -> *const c_void {
+        unsafe {
+            Arc::<dkg::round2::SecretPackage>::increment_strong_count(ptr as _);
+            ptr
+        }
+    }
+
+    #[no_mangle]
     pub extern "C" fn drop_opaque_FrostIdentifier(ptr: *const c_void) {
         unsafe {
             Arc::<frost::Identifier>::decrement_strong_count(ptr as _);
@@ -300,6 +435,16 @@ mod io {
             unsafe { support::opaque_from_dart(self.ptr as _) }
         }
     }
+    impl Wire2Api<RustOpaque<dkg::round1::SecretPackage>> for wire_DkgRound1SecretPackage {
+        fn wire2api(self) -> RustOpaque<dkg::round1::SecretPackage> {
+            unsafe { support::opaque_from_dart(self.ptr as _) }
+        }
+    }
+    impl Wire2Api<RustOpaque<dkg::round2::Package>> for wire_DkgRound2Package {
+        fn wire2api(self) -> RustOpaque<dkg::round2::Package> {
+            unsafe { support::opaque_from_dart(self.ptr as _) }
+        }
+    }
     impl Wire2Api<RustOpaque<frost::Identifier>> for wire_FrostIdentifier {
         fn wire2api(self) -> RustOpaque<frost::Identifier> {
             unsafe { support::opaque_from_dart(self.ptr as _) }
@@ -309,6 +454,23 @@ mod io {
         fn wire2api(self) -> String {
             let vec: Vec<u8> = self.wire2api();
             String::from_utf8_lossy(&vec).into_owned()
+        }
+    }
+    impl Wire2Api<DkgCommitmentForIdentifier> for wire_DkgCommitmentForIdentifier {
+        fn wire2api(self) -> DkgCommitmentForIdentifier {
+            DkgCommitmentForIdentifier {
+                identifier: self.identifier.wire2api(),
+                commitment: self.commitment.wire2api(),
+            }
+        }
+    }
+    impl Wire2Api<Vec<DkgCommitmentForIdentifier>> for *mut wire_list_dkg_commitment_for_identifier {
+        fn wire2api(self) -> Vec<DkgCommitmentForIdentifier> {
+            let vec = unsafe {
+                let wrap = support::box_from_leak_ptr(self);
+                support::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(Wire2Api::wire2api).collect()
         }
     }
 
@@ -330,8 +492,34 @@ mod io {
 
     #[repr(C)]
     #[derive(Clone)]
+    pub struct wire_DkgRound1SecretPackage {
+        ptr: *const core::ffi::c_void,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
+    pub struct wire_DkgRound2Package {
+        ptr: *const core::ffi::c_void,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
     pub struct wire_FrostIdentifier {
         ptr: *const core::ffi::c_void,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
+    pub struct wire_DkgCommitmentForIdentifier {
+        identifier: wire_FrostIdentifier,
+        commitment: wire_DkgRound1Package,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
+    pub struct wire_list_dkg_commitment_for_identifier {
+        ptr: *mut wire_DkgCommitmentForIdentifier,
+        len: i32,
     }
 
     #[repr(C)]
@@ -360,11 +548,40 @@ mod io {
             }
         }
     }
+    impl NewWithNullPtr for wire_DkgRound1SecretPackage {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                ptr: core::ptr::null(),
+            }
+        }
+    }
+    impl NewWithNullPtr for wire_DkgRound2Package {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                ptr: core::ptr::null(),
+            }
+        }
+    }
     impl NewWithNullPtr for wire_FrostIdentifier {
         fn new_with_null_ptr() -> Self {
             Self {
                 ptr: core::ptr::null(),
             }
+        }
+    }
+
+    impl NewWithNullPtr for wire_DkgCommitmentForIdentifier {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                identifier: wire_FrostIdentifier::new_with_null_ptr(),
+                commitment: wire_DkgRound1Package::new_with_null_ptr(),
+            }
+        }
+    }
+
+    impl Default for wire_DkgCommitmentForIdentifier {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
         }
     }
 

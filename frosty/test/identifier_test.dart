@@ -67,5 +67,13 @@ void main() {
       }
     });
 
+    test("allows equality comparison", () {
+      final id1 = Identifier.fromUint16(1);
+      final id2 = Identifier.fromUint16(2);
+      expect(id1, id1);
+      expect(id1, Identifier.fromUint16(1));
+      expect(id1, isNot(id2));
+    });
+
   });
 }
