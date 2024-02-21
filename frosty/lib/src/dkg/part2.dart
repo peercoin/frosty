@@ -1,9 +1,16 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
+import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
 import 'public_commitment.dart';
 import 'part1.dart';
 import 'shared_secret.dart';
+
+/// The secret from part 2 that is to be held until part 3. After part 3 this
+/// can be disposed of with [dispose()].
+class DkgRound2Secret extends RustObjectWrapper<rust.DkgRound2SecretPackage> {
+  DkgRound2Secret.fromUnderlying(super._underlying);
+}
 
 /// Thrown when data provided into part 2 is not valid
 class InvalidPart2 implements Exception {
@@ -13,8 +20,7 @@ class InvalidPart2 implements Exception {
   String toString() => "InvalidPart2: $error";
 }
 
-typedef DkgRound2Secret = rust.DkgRound2SecretPackage;
-typedef Round2 = (DkgRound2Secret, List<rust.DkgRound2SecretToShare>);
+typedef Round2 = (rust.DkgRound2SecretPackage, List<rust.DkgRound2SecretToShare>);
 
 Round2 _handleGetRound2(Round2 Function() f) {
   try {
@@ -47,7 +53,7 @@ class DkgPart2 {
   }) {
 
     final record = _handleGetRound2(() => rust.rustApi.dkgPart2(
-      round1Secret: round1Secret,
+      round1Secret: round1Secret.underlying,
       round1Commitments: identifierCommitments.map(
         (v) => rust.DkgCommitmentForIdentifier(
           identifier: v.$1.underlying,
@@ -56,7 +62,7 @@ class DkgPart2 {
       ).toList(),
     ),);
 
-    secret = record.$1;
+    secret = DkgRound2Secret.fromUnderlying(record.$1);
     secretsToShare = record.$2.map(
       (s) => (
         Identifier.fromUnderlying(s.identifier),

@@ -75,5 +75,11 @@ void main() {
       expect(id1, isNot(id2));
     });
 
+    test("cannot use after free", () {
+      final id = Identifier.fromUint16(1);
+      id.dispose();
+      expect(() => id.toBytes(), throwsA(isA<UseAfterFree>()));
+    });
+
   });
 }

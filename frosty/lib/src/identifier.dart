@@ -1,5 +1,6 @@
 import "package:coinlib/coinlib.dart";
 import "package:flutter_rust_bridge/flutter_rust_bridge.dart";
+import "package:frosty/src/rust_bindings/rust_object_wrapper.dart";
 import "rust_bindings/rust_api.dart" as rust;
 
 /// Thrown when a valid identifier cannot be created
@@ -25,27 +26,25 @@ rust.FrostIdentifier _handleGetIdentifier(rust.FrostIdentifier Function() f) {
 /// generated from strings using [fromString()].
 ///
 /// Identifiers can be compared for equality with `==`.
-class Identifier {
+class Identifier extends RustObjectWrapper<rust.FrostIdentifier> {
 
-  final rust.FrostIdentifier underlying;
-
-  Identifier.fromUnderlying(this.underlying);
+  Identifier.fromUnderlying(super.underlying);
 
   /// Creates an identifier from a non-zero 16-bit integer
-  Identifier.fromUint16(int i) : underlying = _handleGetIdentifier(
+  Identifier.fromUint16(int i) : super(_handleGetIdentifier(
     () => rust.rustApi.identifierFromU16(i: i),
-  );
+  ),);
 
   /// Creates an identifier from an arbitrary string
-  Identifier.fromString(String s) : underlying = _handleGetIdentifier(
+  Identifier.fromString(String s) : super(_handleGetIdentifier(
     () => rust.rustApi.identifierFromString(s: s),
-  );
+  ),);
 
   /// Creates an identifier from a 32-byte non-zero secp256k1 scalar in
   /// big-endian
-  Identifier.fromBytes(Uint8List data) : underlying = _handleGetIdentifier(
+  Identifier.fromBytes(Uint8List data) : super(_handleGetIdentifier(
     () => rust.rustApi.identifierFromBytes(bytes: data),
-  );
+  ),);
 
   /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
   Uint8List? bytesCache;

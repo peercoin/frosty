@@ -52,7 +52,7 @@ void main() {
             for (int j = 1; j < 3; j++) (ids[j], eachPart1[j].public),
           ],
         ),
-        throwsException,
+        throwsA(isA<UseAfterFree>()),
       );
 
     });
