@@ -75,6 +75,17 @@ void main() {
       expect(id1, isNot(id2));
     });
 
+    test("allows comparison", () {
+      final id1 = Identifier.fromUint16(1);
+      final id2 = Identifier.fromUint16(2);
+      final id3 = Identifier.fromUint16(3);
+      final idffff = Identifier.fromUint16(0xffff);
+      expect(
+        [id2, idffff, id1, id3]..sort(),
+        orderedEquals([id1, id2, id3, idffff]),
+      );
+    });
+
     test("cannot use after free", () {
       final id = Identifier.fromUint16(1);
       id.dispose();

@@ -26,7 +26,9 @@ rust.FrostIdentifier _handleGetIdentifier(rust.FrostIdentifier Function() f) {
 /// generated from strings using [fromString()].
 ///
 /// Identifiers can be compared for equality with `==`.
-class Identifier extends RustObjectWrapper<rust.FrostIdentifier> {
+class Identifier
+  extends RustObjectWrapper<rust.FrostIdentifier>
+  implements Comparable<Identifier> {
 
   Identifier.fromUnderlying(super.underlying);
 
@@ -46,8 +48,8 @@ class Identifier extends RustObjectWrapper<rust.FrostIdentifier> {
     () => rust.rustApi.identifierFromBytes(bytes: data),
   ),);
 
-  /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
   Uint8List? bytesCache;
+  /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
   Uint8List toBytes() => bytesCache ??= rust.rustApi.identifierToBytes(
     identifier: underlying,
   );
@@ -62,5 +64,8 @@ class Identifier extends RustObjectWrapper<rust.FrostIdentifier> {
     | toBytes()[2] << 8
     | toBytes()[3] << 16
     | toBytes()[4] << 24;
+
+  @override
+  int compareTo(Identifier other) => compareBytes(toBytes(), other.toBytes());
 
 }
