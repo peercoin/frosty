@@ -1,3 +1,4 @@
+export "dkg/commitment_set.dart";
 export "dkg/public_commitment.dart";
 export "dkg/part1.dart";
 export "dkg/part2.dart";
