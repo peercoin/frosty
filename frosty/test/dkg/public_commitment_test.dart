@@ -32,11 +32,5 @@ void main() {
       expectInvalid(Uint8List.fromList([...validBytes, 0]));
     });
 
-    test("cannot use after free", () {
-      final commitment = DkgPublicCommitment.fromBytes(validBytes);
-      commitment.dispose();
-      expect(() => commitment.toBytes(), throwsA(isA<UseAfterFree>()));
-    });
-
   });
 }

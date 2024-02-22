@@ -36,11 +36,14 @@ class DkgPublicCommitment extends RustObjectWrapper<rust.DkgRound1Package> {
     _handleGetCommitment(
       () => rust.rustApi.publicCommitmentFromBytes(bytes: data),
     ),
-  );
+  ) {
+    _bytesCache = data;
+  }
 
+  Uint8List? _bytesCache;
   /// Obtains serialised data for the commitment that can be shared with other
   /// participants.
-  Uint8List toBytes() => rust.rustApi.publicCommitmentToBytes(
+  Uint8List toBytes() => _bytesCache ??= rust.rustApi.publicCommitmentToBytes(
     commitment: underlying,
   );
 

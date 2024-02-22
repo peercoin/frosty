@@ -41,10 +41,7 @@ void main() {
 
     });
 
-    test("cannot use round 1 secret after free", () {
-
-      eachPart1[0].secret.dispose();
-
+    void expectUseAfterFree() {
       expect(
         () => DkgPart2(
           round1Secret: eachPart1[0].secret,
@@ -54,7 +51,16 @@ void main() {
         ),
         throwsA(isA<UseAfterFree>()),
       );
+    }
 
+    test("cannot use round 1 secret after free", () {
+      eachPart1[0].secret.dispose();
+      expectUseAfterFree();
+    });
+
+    test("cannot use public commitment after free", () {
+      eachPart1[1].public.dispose();
+      expectUseAfterFree();
     });
 
     test("invalid round 2", () {

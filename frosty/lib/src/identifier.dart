@@ -46,11 +46,13 @@ class Identifier
   /// big-endian
   Identifier.fromBytes(Uint8List data) : super(_handleGetIdentifier(
     () => rust.rustApi.identifierFromBytes(bytes: data),
-  ),);
+  ),) {
+    _bytesCache = data;
+  }
 
-  Uint8List? bytesCache;
+  Uint8List? _bytesCache;
   /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
-  Uint8List toBytes() => bytesCache ??= rust.rustApi.identifierToBytes(
+  Uint8List toBytes() => _bytesCache ??= rust.rustApi.identifierToBytes(
     identifier: underlying,
   );
 
