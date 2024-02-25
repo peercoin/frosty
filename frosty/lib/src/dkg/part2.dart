@@ -1,4 +1,5 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:frosty/src/frosty_base.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
@@ -39,14 +40,14 @@ class DkgPart2 {
   /// and identifiers from all of the other participants.
   DkgPart2({
     required DkgRound1Secret round1Secret,
-    required List<(Identifier, DkgPublicCommitment)> identifierCommitments,
+    required DkgCommitmentSet commitments,
   }) {
 
     try {
 
       final record = rust.rustApi.dkgPart2(
         round1Secret: round1Secret.underlying,
-        round1Commitments: identifierCommitments.map(
+        round1Commitments: commitments.list.map(
           (v) => rust.DkgCommitmentForIdentifier(
             identifier: v.$1.underlying,
             commitment: v.$2.underlying,

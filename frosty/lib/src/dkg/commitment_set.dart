@@ -12,20 +12,20 @@ typedef CommitmentList = List<CommitmentPair>;
 /// of commitments from each participant and verifying that they are the same.
 class DkgCommitmentSet {
 
-  final CommitmentList commitments;
+  final CommitmentList list;
 
   /// Takes a list of commitments with each element containing a tuple of the
   /// [Identifier] followed by the associated [DkgPublicCommitment].
   DkgCommitmentSet(CommitmentList commitments)
     // Order commitments to ensure consistency
-    : commitments = List.from(commitments)..sort(
+    : list = List.from(commitments)..sort(
       (a, b) => a.$1.compareTo(b.$1),
     );
 
   Uint8List? _hashCache;
   Uint8List get hash => _hashCache ??= sha256Hash(
     Uint8List.fromList([
-      for (final commitment in commitments)
+      for (final commitment in list)
       ...commitment.$2.toBytes(),
     ],),
   );

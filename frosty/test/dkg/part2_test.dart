@@ -24,10 +24,10 @@ void main() {
       for (int i = 0; i < 3; i++) {
         final part2 = DkgPart2(
           round1Secret: eachPart1[i].secret,
-          identifierCommitments: [
+          commitments: DkgCommitmentSet([
             for (int j = 0; j < 3; j++)
               if (j != i) (ids[j], eachPart1[j].public),
-          ],
+          ]),
         );
         expect(part2.secretsToShare.length, 2);
         // Should have other identifiers
@@ -45,9 +45,9 @@ void main() {
       expect(
         () => DkgPart2(
           round1Secret: eachPart1[0].secret,
-          identifierCommitments: [
+          commitments: DkgCommitmentSet([
             for (int j = 1; j < 3; j++) (ids[j], eachPart1[j].public),
-          ],
+          ]),
         ),
         throwsA(isA<UseAfterFree>()),
       );
@@ -69,7 +69,7 @@ void main() {
       expect(
         () => DkgPart2(
           round1Secret: eachPart1[0].secret,
-          identifierCommitments: [(ids[1], eachPart1[1].public)],
+          commitments: DkgCommitmentSet([(ids[1], eachPart1[1].public)]),
         ),
         throwsA(isA<InvalidPart2>()),
       );
@@ -78,9 +78,9 @@ void main() {
       expect(
         () => DkgPart2(
           round1Secret: eachPart1[0].secret,
-          identifierCommitments: [
+          commitments: DkgCommitmentSet([
             for (int j = 1; j < 3; j++) (ids[j], eachPart1[3-j].public),
-          ],
+          ]),
         ),
         throwsA(isA<InvalidPart2>()),
       );
