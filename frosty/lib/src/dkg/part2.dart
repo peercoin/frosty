@@ -20,16 +20,6 @@ class InvalidPart2 implements Exception {
   String toString() => "InvalidPart2: $error";
 }
 
-typedef Round2 = (rust.DkgRound2SecretPackage, List<rust.DkgRound2SecretToShare>);
-
-Round2 _handleGetRound2(Round2 Function() f) {
-  try {
-    return f();
-  } on FrbAnyhowException catch(e) {
-    throw InvalidPart2(e.anyhow);
-  }
-}
-
 /// The second step to generate a distributed FROST key. This provides the
 /// secrets that must be shared to the participants of each given identifier
 /// without revealing them to anyone else. Authentication and encryption must be
@@ -52,23 +42,29 @@ class DkgPart2 {
     required List<(Identifier, DkgPublicCommitment)> identifierCommitments,
   }) {
 
-    final record = _handleGetRound2(() => rust.rustApi.dkgPart2(
-      round1Secret: round1Secret.underlying,
-      round1Commitments: identifierCommitments.map(
-        (v) => rust.DkgCommitmentForIdentifier(
-          identifier: v.$1.underlying,
-          commitment: v.$2.underlying,
-        ),
-      ).toList(),
-    ),);
+    try {
 
-    secret = DkgRound2Secret.fromUnderlying(record.$1);
-    secretsToShare = record.$2.map(
-      (s) => (
-        Identifier.fromUnderlying(s.identifier),
-        DkgSharedSecret.fromUnderlying(s.secret),
-      ),
-    ).toList();
+      final record = rust.rustApi.dkgPart2(
+        round1Secret: round1Secret.underlying,
+        round1Commitments: identifierCommitments.map(
+          (v) => rust.DkgCommitmentForIdentifier(
+            identifier: v.$1.underlying,
+            commitment: v.$2.underlying,
+          ),
+        ).toList(),
+      );
+
+      secret = DkgRound2Secret.fromUnderlying(record.$1);
+      secretsToShare = record.$2.map(
+        (s) => (
+          Identifier.fromUnderlying(s.identifier),
+          DkgSharedSecret.fromUnderlying(s.secret),
+        ),
+      ).toList();
+
+    } on FrbAnyhowException catch(e) {
+      throw InvalidPart2(e.anyhow);
+    }
 
   }
 

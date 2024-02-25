@@ -25,6 +25,9 @@ rust.DkgRound2Package _handleGetSecret(
 ///
 /// These must be encrypted and authenticated so that only the recipient has the
 /// secret and they know whom it was sent from.
+///
+/// After this secret has been successfully broadcast to the participant, it
+/// should be disposed with [dispose()].
 class DkgSharedSecret extends RustObjectWrapper<rust.DkgRound2Package> {
 
   DkgSharedSecret.fromUnderlying(super._underlying);
