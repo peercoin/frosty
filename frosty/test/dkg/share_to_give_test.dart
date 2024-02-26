@@ -4,7 +4,7 @@ import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("DkgSharedSecret", () {
+  group("DkgShareToGive", () {
 
     setUp(loadFrosty);
 
@@ -14,15 +14,15 @@ void main() {
 
     test("fromBytes valid", () {
       expect(
-        DkgSharedSecret.fromBytes(validBytes).toBytes(),
+        DkgShareToGive.fromBytes(validBytes).toBytes(),
         validBytes,
       );
     });
 
     test("fromBytes invalid", () {
       void expectInvalid(Uint8List bytes) => expect(
-        () => DkgSharedSecret.fromBytes(bytes),
-        throwsA(isA<InvalidSharedSecret>()),
+        () => DkgShareToGive.fromBytes(bytes),
+        throwsA(isA<InvalidShareToGive>()),
       );
       expectInvalid(Uint8List(0));
       expectInvalid(Uint8List.view(validBytes.buffer, 1));
@@ -30,7 +30,7 @@ void main() {
     });
 
     test("cannot use after free", () {
-      final secret = DkgSharedSecret.fromBytes(validBytes);
+      final secret = DkgShareToGive.fromBytes(validBytes);
       secret.dispose();
       expect(() => secret.toBytes(), throwsA(isA<UseAfterFree>()));
     });

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
+import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'public_commitment.dart';
 import 'package:frosty/src/identifier.dart';
 
@@ -29,5 +30,12 @@ class DkgCommitmentSet {
       ...commitment.$2.toBytes(),
     ],),
   );
+
+  List<rust.DkgCommitmentForIdentifier> get nativeList => list.map(
+    (v) => rust.DkgCommitmentForIdentifier(
+      identifier: v.$1.underlying,
+      commitment: v.$2.underlying,
+    ),
+  ).toList();
 
 }

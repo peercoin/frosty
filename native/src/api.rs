@@ -3,7 +3,6 @@ pub use frost_secp256k1::keys::dkg as dkg;
 use rand::thread_rng;
 use anyhow::{anyhow, Result};
 use flutter_rust_bridge::{SyncReturn, RustOpaque, DartSafe};
-use std::collections::HashMap;
 
 // Common
 
@@ -117,17 +116,15 @@ pub struct DkgCommitmentForIdentifier {
     pub commitment: RustOpaque<dkg::round1::Package>,
 }
 
-type DkgSharedSecretOpaque = RustOpaque<dkg::round2::Package>;
+type DkgRound2SecretOpaque = RustOpaque<dkg::round2::SecretPackage>;
+type DkgShareToGiveOpaque = RustOpaque<dkg::round2::Package>;
 
-pub struct DkgRound2SecretToShare {
+pub struct DkgRound2IdentifierAndShare {
     pub identifier: IdentifierOpaque,
-    pub secret: DkgSharedSecretOpaque,
+    pub secret: DkgShareToGiveOpaque,
 }
 
-type DkgRound2Data = (
-    RustOpaque<dkg::round2::SecretPackage>,
-    Vec<DkgRound2SecretToShare>
-);
+type DkgRound2Data = (DkgRound2SecretOpaque, Vec<DkgRound2IdentifierAndShare>);
 type DkgPart2Result = Result<SyncReturn<DkgRound2Data>>;
 
 pub fn dkg_part_2(
@@ -136,10 +133,9 @@ pub fn dkg_part_2(
 ) -> DkgPart2Result {
 
     // Convert vector into hashmap
-    let commitment_map: HashMap<frost::Identifier, dkg::round1::Package>
-        = round_1_commitments.into_iter().map(
-            |v| (*v.identifier, (*v.commitment).clone())
-        ).collect();
+    let commitment_map = round_1_commitments.into_iter().map(
+        |v| (*v.identifier, (*v.commitment).clone())
+    ).collect();
 
     let result = dkg::part2((*round_1_secret).clone(), &commitment_map)?;
 
@@ -148,7 +144,7 @@ pub fn dkg_part_2(
         (
             RustOpaque::new(result.0),
             result.1.into_iter().map(
-                |v| DkgRound2SecretToShare {
+                |v| DkgRound2IdentifierAndShare {
                     identifier: RustOpaque::new(v.0),
                     secret: RustOpaque::new(v.1)
                 }
@@ -158,19 +154,60 @@ pub fn dkg_part_2(
 
 }
 
-pub fn shared_secret_from_bytes(
+pub fn share_to_give_from_bytes(
     bytes: Vec<u8>
-) -> Result<SyncReturn<DkgSharedSecretOpaque>> {
+) -> Result<SyncReturn<DkgShareToGiveOpaque>> {
     from_bytes(
         bytes,
         |b| dkg::round2::Package::deserialize(&b),
         |obj| obj.serialize(),
-        "Shared secret"
+        "Share to give"
     )
 }
 
-pub fn shared_secret_to_bytes(
-    secret: DkgSharedSecretOpaque
+pub fn share_to_give_to_bytes(
+    share: DkgShareToGiveOpaque
 ) -> Result<SyncReturn<Vec<u8>>> {
-    Ok(SyncReturn(secret.serialize()?))
+    Ok(SyncReturn(share.serialize()?))
+}
+
+// DKG Part 3
+
+pub struct KeyShareData {
+    pub private: frost::keys::KeyPackage,
+    pub public: frost::keys::PublicKeyPackage,
+}
+type KeyShareResult = Result<SyncReturn<RustOpaque<KeyShareData>>>;
+
+pub fn dkg_part_3(
+    round_2_secret: DkgRound2SecretOpaque,
+    round_1_commitments: Vec<DkgCommitmentForIdentifier>,
+    round_2_shares: Vec<DkgRound2IdentifierAndShare>,
+) -> KeyShareResult {
+
+    // Convert vectors into hashmaps
+
+    let commitment_map = round_1_commitments.into_iter().map(
+        |v| (*v.identifier, (*v.commitment).clone())
+    ).collect();
+
+    let secrets_map = round_2_shares.into_iter().map(
+        |v| (*v.identifier, (*v.secret).clone())
+    ).collect();
+
+    let result = dkg::part3(
+        &round_2_secret,
+        &commitment_map,
+        &secrets_map,
+    )?;
+
+    Ok(SyncReturn(
+        RustOpaque::new(
+            KeyShareData {
+                private: result.0,
+                public: result.1,
+            }
+        )
+    ))
+
 }

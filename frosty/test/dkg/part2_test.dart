@@ -29,10 +29,10 @@ void main() {
               if (j != i) (ids[j], eachPart1[j].public),
           ]),
         );
-        expect(part2.secretsToShare.length, 2);
+        expect(part2.sharesToGive.length, 2);
         // Should have other identifiers
         expect(
-          part2.secretsToShare.map((sts) => sts.$1).toList(),
+          part2.sharesToGive.map((sts) => sts.$1).toList(),
           unorderedEquals(
             [for (final id in ids) if (id != ids[i]) id],
           ),
