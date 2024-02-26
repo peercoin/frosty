@@ -1,22 +1,16 @@
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+import 'helpers.dart';
 
 void main() {
   group("DkgPart2", () {
 
     late List<Identifier> ids;
     late List<DkgPart1> eachPart1;
+    late List<DkgCommitmentSet> eachCommitmentSet;
     setUp(() async {
       await loadFrosty();
-      ids = List.generate(3, (i) => Identifier.fromUint16(1+i));
-      eachPart1 = List.generate(
-        3,
-        (i) => DkgPart1(
-          identifier: ids[i],
-          threshold: 2,
-          n: 3,
-        ),
-      );
+      (ids, eachPart1, eachCommitmentSet) = genPart1();
     });
 
     test("gives expected secrets to share", () {
@@ -24,10 +18,7 @@ void main() {
       for (int i = 0; i < 3; i++) {
         final part2 = DkgPart2(
           round1Secret: eachPart1[i].secret,
-          commitments: DkgCommitmentSet([
-            for (int j = 0; j < 3; j++)
-              if (j != i) (ids[j], eachPart1[j].public),
-          ]),
+          commitments: eachCommitmentSet[i],
         );
         expect(part2.sharesToGive.length, 2);
         // Should have other identifiers
@@ -44,10 +35,8 @@ void main() {
     void expectUseAfterFree() {
       expect(
         () => DkgPart2(
-          round1Secret: eachPart1[0].secret,
-          commitments: DkgCommitmentSet([
-            for (int j = 1; j < 3; j++) (ids[j], eachPart1[j].public),
-          ]),
+          round1Secret: eachPart1.first.secret,
+          commitments: eachCommitmentSet.first,
         ),
         throwsA(isA<UseAfterFree>()),
       );
