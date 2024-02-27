@@ -1,4 +1,5 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/private_key_share.dart';
 import 'package:frosty/src/public_key_shares.dart';
@@ -9,11 +10,8 @@ import 'part2.dart';
 import 'share_to_give.dart';
 
 /// Thrown when data provided into part 3 is not valid
-class InvalidPart3 implements Exception {
-  final String error;
-  InvalidPart3(this.error);
-  @override
-  String toString() => "InvalidPart3: $error";
+class InvalidPart3 extends MessageException{
+  InvalidPart3(super.message);
 }
 
 /// The third and final part of the DKG. This produces the final

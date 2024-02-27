@@ -1,21 +1,12 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:frosty/src/helpers/message_exception.dart';
+import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
 
 /// Thrown when bytes are not a valid public commitment
-class InvalidPublicCommitment implements Exception {
-  final String error;
-  InvalidPublicCommitment(this.error);
-  @override
-  String toString() => "InvalidPublicCommitment: $error";
-}
-
-rust.DkgRound1Package _handleGetCommitment(rust.DkgRound1Package Function() f) {
-  try {
-    return f();
-  } on FrbAnyhowException catch(e) {
-    throw InvalidPublicCommitment(e.anyhow);
-  }
+class InvalidPublicCommitment extends MessageException {
+  InvalidPublicCommitment(super.message);
 }
 
 /// This class represents information that should be shared to other
@@ -33,8 +24,9 @@ class DkgPublicCommitment extends RustObjectWrapper<rust.DkgRound1Package> {
   /// Reads the serialised public commitment from a participant and throws
   /// [InvalidPublicCommitment] if invalid.
   DkgPublicCommitment.fromBytes(Uint8List data) : super(
-    _handleGetCommitment(
+    handleGetObject(
       () => rust.rustApi.publicCommitmentFromBytes(bytes: data),
+      (e) => InvalidPublicCommitment(e),
     ),
   ) {
     _bytesCache = data;

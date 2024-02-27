@@ -1,23 +1,18 @@
 import "package:coinlib/coinlib.dart";
 import "package:flutter_rust_bridge/flutter_rust_bridge.dart";
+import "package:frosty/src/helpers/message_exception.dart";
+import "package:frosty/src/rust_bindings/invalid_object.dart";
 import "package:frosty/src/rust_bindings/rust_object_wrapper.dart";
 import "rust_bindings/rust_api.dart" as rust;
 
 /// Thrown when a valid identifier cannot be created
-class InvalidIdentifier implements Exception {
-  final String error;
-  InvalidIdentifier(this.error);
-  @override
-  String toString() => "InvalidIdentifier: $error";
+class InvalidIdentifier extends MessageException {
+  InvalidIdentifier(super.message);
 }
 
-rust.FrostIdentifier _handleGetIdentifier(rust.FrostIdentifier Function() f) {
-  try {
-    return f();
-  } on FrbAnyhowException catch(e) {
-    throw InvalidIdentifier(e.anyhow);
-  }
-}
+rust.FrostIdentifier _handleGetIdentifier(
+  rust.FrostIdentifier Function() f,
+) => handleGetObject(f, (e) => InvalidIdentifier(e));
 
 /// The ID of a participant in a threshold signing group.
 ///

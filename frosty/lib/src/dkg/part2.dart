@@ -1,4 +1,5 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
@@ -13,11 +14,8 @@ class DkgRound2Secret extends RustObjectWrapper<rust.DkgRound2SecretPackage> {
 }
 
 /// Thrown when data provided into part 2 is not valid
-class InvalidPart2 implements Exception {
-  final String error;
-  InvalidPart2(this.error);
-  @override
-  String toString() => "InvalidPart2: $error";
+class InvalidPart2 extends MessageException {
+  InvalidPart2(super.message);
 }
 
 /// The second step to generate a distributed FROST key. This provides the

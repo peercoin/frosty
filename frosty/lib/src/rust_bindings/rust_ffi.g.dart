@@ -64,6 +64,14 @@ abstract class FrostyRust {
 
   FlutterRustBridgeTaskConstMeta get kDkgPart3ConstMeta;
 
+  FrostKeysKeyPackage privateKeyShareFromBytes({required Uint8List bytes, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kPrivateKeyShareFromBytesConstMeta;
+
+  Uint8List privateKeyShareToBytes({required FrostKeysKeyPackage share, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kPrivateKeyShareToBytesConstMeta;
+
   DropFnType get dropOpaqueDkgRound1Package;
   ShareFnType get shareOpaqueDkgRound1Package;
   OpaqueTypeFinalizer get DkgRound1PackageFinalizer;
@@ -473,6 +481,48 @@ class FrostyRustImpl implements FrostyRust {
         ],
       );
 
+  FrostKeysKeyPackage privateKeyShareFromBytes({required Uint8List bytes, dynamic hint}) {
+    var arg0 = _platform.api2wire_uint_8_list(bytes);
+    return _platform.executeSync(FlutterRustBridgeSyncTask(
+      callFfi: () => _platform.inner.wire_private_key_share_from_bytes(arg0),
+      parseSuccessData: _wire2api_FrostKeysKeyPackage,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kPrivateKeyShareFromBytesConstMeta,
+      argValues: [
+        bytes
+      ],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kPrivateKeyShareFromBytesConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "private_key_share_from_bytes",
+        argNames: [
+          "bytes"
+        ],
+      );
+
+  Uint8List privateKeyShareToBytes({required FrostKeysKeyPackage share, dynamic hint}) {
+    var arg0 = _platform.api2wire_FrostKeysKeyPackage(share);
+    return _platform.executeSync(FlutterRustBridgeSyncTask(
+      callFfi: () => _platform.inner.wire_private_key_share_to_bytes(arg0),
+      parseSuccessData: _wire2api_uint_8_list,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kPrivateKeyShareToBytesConstMeta,
+      argValues: [
+        share
+      ],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kPrivateKeyShareToBytesConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "private_key_share_to_bytes",
+        argNames: [
+          "share"
+        ],
+      );
+
   DropFnType get dropOpaqueDkgRound1Package => _platform.inner.drop_opaque_DkgRound1Package;
   ShareFnType get shareOpaqueDkgRound1Package => _platform.inner.share_opaque_DkgRound1Package;
   OpaqueTypeFinalizer get DkgRound1PackageFinalizer => _platform.DkgRound1PackageFinalizer;
@@ -661,6 +711,13 @@ class FrostyRustPlatform extends FlutterRustBridgeBase<FrostyRustWire> {
   }
 
   @protected
+  wire_FrostKeysKeyPackage api2wire_FrostKeysKeyPackage(FrostKeysKeyPackage raw) {
+    final ptr = inner.new_FrostKeysKeyPackage();
+    _api_fill_to_wire_FrostKeysKeyPackage(raw, ptr);
+    return ptr;
+  }
+
+  @protected
   ffi.Pointer<wire_uint_8_list> api2wire_String(String raw) {
     return api2wire_uint_8_list(utf8.encoder.convert(raw));
   }
@@ -724,6 +781,10 @@ class FrostyRustPlatform extends FlutterRustBridgeBase<FrostyRustWire> {
   }
 
   void _api_fill_to_wire_FrostIdentifier(FrostIdentifier apiObj, wire_FrostIdentifier wireObj) {
+    wireObj.ptr = apiObj.shareOrMove();
+  }
+
+  void _api_fill_to_wire_FrostKeysKeyPackage(FrostKeysKeyPackage apiObj, wire_FrostKeysKeyPackage wireObj) {
     wireObj.ptr = apiObj.shareOrMove();
   }
 
@@ -945,6 +1006,28 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
   late final _wire_dkg_part_3Ptr = _lookup<ffi.NativeFunction<WireSyncReturn Function(wire_DkgRound2SecretPackage, ffi.Pointer<wire_list_dkg_commitment_for_identifier>, ffi.Pointer<wire_list_dkg_round_2_identifier_and_share>)>>('wire_dkg_part_3');
   late final _wire_dkg_part_3 = _wire_dkg_part_3Ptr.asFunction<WireSyncReturn Function(wire_DkgRound2SecretPackage, ffi.Pointer<wire_list_dkg_commitment_for_identifier>, ffi.Pointer<wire_list_dkg_round_2_identifier_and_share>)>();
 
+  WireSyncReturn wire_private_key_share_from_bytes(
+    ffi.Pointer<wire_uint_8_list> bytes,
+  ) {
+    return _wire_private_key_share_from_bytes(
+      bytes,
+    );
+  }
+
+  late final _wire_private_key_share_from_bytesPtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(ffi.Pointer<wire_uint_8_list>)>>('wire_private_key_share_from_bytes');
+  late final _wire_private_key_share_from_bytes = _wire_private_key_share_from_bytesPtr.asFunction<WireSyncReturn Function(ffi.Pointer<wire_uint_8_list>)>();
+
+  WireSyncReturn wire_private_key_share_to_bytes(
+    wire_FrostKeysKeyPackage share,
+  ) {
+    return _wire_private_key_share_to_bytes(
+      share,
+    );
+  }
+
+  late final _wire_private_key_share_to_bytesPtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(wire_FrostKeysKeyPackage)>>('wire_private_key_share_to_bytes');
+  late final _wire_private_key_share_to_bytes = _wire_private_key_share_to_bytesPtr.asFunction<WireSyncReturn Function(wire_FrostKeysKeyPackage)>();
+
   wire_DkgRound1Package new_DkgRound1Package() {
     return _new_DkgRound1Package();
   }
@@ -979,6 +1062,13 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
 
   late final _new_FrostIdentifierPtr = _lookup<ffi.NativeFunction<wire_FrostIdentifier Function()>>('new_FrostIdentifier');
   late final _new_FrostIdentifier = _new_FrostIdentifierPtr.asFunction<wire_FrostIdentifier Function()>();
+
+  wire_FrostKeysKeyPackage new_FrostKeysKeyPackage() {
+    return _new_FrostKeysKeyPackage();
+  }
+
+  late final _new_FrostKeysKeyPackagePtr = _lookup<ffi.NativeFunction<wire_FrostKeysKeyPackage Function()>>('new_FrostKeysKeyPackage');
+  late final _new_FrostKeysKeyPackage = _new_FrostKeysKeyPackagePtr.asFunction<wire_FrostKeysKeyPackage Function()>();
 
   ffi.Pointer<wire_list_dkg_commitment_for_identifier> new_list_dkg_commitment_for_identifier_0(
     int len,
@@ -1232,6 +1322,10 @@ final class wire_list_dkg_round_2_identifier_and_share extends ffi.Struct {
 
   @ffi.Int32()
   external int len;
+}
+
+final class wire_FrostKeysKeyPackage extends ffi.Struct {
+  external ffi.Pointer<ffi.Void> ptr;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(DartPort port_id, ffi.Pointer<ffi.Void> message)>>;
