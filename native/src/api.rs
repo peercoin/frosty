@@ -173,17 +173,16 @@ pub fn share_to_give_to_bytes(
 
 // DKG Part 3
 
-pub struct KeyShareData {
-    pub private: frost::keys::KeyPackage,
-    pub public: frost::keys::PublicKeyPackage,
-}
-type KeyShareResult = Result<SyncReturn<RustOpaque<KeyShareData>>>;
+type PrivateKeyShare = RustOpaque<frost::keys::KeyPackage>;
+type PublicKeyShares = RustOpaque<frost::keys::PublicKeyPackage>;
+type DkgRound3Data = (PrivateKeyShare, PublicKeyShares);
+type DkgPart3Result = Result<SyncReturn<DkgRound3Data>>;
 
 pub fn dkg_part_3(
     round_2_secret: DkgRound2SecretOpaque,
     round_1_commitments: Vec<DkgCommitmentForIdentifier>,
     round_2_shares: Vec<DkgRound2IdentifierAndShare>,
-) -> KeyShareResult {
+) -> DkgPart3Result {
 
     // Convert vectors into hashmaps
 
@@ -201,13 +200,6 @@ pub fn dkg_part_3(
         &secrets_map,
     )?;
 
-    Ok(SyncReturn(
-        RustOpaque::new(
-            KeyShareData {
-                private: result.0,
-                public: result.1,
-            }
-        )
-    ))
+    Ok(SyncReturn((RustOpaque::new(result.0), RustOpaque::new(result.1))))
 
 }

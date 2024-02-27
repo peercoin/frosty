@@ -480,16 +480,31 @@ mod io {
     }
 
     #[no_mangle]
-    pub extern "C" fn drop_opaque_KeyShareData(ptr: *const c_void) {
+    pub extern "C" fn drop_opaque_FrostKeysKeyPackage(ptr: *const c_void) {
         unsafe {
-            Arc::<KeyShareData>::decrement_strong_count(ptr as _);
+            Arc::<frost::keys::KeyPackage>::decrement_strong_count(ptr as _);
         }
     }
 
     #[no_mangle]
-    pub extern "C" fn share_opaque_KeyShareData(ptr: *const c_void) -> *const c_void {
+    pub extern "C" fn share_opaque_FrostKeysKeyPackage(ptr: *const c_void) -> *const c_void {
         unsafe {
-            Arc::<KeyShareData>::increment_strong_count(ptr as _);
+            Arc::<frost::keys::KeyPackage>::increment_strong_count(ptr as _);
+            ptr
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn drop_opaque_FrostKeysPublicKeyPackage(ptr: *const c_void) {
+        unsafe {
+            Arc::<frost::keys::PublicKeyPackage>::decrement_strong_count(ptr as _);
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn share_opaque_FrostKeysPublicKeyPackage(ptr: *const c_void) -> *const c_void {
+        unsafe {
+            Arc::<frost::keys::PublicKeyPackage>::increment_strong_count(ptr as _);
             ptr
         }
     }

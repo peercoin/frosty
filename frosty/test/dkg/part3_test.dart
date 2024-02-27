@@ -49,7 +49,7 @@ void main() {
         ),
       );
 
-      // TODO: Check unique key share
+      // TODO: Check unique key share and identical public shares
 
     });
 

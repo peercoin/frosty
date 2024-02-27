@@ -57,7 +57,10 @@ abstract class FrostyRust {
 
   FlutterRustBridgeTaskConstMeta get kShareToGiveToBytesConstMeta;
 
-  KeyShareData dkgPart3({required DkgRound2SecretPackage round2Secret, required List<DkgCommitmentForIdentifier> round1Commitments, required List<DkgRound2IdentifierAndShare> round2Shares, dynamic hint});
+  (
+    FrostKeysKeyPackage,
+    FrostKeysPublicKeyPackage
+  ) dkgPart3({required DkgRound2SecretPackage round2Secret, required List<DkgCommitmentForIdentifier> round1Commitments, required List<DkgRound2IdentifierAndShare> round2Shares, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kDkgPart3ConstMeta;
 
@@ -81,9 +84,13 @@ abstract class FrostyRust {
   ShareFnType get shareOpaqueFrostIdentifier;
   OpaqueTypeFinalizer get FrostIdentifierFinalizer;
 
-  DropFnType get dropOpaqueKeyShareData;
-  ShareFnType get shareOpaqueKeyShareData;
-  OpaqueTypeFinalizer get KeyShareDataFinalizer;
+  DropFnType get dropOpaqueFrostKeysKeyPackage;
+  ShareFnType get shareOpaqueFrostKeysKeyPackage;
+  OpaqueTypeFinalizer get FrostKeysKeyPackageFinalizer;
+
+  DropFnType get dropOpaqueFrostKeysPublicKeyPackage;
+  ShareFnType get shareOpaqueFrostKeysPublicKeyPackage;
+  OpaqueTypeFinalizer get FrostKeysPublicKeyPackageFinalizer;
 }
 
 @sealed
@@ -157,17 +164,31 @@ class FrostIdentifier extends FrbOpaque {
 }
 
 @sealed
-class KeyShareData extends FrbOpaque {
+class FrostKeysKeyPackage extends FrbOpaque {
   final FrostyRust bridge;
-  KeyShareData.fromRaw(int ptr, int size, this.bridge) : super.unsafe(ptr, size);
+  FrostKeysKeyPackage.fromRaw(int ptr, int size, this.bridge) : super.unsafe(ptr, size);
   @override
-  DropFnType get dropFn => bridge.dropOpaqueKeyShareData;
+  DropFnType get dropFn => bridge.dropOpaqueFrostKeysKeyPackage;
 
   @override
-  ShareFnType get shareFn => bridge.shareOpaqueKeyShareData;
+  ShareFnType get shareFn => bridge.shareOpaqueFrostKeysKeyPackage;
 
   @override
-  OpaqueTypeFinalizer get staticFinalizer => bridge.KeyShareDataFinalizer;
+  OpaqueTypeFinalizer get staticFinalizer => bridge.FrostKeysKeyPackageFinalizer;
+}
+
+@sealed
+class FrostKeysPublicKeyPackage extends FrbOpaque {
+  final FrostyRust bridge;
+  FrostKeysPublicKeyPackage.fromRaw(int ptr, int size, this.bridge) : super.unsafe(ptr, size);
+  @override
+  DropFnType get dropFn => bridge.dropOpaqueFrostKeysPublicKeyPackage;
+
+  @override
+  ShareFnType get shareFn => bridge.shareOpaqueFrostKeysPublicKeyPackage;
+
+  @override
+  OpaqueTypeFinalizer get staticFinalizer => bridge.FrostKeysPublicKeyPackageFinalizer;
 }
 
 class DkgCommitmentForIdentifier {
@@ -422,13 +443,16 @@ class FrostyRustImpl implements FrostyRust {
         ],
       );
 
-  KeyShareData dkgPart3({required DkgRound2SecretPackage round2Secret, required List<DkgCommitmentForIdentifier> round1Commitments, required List<DkgRound2IdentifierAndShare> round2Shares, dynamic hint}) {
+  (
+    FrostKeysKeyPackage,
+    FrostKeysPublicKeyPackage
+  ) dkgPart3({required DkgRound2SecretPackage round2Secret, required List<DkgCommitmentForIdentifier> round1Commitments, required List<DkgRound2IdentifierAndShare> round2Shares, dynamic hint}) {
     var arg0 = _platform.api2wire_DkgRound2SecretPackage(round2Secret);
     var arg1 = _platform.api2wire_list_dkg_commitment_for_identifier(round1Commitments);
     var arg2 = _platform.api2wire_list_dkg_round_2_identifier_and_share(round2Shares);
     return _platform.executeSync(FlutterRustBridgeSyncTask(
       callFfi: () => _platform.inner.wire_dkg_part_3(arg0, arg1, arg2),
-      parseSuccessData: _wire2api_KeyShareData,
+      parseSuccessData: _wire2api___record__FrostKeysKeyPackage_FrostKeysPublicKeyPackage,
       parseErrorData: _wire2api_FrbAnyhowException,
       constMeta: kDkgPart3ConstMeta,
       argValues: [
@@ -469,9 +493,13 @@ class FrostyRustImpl implements FrostyRust {
   ShareFnType get shareOpaqueFrostIdentifier => _platform.inner.share_opaque_FrostIdentifier;
   OpaqueTypeFinalizer get FrostIdentifierFinalizer => _platform.FrostIdentifierFinalizer;
 
-  DropFnType get dropOpaqueKeyShareData => _platform.inner.drop_opaque_KeyShareData;
-  ShareFnType get shareOpaqueKeyShareData => _platform.inner.share_opaque_KeyShareData;
-  OpaqueTypeFinalizer get KeyShareDataFinalizer => _platform.KeyShareDataFinalizer;
+  DropFnType get dropOpaqueFrostKeysKeyPackage => _platform.inner.drop_opaque_FrostKeysKeyPackage;
+  ShareFnType get shareOpaqueFrostKeysKeyPackage => _platform.inner.share_opaque_FrostKeysKeyPackage;
+  OpaqueTypeFinalizer get FrostKeysKeyPackageFinalizer => _platform.FrostKeysKeyPackageFinalizer;
+
+  DropFnType get dropOpaqueFrostKeysPublicKeyPackage => _platform.inner.drop_opaque_FrostKeysPublicKeyPackage;
+  ShareFnType get shareOpaqueFrostKeysPublicKeyPackage => _platform.inner.share_opaque_FrostKeysPublicKeyPackage;
+  OpaqueTypeFinalizer get FrostKeysPublicKeyPackageFinalizer => _platform.FrostKeysPublicKeyPackageFinalizer;
 
   void dispose() {
     _platform.dispose();
@@ -502,8 +530,12 @@ class FrostyRustImpl implements FrostyRust {
     return FrostIdentifier.fromRaw(raw[0], raw[1], this);
   }
 
-  KeyShareData _wire2api_KeyShareData(dynamic raw) {
-    return KeyShareData.fromRaw(raw[0], raw[1], this);
+  FrostKeysKeyPackage _wire2api_FrostKeysKeyPackage(dynamic raw) {
+    return FrostKeysKeyPackage.fromRaw(raw[0], raw[1], this);
+  }
+
+  FrostKeysPublicKeyPackage _wire2api_FrostKeysPublicKeyPackage(dynamic raw) {
+    return FrostKeysPublicKeyPackage.fromRaw(raw[0], raw[1], this);
   }
 
   String _wire2api_String(dynamic raw) {
@@ -535,6 +567,20 @@ class FrostyRustImpl implements FrostyRust {
     return (
       _wire2api_DkgRound2SecretPackage(arr[0]),
       _wire2api_list_dkg_round_2_identifier_and_share(arr[1]),
+    );
+  }
+
+  (
+    FrostKeysKeyPackage,
+    FrostKeysPublicKeyPackage
+  ) _wire2api___record__FrostKeysKeyPackage_FrostKeysPublicKeyPackage(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      _wire2api_FrostKeysKeyPackage(arr[0]),
+      _wire2api_FrostKeysPublicKeyPackage(arr[1]),
     );
   }
 
@@ -655,8 +701,10 @@ class FrostyRustPlatform extends FlutterRustBridgeBase<FrostyRustWire> {
   OpaqueTypeFinalizer get DkgRound2SecretPackageFinalizer => _DkgRound2SecretPackageFinalizer;
   late final OpaqueTypeFinalizer _FrostIdentifierFinalizer = OpaqueTypeFinalizer(inner._drop_opaque_FrostIdentifierPtr);
   OpaqueTypeFinalizer get FrostIdentifierFinalizer => _FrostIdentifierFinalizer;
-  late final OpaqueTypeFinalizer _KeyShareDataFinalizer = OpaqueTypeFinalizer(inner._drop_opaque_KeyShareDataPtr);
-  OpaqueTypeFinalizer get KeyShareDataFinalizer => _KeyShareDataFinalizer;
+  late final OpaqueTypeFinalizer _FrostKeysKeyPackageFinalizer = OpaqueTypeFinalizer(inner._drop_opaque_FrostKeysKeyPackagePtr);
+  OpaqueTypeFinalizer get FrostKeysKeyPackageFinalizer => _FrostKeysKeyPackageFinalizer;
+  late final OpaqueTypeFinalizer _FrostKeysPublicKeyPackageFinalizer = OpaqueTypeFinalizer(inner._drop_opaque_FrostKeysPublicKeyPackagePtr);
+  OpaqueTypeFinalizer get FrostKeysPublicKeyPackageFinalizer => _FrostKeysPublicKeyPackageFinalizer;
 // Section: api_fill_to_wire
 
   void _api_fill_to_wire_DkgRound1Package(DkgRound1Package apiObj, wire_DkgRound1Package wireObj) {
@@ -1075,27 +1123,49 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
   late final _share_opaque_FrostIdentifierPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>>('share_opaque_FrostIdentifier');
   late final _share_opaque_FrostIdentifier = _share_opaque_FrostIdentifierPtr.asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
 
-  void drop_opaque_KeyShareData(
+  void drop_opaque_FrostKeysKeyPackage(
     ffi.Pointer<ffi.Void> ptr,
   ) {
-    return _drop_opaque_KeyShareData(
+    return _drop_opaque_FrostKeysKeyPackage(
       ptr,
     );
   }
 
-  late final _drop_opaque_KeyShareDataPtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>('drop_opaque_KeyShareData');
-  late final _drop_opaque_KeyShareData = _drop_opaque_KeyShareDataPtr.asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+  late final _drop_opaque_FrostKeysKeyPackagePtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>('drop_opaque_FrostKeysKeyPackage');
+  late final _drop_opaque_FrostKeysKeyPackage = _drop_opaque_FrostKeysKeyPackagePtr.asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
-  ffi.Pointer<ffi.Void> share_opaque_KeyShareData(
+  ffi.Pointer<ffi.Void> share_opaque_FrostKeysKeyPackage(
     ffi.Pointer<ffi.Void> ptr,
   ) {
-    return _share_opaque_KeyShareData(
+    return _share_opaque_FrostKeysKeyPackage(
       ptr,
     );
   }
 
-  late final _share_opaque_KeyShareDataPtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>>('share_opaque_KeyShareData');
-  late final _share_opaque_KeyShareData = _share_opaque_KeyShareDataPtr.asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
+  late final _share_opaque_FrostKeysKeyPackagePtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>>('share_opaque_FrostKeysKeyPackage');
+  late final _share_opaque_FrostKeysKeyPackage = _share_opaque_FrostKeysKeyPackagePtr.asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
+
+  void drop_opaque_FrostKeysPublicKeyPackage(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _drop_opaque_FrostKeysPublicKeyPackage(
+      ptr,
+    );
+  }
+
+  late final _drop_opaque_FrostKeysPublicKeyPackagePtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>('drop_opaque_FrostKeysPublicKeyPackage');
+  late final _drop_opaque_FrostKeysPublicKeyPackage = _drop_opaque_FrostKeysPublicKeyPackagePtr.asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  ffi.Pointer<ffi.Void> share_opaque_FrostKeysPublicKeyPackage(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _share_opaque_FrostKeysPublicKeyPackage(
+      ptr,
+    );
+  }
+
+  late final _share_opaque_FrostKeysPublicKeyPackagePtr = _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>>('share_opaque_FrostKeysPublicKeyPackage');
+  late final _share_opaque_FrostKeysPublicKeyPackage = _share_opaque_FrostKeysPublicKeyPackagePtr.asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
 
   void free_WireSyncReturn(
     WireSyncReturn ptr,
