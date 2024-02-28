@@ -21,3 +21,24 @@ class RustObjectWrapper<T extends FrbOpaque> {
 
 }
 
+abstract class WritableRustObjectWrapper<T extends FrbOpaque>
+extends RustObjectWrapper<T> {
+
+  WritableRustObjectWrapper(super._underlying, [Uint8List? bytes])
+    : _bytesCache = bytes;
+
+  Uint8List? _bytesCache;
+  /// Obtain the serailised bytes for this object
+  Uint8List toBytes() => _bytesCache ??= serializeImpl();
+
+  @override
+  void dispose() {
+    _bytesCache = null;
+    super.dispose();
+  }
+
+  /// Subclasses should implement this to obtain the serailised bytes. Use
+  /// [toBytes] to obtain a cached version.
+  Uint8List serializeImpl();
+
+}

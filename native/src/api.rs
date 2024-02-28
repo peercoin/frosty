@@ -173,9 +173,9 @@ pub fn share_to_give_to_bytes(
 
 // DKG Part 3
 
-type PrivateKeyShare = RustOpaque<frost::keys::KeyPackage>;
-type PublicKeyShares = RustOpaque<frost::keys::PublicKeyPackage>;
-type DkgRound3Data = (PrivateKeyShare, PublicKeyShares);
+type PrivateKeyShareOpaque = RustOpaque<frost::keys::KeyPackage>;
+type PublicKeySharesOpaque = RustOpaque<frost::keys::PublicKeyPackage>;
+type DkgRound3Data = (PrivateKeyShareOpaque, PublicKeySharesOpaque);
 type DkgPart3Result = Result<SyncReturn<DkgRound3Data>>;
 
 pub fn dkg_part_3(
@@ -202,4 +202,21 @@ pub fn dkg_part_3(
 
     Ok(SyncReturn((RustOpaque::new(result.0), RustOpaque::new(result.1))))
 
+}
+
+pub fn private_key_share_from_bytes(
+    bytes: Vec<u8>
+) -> Result<SyncReturn<PrivateKeyShareOpaque>> {
+    from_bytes(
+        bytes,
+        |b| frost::keys::KeyPackage::deserialize(&b),
+        |obj| obj.serialize(),
+        "Private key share"
+    )
+}
+
+pub fn private_key_share_to_bytes(
+    share: PrivateKeyShareOpaque
+) -> Result<SyncReturn<Vec<u8>>> {
+    Ok(SyncReturn(share.serialize()?))
 }

@@ -17,7 +17,7 @@ class InvalidShareToGive extends MessageException {
 ///
 /// After this secret has been successfully broadcast to the participant, it
 /// should be disposed with [dispose()].
-class DkgShareToGive extends RustObjectWrapper<rust.DkgRound2Package> {
+class DkgShareToGive extends WritableRustObjectWrapper<rust.DkgRound2Package> {
 
   DkgShareToGive.fromUnderlying(super._underlying);
 
@@ -28,11 +28,13 @@ class DkgShareToGive extends RustObjectWrapper<rust.DkgRound2Package> {
       () => rust.rustApi.shareToGiveFromBytes(bytes: data),
       (e) => InvalidShareToGive(e),
     ),
+    data,
   );
 
   /// Obtains serialised data for the secret that should only be shared to the
   /// recipient participant. Shared secrets must be encrypted and authenticated
   /// and must only be sent to the required recipient.
-  Uint8List toBytes() => rust.rustApi.shareToGiveToBytes(share: underlying);
+  @override
+  Uint8List serializeImpl() => rust.rustApi.shareToGiveToBytes(share: underlying);
 
 }

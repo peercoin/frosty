@@ -199,6 +199,36 @@ fn wire_dkg_part_3_impl(
         },
     )
 }
+fn wire_private_key_share_from_bytes_impl(
+    bytes: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "private_key_share_from_bytes",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_bytes = bytes.wire2api();
+            private_key_share_from_bytes(api_bytes)
+        },
+    )
+}
+fn wire_private_key_share_to_bytes_impl(
+    share: impl Wire2Api<RustOpaque<frost::keys::KeyPackage>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "private_key_share_to_bytes",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_share = share.wire2api();
+            private_key_share_to_bytes(api_share)
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -338,6 +368,20 @@ mod io {
         wire_dkg_part_3_impl(round_2_secret, round_1_commitments, round_2_shares)
     }
 
+    #[no_mangle]
+    pub extern "C" fn wire_private_key_share_from_bytes(
+        bytes: *mut wire_uint_8_list,
+    ) -> support::WireSyncReturn {
+        wire_private_key_share_from_bytes_impl(bytes)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn wire_private_key_share_to_bytes(
+        share: wire_FrostKeysKeyPackage,
+    ) -> support::WireSyncReturn {
+        wire_private_key_share_to_bytes_impl(share)
+    }
+
     // Section: allocate functions
 
     #[no_mangle]
@@ -363,6 +407,11 @@ mod io {
     #[no_mangle]
     pub extern "C" fn new_FrostIdentifier() -> wire_FrostIdentifier {
         wire_FrostIdentifier::new_with_null_ptr()
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_FrostKeysKeyPackage() -> wire_FrostKeysKeyPackage {
+        wire_FrostKeysKeyPackage::new_with_null_ptr()
     }
 
     #[no_mangle]
@@ -536,6 +585,11 @@ mod io {
             unsafe { support::opaque_from_dart(self.ptr as _) }
         }
     }
+    impl Wire2Api<RustOpaque<frost::keys::KeyPackage>> for wire_FrostKeysKeyPackage {
+        fn wire2api(self) -> RustOpaque<frost::keys::KeyPackage> {
+            unsafe { support::opaque_from_dart(self.ptr as _) }
+        }
+    }
     impl Wire2Api<String> for *mut wire_uint_8_list {
         fn wire2api(self) -> String {
             let vec: Vec<u8> = self.wire2api();
@@ -621,6 +675,12 @@ mod io {
 
     #[repr(C)]
     #[derive(Clone)]
+    pub struct wire_FrostKeysKeyPackage {
+        ptr: *const core::ffi::c_void,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
     pub struct wire_DkgCommitmentForIdentifier {
         identifier: wire_FrostIdentifier,
         commitment: wire_DkgRound1Package,
@@ -695,6 +755,13 @@ mod io {
         }
     }
     impl NewWithNullPtr for wire_FrostIdentifier {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                ptr: core::ptr::null(),
+            }
+        }
+    }
+    impl NewWithNullPtr for wire_FrostKeysKeyPackage {
         fn new_with_null_ptr() -> Self {
             Self {
                 ptr: core::ptr::null(),

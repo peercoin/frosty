@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+import 'helpers.dart';
 
 final testIdHex
   = "42c9baf42b1cdefb007e286c44a4b9f23430b99f0f038447619c2ce111e737f4";
@@ -10,6 +11,21 @@ void main() {
   group("Identifier", () {
 
     setUp(loadFrosty);
+
+    writableObjTests<Identifier, InvalidIdentifier>(
+      hexToBytes(testIdHex),
+      (b) => Identifier.fromBytes(b),
+      [
+        // Zero
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        // Out of field order
+        "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+        // Too small
+        "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
+        // Too large
+        "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20",
+      ].map((hex) => hexToBytes(hex)).toList(),
+    );
 
     test("fromUint16 valid", () {
       expect(
@@ -35,35 +51,9 @@ void main() {
       );
     });
 
-    test("fromBytes valid", () {
-      final bytes = hexToBytes(testIdHex);
-      expect(
-        bytesToHex(Identifier.fromBytes(bytes).toBytes()),
-        testIdHex,
-      );
-    });
-
     test("fromUint16 invalid", () {
       for (final bad in [0, 0x10000]) {
         expect(() => Identifier.fromUint16(bad), throwsA(isA<InvalidIdentifier>()));
-      }
-    });
-
-    test("fromBytes invalid", () {
-      for (final bad in [
-        // Zero
-        "0000000000000000000000000000000000000000000000000000000000000000",
-        // Out of field order
-        "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
-        // Too small
-        "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
-        // Too large
-        "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20",
-      ]) {
-        expect(
-          () => Identifier.fromBytes(hexToBytes(bad)),
-          throwsA(isA<InvalidIdentifier>()),
-        );
       }
     });
 
@@ -84,12 +74,6 @@ void main() {
         [id2, idffff, id1, id3]..sort(),
         orderedEquals([id1, id2, id3, idffff]),
       );
-    });
-
-    test("cannot use after free", () {
-      final id = Identifier.fromUint16(1);
-      id.dispose();
-      expect(() => id.toBytes(), throwsA(isA<UseAfterFree>()));
     });
 
   });

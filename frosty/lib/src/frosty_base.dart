@@ -7,3 +7,4 @@ export "dkg/share_to_give.dart";
 export "rust_bindings/rust_api.dart";
 export "rust_bindings/rust_object_wrapper.dart";
 export "identifier.dart";
+export "private_key_share.dart";
