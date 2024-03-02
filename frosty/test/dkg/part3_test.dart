@@ -1,3 +1,4 @@
+import 'package:coinlib/coinlib.dart';
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 import '../helpers.dart';
@@ -40,15 +41,46 @@ void main() {
 
     test("gives different key shares to participants", () {
 
-      final eachPart3 = List.generate(
-        3, (i) => DkgPart3(
+      final infos = List.generate(
+        3,
+        (i) => DkgPart3(
           round2Secret: eachPart2[i].secret,
           commitments: eachCommitmentSet[i],
           receivedShares: eachReceivedShares[i],
-        ),
+        ).frostPrivateInfo,
       );
 
-      // TODO: Check unique key share and identical public shares
+      for (int i = 0; i < 3; i++) {
+
+        final info = infos[i];
+        final pkShares = info.public.publicShares;
+
+        expect(info.identifier, ids[i]);
+        expect(
+          info.identifier,
+          isIn(pkShares.map((e) => e.$1)),
+        );
+        expect(
+          info.privateShare.pubkey,
+          isIn(pkShares.map((e) => e.$2)),
+        );
+        expect(info.public.threshold, 2);
+        expect(info.public.groupPublicKey.compressed, true);
+        expect(pkShares.map((e) => e.$2.compressed), everyElement(true));
+
+      }
+
+      // Expect private shares to be unique
+      expect(
+        infos.map((i) => bytesToHex(i.privateShare.data)).toSet().length,
+        3,
+      );
+
+      // Expect public shares to be identical and encode to the same bytes
+      expect(
+        infos.map((i) => i.public.toHex()).toSet().length,
+        1,
+      );
 
     });
 

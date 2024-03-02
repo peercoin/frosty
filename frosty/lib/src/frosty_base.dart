@@ -6,5 +6,6 @@ export "dkg/part3.dart";
 export "dkg/share_to_give.dart";
 export "rust_bindings/rust_api.dart";
 export "rust_bindings/rust_object_wrapper.dart";
+export "frost_private_info.dart";
+export "frost_public_info.dart";
 export "identifier.dart";
-export "private_key_share.dart";

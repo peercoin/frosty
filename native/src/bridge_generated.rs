@@ -199,36 +199,6 @@ fn wire_dkg_part_3_impl(
         },
     )
 }
-fn wire_private_key_share_from_bytes_impl(
-    bytes: impl Wire2Api<Vec<u8>> + UnwindSafe,
-) -> support::WireSyncReturn {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
-        WrapInfo {
-            debug_name: "private_key_share_from_bytes",
-            port: None,
-            mode: FfiCallMode::Sync,
-        },
-        move || {
-            let api_bytes = bytes.wire2api();
-            private_key_share_from_bytes(api_bytes)
-        },
-    )
-}
-fn wire_private_key_share_to_bytes_impl(
-    share: impl Wire2Api<RustOpaque<frost::keys::KeyPackage>> + UnwindSafe,
-) -> support::WireSyncReturn {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
-        WrapInfo {
-            debug_name: "private_key_share_to_bytes",
-            port: None,
-            mode: FfiCallMode::Sync,
-        },
-        move || {
-            let api_share = share.wire2api();
-            private_key_share_to_bytes(api_share)
-        },
-    )
-}
 // Section: wrapper structs
 
 // Section: static checks
@@ -272,6 +242,41 @@ impl support::IntoDart for DkgRound2IdentifierAndShare {
 }
 impl support::IntoDartExceptPrimitive for DkgRound2IdentifierAndShare {}
 impl rust2dart::IntoIntoDart<DkgRound2IdentifierAndShare> for DkgRound2IdentifierAndShare {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for DkgRound3Data {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.identifier.into_dart(),
+            self.private_share.into_into_dart().into_dart(),
+            self.group_pk.into_into_dart().into_dart(),
+            self.public_key_shares.into_into_dart().into_dart(),
+            self.threshold.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for DkgRound3Data {}
+impl rust2dart::IntoIntoDart<DkgRound3Data> for DkgRound3Data {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for IdentifierAndPublicShare {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.identifier.into_dart(),
+            self.public_share.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for IdentifierAndPublicShare {}
+impl rust2dart::IntoIntoDart<IdentifierAndPublicShare> for IdentifierAndPublicShare {
     fn into_into_dart(self) -> Self {
         self
     }
@@ -368,20 +373,6 @@ mod io {
         wire_dkg_part_3_impl(round_2_secret, round_1_commitments, round_2_shares)
     }
 
-    #[no_mangle]
-    pub extern "C" fn wire_private_key_share_from_bytes(
-        bytes: *mut wire_uint_8_list,
-    ) -> support::WireSyncReturn {
-        wire_private_key_share_from_bytes_impl(bytes)
-    }
-
-    #[no_mangle]
-    pub extern "C" fn wire_private_key_share_to_bytes(
-        share: wire_FrostKeysKeyPackage,
-    ) -> support::WireSyncReturn {
-        wire_private_key_share_to_bytes_impl(share)
-    }
-
     // Section: allocate functions
 
     #[no_mangle]
@@ -407,11 +398,6 @@ mod io {
     #[no_mangle]
     pub extern "C" fn new_FrostIdentifier() -> wire_FrostIdentifier {
         wire_FrostIdentifier::new_with_null_ptr()
-    }
-
-    #[no_mangle]
-    pub extern "C" fn new_FrostKeysKeyPackage() -> wire_FrostKeysKeyPackage {
-        wire_FrostKeysKeyPackage::new_with_null_ptr()
     }
 
     #[no_mangle]
@@ -528,36 +514,6 @@ mod io {
         }
     }
 
-    #[no_mangle]
-    pub extern "C" fn drop_opaque_FrostKeysKeyPackage(ptr: *const c_void) {
-        unsafe {
-            Arc::<frost::keys::KeyPackage>::decrement_strong_count(ptr as _);
-        }
-    }
-
-    #[no_mangle]
-    pub extern "C" fn share_opaque_FrostKeysKeyPackage(ptr: *const c_void) -> *const c_void {
-        unsafe {
-            Arc::<frost::keys::KeyPackage>::increment_strong_count(ptr as _);
-            ptr
-        }
-    }
-
-    #[no_mangle]
-    pub extern "C" fn drop_opaque_FrostKeysPublicKeyPackage(ptr: *const c_void) {
-        unsafe {
-            Arc::<frost::keys::PublicKeyPackage>::decrement_strong_count(ptr as _);
-        }
-    }
-
-    #[no_mangle]
-    pub extern "C" fn share_opaque_FrostKeysPublicKeyPackage(ptr: *const c_void) -> *const c_void {
-        unsafe {
-            Arc::<frost::keys::PublicKeyPackage>::increment_strong_count(ptr as _);
-            ptr
-        }
-    }
-
     // Section: impl Wire2Api
 
     impl Wire2Api<RustOpaque<dkg::round1::Package>> for wire_DkgRound1Package {
@@ -582,11 +538,6 @@ mod io {
     }
     impl Wire2Api<RustOpaque<frost::Identifier>> for wire_FrostIdentifier {
         fn wire2api(self) -> RustOpaque<frost::Identifier> {
-            unsafe { support::opaque_from_dart(self.ptr as _) }
-        }
-    }
-    impl Wire2Api<RustOpaque<frost::keys::KeyPackage>> for wire_FrostKeysKeyPackage {
-        fn wire2api(self) -> RustOpaque<frost::keys::KeyPackage> {
             unsafe { support::opaque_from_dart(self.ptr as _) }
         }
     }
@@ -675,12 +626,6 @@ mod io {
 
     #[repr(C)]
     #[derive(Clone)]
-    pub struct wire_FrostKeysKeyPackage {
-        ptr: *const core::ffi::c_void,
-    }
-
-    #[repr(C)]
-    #[derive(Clone)]
     pub struct wire_DkgCommitmentForIdentifier {
         identifier: wire_FrostIdentifier,
         commitment: wire_DkgRound1Package,
@@ -755,13 +700,6 @@ mod io {
         }
     }
     impl NewWithNullPtr for wire_FrostIdentifier {
-        fn new_with_null_ptr() -> Self {
-            Self {
-                ptr: core::ptr::null(),
-            }
-        }
-    }
-    impl NewWithNullPtr for wire_FrostKeysKeyPackage {
         fn new_with_null_ptr() -> Self {
             Self {
                 ptr: core::ptr::null(),

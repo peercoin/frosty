@@ -173,9 +173,17 @@ pub fn share_to_give_to_bytes(
 
 // DKG Part 3
 
-type PrivateKeyShareOpaque = RustOpaque<frost::keys::KeyPackage>;
-type PublicKeySharesOpaque = RustOpaque<frost::keys::PublicKeyPackage>;
-type DkgRound3Data = (PrivateKeyShareOpaque, PublicKeySharesOpaque);
+pub struct IdentifierAndPublicShare {
+    pub identifier: IdentifierOpaque,
+    pub public_share: Vec<u8>,
+}
+pub struct DkgRound3Data {
+    pub identifier: IdentifierOpaque,
+    pub private_share: Vec<u8>,
+    pub group_pk: Vec<u8>,
+    pub public_key_shares: Vec<IdentifierAndPublicShare>,
+    pub threshold: u16,
+}
 type DkgPart3Result = Result<SyncReturn<DkgRound3Data>>;
 
 pub fn dkg_part_3(
@@ -200,23 +208,22 @@ pub fn dkg_part_3(
         &secrets_map,
     )?;
 
-    Ok(SyncReturn((RustOpaque::new(result.0), RustOpaque::new(result.1))))
+    Ok(SyncReturn(
+        DkgRound3Data {
+            identifier: RustOpaque::new(*result.0.identifier()),
+            // Get private share as scalar
+            private_share: result.0.secret_share().serialize().to_vec(),
+            // Get the threshold public key
+            group_pk: result.1.group_public().serialize().to_vec(),
+            // Collect all the identifier public key shares into a vector
+            public_key_shares: result.1.signer_pubkeys().into_iter().map(
+                |v| IdentifierAndPublicShare {
+                    identifier: RustOpaque::new(*v.0),
+                    public_share: v.1.serialize().to_vec(),
+                }
+            ).collect(),
+            threshold: *result.0.min_signers(),
+        }
+    ))
 
-}
-
-pub fn private_key_share_from_bytes(
-    bytes: Vec<u8>
-) -> Result<SyncReturn<PrivateKeyShareOpaque>> {
-    from_bytes(
-        bytes,
-        |b| frost::keys::KeyPackage::deserialize(&b),
-        |obj| obj.serialize(),
-        "Private key share"
-    )
-}
-
-pub fn private_key_share_to_bytes(
-    share: PrivateKeyShareOpaque
-) -> Result<SyncReturn<Vec<u8>>> {
-    Ok(SyncReturn(share.serialize()?))
 }

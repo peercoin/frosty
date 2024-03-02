@@ -1,8 +1,9 @@
+import 'package:coinlib/coinlib.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:frosty/src/frost_private_info.dart';
+import 'package:frosty/src/frost_public_info.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
-import 'package:frosty/src/private_key_share.dart';
-import 'package:frosty/src/public_key_shares.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'commitment_set.dart';
 import 'part1.dart';
@@ -14,21 +15,17 @@ class InvalidPart3 extends MessageException{
   InvalidPart3(super.message);
 }
 
-/// The third and final part of the DKG. This produces the final
-/// [PrivateKeyShare] for the participant and the [PublicKeyShares] that can be
-/// used by a coordinator to verify signature shares.
+/// The third and final part of the DKG. This provides the [frostPrivateInfo]
+/// which allows the participant to produce signature shares.
 ///
 /// The information that went into producing the key can be diposed of
 /// afterwards. This includes the [DkgRound2Secret], [DkgCommitmentSet] and
 /// [DkgShareToGive] shares.
 class DkgPart3 {
 
-  /// The share of the key for the participant
-  late PrivateKeyShare privateKeyShare;
-
-  /// The public shares of each participant so the coordinator can verify
-  /// signature shares
-  late PublicKeyShares publicKeyShares;
+  /// All the information required for a participant to begin producing
+  /// signature shares.
+  late FrostPrivateInfo frostPrivateInfo;
 
   /// Takes the secret from [DkgPart2.secret], the commitments from [DkgPart1]
   /// and all received shares from [DkgPart2]. The received shares should be
@@ -52,8 +49,20 @@ class DkgPart3 {
         ).toList(),
       );
 
-      privateKeyShare = PrivateKeyShare.fromUnderlying(record.$1);
-      publicKeyShares = PublicKeyShares.fromUnderlying(record.$2);
+      frostPrivateInfo = FrostPrivateInfo(
+        identifier: Identifier.fromUnderlying(record.identifier),
+        privateShare: ECPrivateKey(record.privateShare),
+        public: FrostPublicInfo(
+          groupPublicKey: ECPublicKey(record.groupPk),
+          publicShares: [
+            for (final share in record.publicKeyShares) (
+              Identifier.fromUnderlying(share.identifier),
+              ECPublicKey(share.publicShare),
+            ),
+          ],
+          threshold: record.threshold,
+        ),
+      );
 
     } on FrbAnyhowException catch(e) {
       throw InvalidPart3(e.anyhow);
