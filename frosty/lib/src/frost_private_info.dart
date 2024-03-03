@@ -14,11 +14,20 @@ class FrostPrivateInfo with Writable {
   /// The public information for the FROST key.
   final FrostPublicInfo public;
 
+  /// Provides the private key share alongside public information for the FROST
+  /// key. The identifier and private share are assumed to belong to the public
+  /// shares.
   FrostPrivateInfo({
     required this.identifier,
     required this.privateShare,
     required this.public,
   });
+
+  FrostPrivateInfo.fromReader(BytesReader reader) : this(
+    identifier: Identifier.fromBytes(reader.readSlice(32)),
+    privateShare: ECPrivateKey(reader.readSlice(32)),
+    public: FrostPublicInfo.fromReader(reader),
+  );
 
   @override
   void write(Writer writer) {

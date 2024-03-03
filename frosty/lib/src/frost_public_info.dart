@@ -1,5 +1,11 @@
 import 'package:coinlib/coinlib.dart';
+import 'helpers/message_exception.dart';
 import 'identifier.dart';
+
+/// Thrown if the public information is not valid
+class InvalidPublicInfo extends MessageException {
+  InvalidPublicInfo(super.message);
+}
 
 typedef PublicShareList = List<(Identifier, ECPublicKey)>;
 
@@ -15,6 +21,8 @@ class FrostPublicInfo with Writable {
   /// The number of signers required for a signature
   final int threshold;
 
+  /// Takes the public FROST key information. If this information is invalid
+  /// [InvalidPublicInfo] may be thrown.
   FrostPublicInfo({
     required this.groupPublicKey,
     required PublicShareList publicShares,
@@ -23,11 +31,9 @@ class FrostPublicInfo with Writable {
       (a, b) => a.$1.compareTo(b.$1),
   ) {
 
-    if (threshold > publicShares.length) {
-      throw ArgumentError.value(
-        threshold,
-        "threshold",
-        "shouldn't exceed number of shares (${publicShares.length})",
+    if (threshold > publicShares.length || threshold < 2) {
+      throw InvalidPublicInfo(
+        "threshold should be between 2 and ${publicShares.length}",
       );
     }
 
@@ -35,10 +41,29 @@ class FrostPublicInfo with Writable {
       !groupPublicKey.compressed
       || publicShares.any((pk) => !pk.$2.compressed)
     ) {
-      throw ArgumentError("FrostPublicInfo cannot accept uncompressed keys");
+      throw InvalidPublicInfo("FrostPublicInfo cannot accept uncompressed keys");
+    }
+
+    if (
+      publicShares.map((share) => share.$1).toSet().length
+      != publicShares.length
+    ) {
+      throw InvalidPublicInfo("Duplicate identifier");
     }
 
   }
+
+  FrostPublicInfo.fromReader(BytesReader reader) : this(
+    groupPublicKey: ECPublicKey(reader.readSlice(33)),
+    publicShares: List.generate(
+      reader.readUInt16(),
+      (i) => (
+        Identifier.fromBytes(reader.readSlice(32)),
+        ECPublicKey(reader.readSlice(33)),
+      ),
+    ),
+    threshold: reader.readUInt16(),
+  );
 
   @override
   void write(Writer writer) {
