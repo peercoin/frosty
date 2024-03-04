@@ -199,6 +199,51 @@ fn wire_dkg_part_3_impl(
         },
     )
 }
+fn wire_sign_part_1_impl(
+    private_share: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "sign_part_1",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_private_share = private_share.wire2api();
+            sign_part_1(api_private_share)
+        },
+    )
+}
+fn wire_signing_commitment_from_bytes_impl(
+    bytes: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "signing_commitment_from_bytes",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_bytes = bytes.wire2api();
+            signing_commitment_from_bytes(api_bytes)
+        },
+    )
+}
+fn wire_signing_commitment_to_bytes_impl(
+    commitment: impl Wire2Api<RustOpaque<frost::round1::SigningCommitments>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "signing_commitment_to_bytes",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_commitment = commitment.wire2api();
+            signing_commitment_to_bytes(api_commitment)
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -373,6 +418,27 @@ mod io {
         wire_dkg_part_3_impl(round_2_secret, round_1_commitments, round_2_shares)
     }
 
+    #[no_mangle]
+    pub extern "C" fn wire_sign_part_1(
+        private_share: *mut wire_uint_8_list,
+    ) -> support::WireSyncReturn {
+        wire_sign_part_1_impl(private_share)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn wire_signing_commitment_from_bytes(
+        bytes: *mut wire_uint_8_list,
+    ) -> support::WireSyncReturn {
+        wire_signing_commitment_from_bytes_impl(bytes)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn wire_signing_commitment_to_bytes(
+        commitment: wire_FrostRound1SigningCommitments,
+    ) -> support::WireSyncReturn {
+        wire_signing_commitment_to_bytes_impl(commitment)
+    }
+
     // Section: allocate functions
 
     #[no_mangle]
@@ -398,6 +464,11 @@ mod io {
     #[no_mangle]
     pub extern "C" fn new_FrostIdentifier() -> wire_FrostIdentifier {
         wire_FrostIdentifier::new_with_null_ptr()
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_FrostRound1SigningCommitments() -> wire_FrostRound1SigningCommitments {
+        wire_FrostRound1SigningCommitments::new_with_null_ptr()
     }
 
     #[no_mangle]
@@ -514,6 +585,38 @@ mod io {
         }
     }
 
+    #[no_mangle]
+    pub extern "C" fn drop_opaque_FrostRound1SigningCommitments(ptr: *const c_void) {
+        unsafe {
+            Arc::<frost::round1::SigningCommitments>::decrement_strong_count(ptr as _);
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn share_opaque_FrostRound1SigningCommitments(
+        ptr: *const c_void,
+    ) -> *const c_void {
+        unsafe {
+            Arc::<frost::round1::SigningCommitments>::increment_strong_count(ptr as _);
+            ptr
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn drop_opaque_FrostRound1SigningNonces(ptr: *const c_void) {
+        unsafe {
+            Arc::<frost::round1::SigningNonces>::decrement_strong_count(ptr as _);
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn share_opaque_FrostRound1SigningNonces(ptr: *const c_void) -> *const c_void {
+        unsafe {
+            Arc::<frost::round1::SigningNonces>::increment_strong_count(ptr as _);
+            ptr
+        }
+    }
+
     // Section: impl Wire2Api
 
     impl Wire2Api<RustOpaque<dkg::round1::Package>> for wire_DkgRound1Package {
@@ -538,6 +641,13 @@ mod io {
     }
     impl Wire2Api<RustOpaque<frost::Identifier>> for wire_FrostIdentifier {
         fn wire2api(self) -> RustOpaque<frost::Identifier> {
+            unsafe { support::opaque_from_dart(self.ptr as _) }
+        }
+    }
+    impl Wire2Api<RustOpaque<frost::round1::SigningCommitments>>
+        for wire_FrostRound1SigningCommitments
+    {
+        fn wire2api(self) -> RustOpaque<frost::round1::SigningCommitments> {
             unsafe { support::opaque_from_dart(self.ptr as _) }
         }
     }
@@ -626,6 +736,12 @@ mod io {
 
     #[repr(C)]
     #[derive(Clone)]
+    pub struct wire_FrostRound1SigningCommitments {
+        ptr: *const core::ffi::c_void,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
     pub struct wire_DkgCommitmentForIdentifier {
         identifier: wire_FrostIdentifier,
         commitment: wire_DkgRound1Package,
@@ -700,6 +816,13 @@ mod io {
         }
     }
     impl NewWithNullPtr for wire_FrostIdentifier {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                ptr: core::ptr::null(),
+            }
+        }
+    }
+    impl NewWithNullPtr for wire_FrostRound1SigningCommitments {
         fn new_with_null_ptr() -> Self {
             Self {
                 ptr: core::ptr::null(),

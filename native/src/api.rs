@@ -37,6 +37,14 @@ where
 
 }
 
+fn vec_to_array<const N: usize, T>(
+    vec: Vec<T>,
+    name: &str
+) -> Result<[T; N]> {
+    <[T; N]>::try_from(vec)
+    .map_err(|_| anyhow!("{} should have {} bytes", name, N))
+}
+
 // Participant identifiers
 
 type IdentifierOpaque = RustOpaque<frost::Identifier>;
@@ -51,12 +59,8 @@ pub fn identifier_from_u16(i: u16) -> IdentifierResult {
 }
 
 pub fn identifier_from_bytes(bytes: Vec<u8>) -> IdentifierResult {
-
-    let array = <[u8; 32]>::try_from(bytes)
-        .map_err(|_| anyhow!("Identifier byte size should be 32"))?;
-
+    let array = vec_to_array::<32, u8>(bytes, "Identifier")?;
     in_to_ext_result(frost::Identifier::deserialize(&array))
-
 }
 
 pub fn identifier_to_bytes(identifier: IdentifierOpaque) -> SyncReturn<Vec<u8>> {
@@ -226,4 +230,45 @@ pub fn dkg_part_3(
         }
     ))
 
+}
+
+// Sign Part 1: Nonce generation
+
+type SigningNonceOpaque = RustOpaque<frost::round1::SigningNonces>;
+type SigningCommitmentOpaque = RustOpaque<frost::round1::SigningCommitments>;
+type SignPart1Result = Result<SyncReturn<(SigningNonceOpaque, SigningCommitmentOpaque)>>;
+
+pub fn sign_part_1(
+    private_share: Vec<u8>
+) -> SignPart1Result {
+
+    let mut rng = thread_rng();
+
+    let array = vec_to_array::<32, u8>(private_share, "Private share")?;
+
+    let (nonce, commitment) = frost::round1::commit(
+        &frost::keys::SigningShare::deserialize(array)
+        .map_err(|_| anyhow!("Could not deserialize private share"))?,
+        &mut rng,
+    );
+
+    Ok(SyncReturn((RustOpaque::new(nonce), RustOpaque::new(commitment))))
+
+}
+
+pub fn signing_commitment_from_bytes(
+    bytes: Vec<u8>
+) -> Result<SyncReturn<SigningCommitmentOpaque>> {
+    from_bytes(
+        bytes,
+        |b| frost::round1::SigningCommitments::deserialize(&b),
+        |obj| obj.serialize(),
+        "Signing commitment"
+    )
+}
+
+pub fn signing_commitment_to_bytes(
+    commitment: SigningCommitmentOpaque
+) -> Result<SyncReturn<Vec<u8>>> {
+    Ok(SyncReturn(commitment.serialize()?))
 }
