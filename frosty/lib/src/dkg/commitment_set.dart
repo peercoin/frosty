@@ -11,7 +11,7 @@ typedef CommitmentList = List<CommitmentPair>;
 /// must be the same across all participants. Each participant should verify
 /// that all other participants have the same set by receiving a signed [hash]
 /// of commitments from each participant and verifying that they are the same.
-class DkgCommitmentSet {
+class DkgCommitmentSet with Writable {
 
   final CommitmentList list;
 
@@ -22,6 +22,16 @@ class DkgCommitmentSet {
     : list = List.from(commitments)..sort(
       (a, b) => a.$1.compareTo(b.$1),
     );
+
+  DkgCommitmentSet.fromReader(BytesReader reader) : this(
+    List.generate(
+      reader.readUInt16(),
+      (i) => (
+        Identifier.fromBytes(reader.readSlice(32)),
+        DkgPublicCommitment.fromBytes(reader.readVarSlice()),
+      ),
+    ),
+  );
 
   Uint8List? _hashCache;
   Uint8List get hash => _hashCache ??= sha256Hash(
@@ -37,5 +47,14 @@ class DkgCommitmentSet {
       commitment: v.$2.underlying,
     ),
   ).toList();
+
+  @override
+  void write(Writer writer) {
+    writer.writeUInt16(list.length);
+    for (final pair in list) {
+      writer.writeSlice(pair.$1.toBytes());
+      writer.writeVarSlice(pair.$2.toBytes());
+    }
+  }
 
 }
