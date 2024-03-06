@@ -5,6 +5,7 @@ export "dkg/part2.dart";
 export "dkg/part3.dart";
 export "dkg/share_to_give.dart";
 export "sign/commitment.dart";
+export "sign/commitment_set.dart";
 export "sign/part1.dart";
 export "rust_bindings/rust_api.dart";
 export "rust_bindings/rust_object_wrapper.dart";

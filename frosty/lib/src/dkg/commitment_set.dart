@@ -4,8 +4,8 @@ import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'public_commitment.dart';
 import 'package:frosty/src/identifier.dart';
 
-typedef CommitmentPair = (Identifier, DkgPublicCommitment);
-typedef CommitmentList = List<CommitmentPair>;
+typedef DkgCommitmentPair = (Identifier, DkgPublicCommitment);
+typedef DkgCommitmentList = List<DkgCommitmentPair>;
 
 /// Holds the list of public commitments associated with each identifier. These
 /// must be the same across all participants. Each participant should verify
@@ -13,11 +13,11 @@ typedef CommitmentList = List<CommitmentPair>;
 /// of commitments from each participant and verifying that they are the same.
 class DkgCommitmentSet with Writable {
 
-  final CommitmentList list;
+  final DkgCommitmentList list;
 
   /// Takes a list of commitments with each element containing a tuple of the
   /// [Identifier] followed by the associated [DkgPublicCommitment].
-  DkgCommitmentSet(CommitmentList commitments)
+  DkgCommitmentSet(DkgCommitmentList commitments)
     // Order commitments to ensure consistency
     : list = List.from(commitments)..sort(
       (a, b) => a.$1.compareTo(b.$1),

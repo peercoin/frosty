@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+import '../helpers.dart';
 
 void main() {
   group("DkgCommitmentSet", () {
@@ -18,20 +19,9 @@ void main() {
       ),
     ];
 
-    final validBytes = Uint8List.fromList([
-      3, 0,
-      ...Uint8List(32)..last=1,
-      commitBytes[0].length,
-      ...commitBytes[0],
-      ...Uint8List(32)..last=2,
-      commitBytes[1].length,
-      ...commitBytes[1],
-      ...Uint8List(32)..last=3,
-      commitBytes[2].length,
-      ...commitBytes[2],
-    ]);
+    final validBytes = commitmentSetBytes(commitBytes);
 
-    late List<CommitmentPair> pairs;
+    late List<DkgCommitmentPair> pairs;
     setUp(() async {
       await loadFrosty();
       pairs = List.generate(

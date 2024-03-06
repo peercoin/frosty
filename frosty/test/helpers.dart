@@ -59,3 +59,18 @@ void writableObjTests<
   });
 
 }
+
+Uint8List commitmentSetBytes(
+  List<Uint8List> commitBytes,
+) => Uint8List.fromList([
+  3, 0,
+  ...Uint8List(32)..last=1,
+  commitBytes[0].length,
+  ...commitBytes[0],
+  ...Uint8List(32)..last=2,
+  commitBytes[1].length,
+  ...commitBytes[1],
+  ...Uint8List(32)..last=3,
+  commitBytes[2].length,
+  ...commitBytes[2],
+]);
