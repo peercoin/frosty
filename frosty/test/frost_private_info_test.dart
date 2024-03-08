@@ -14,15 +14,7 @@ void main() {
 
     test("valid private info", () {
 
-      final valid = FrostPrivateInfo(
-        identifier: Identifier.fromUint16(1),
-        privateShare: privateShares.first,
-        public: FrostPublicInfo(
-          groupPublicKey: groupPublicKey,
-          publicShares: publicShares,
-          threshold: 2,
-        ),
-      );
+      final valid = getPrivateInfo(0);
 
       expect(valid.toHex(), validHex);
       expect(

@@ -45,6 +45,14 @@ fn vec_to_array<const N: usize, T>(
     .map_err(|_| anyhow!("{} should have {} bytes", name, N))
 }
 
+fn vector_to_signing_share(
+    vec: Vec<u8>
+) -> Result<frost::keys::SigningShare> {
+    let array = vec_to_array::<32, u8>(vec, "Private share")?;
+    frost::keys::SigningShare::deserialize(array)
+        .map_err(|_| anyhow!("Could not deserialize private share"))
+}
+
 // Participant identifiers
 
 type IdentifierOpaque = RustOpaque<frost::Identifier>;
@@ -244,11 +252,8 @@ pub fn sign_part_1(
 
     let mut rng = thread_rng();
 
-    let array = vec_to_array::<32, u8>(private_share, "Private share")?;
-
     let (nonce, commitment) = frost::round1::commit(
-        &frost::keys::SigningShare::deserialize(array)
-        .map_err(|_| anyhow!("Could not deserialize private share"))?,
+        &vector_to_signing_share(private_share)?,
         &mut rng,
     );
 
@@ -271,4 +276,68 @@ pub fn signing_commitment_to_bytes(
     commitment: SigningCommitmentOpaque
 ) -> Result<SyncReturn<Vec<u8>>> {
     Ok(SyncReturn(commitment.serialize()?))
+}
+
+// Sign Part 2: Generate signature share
+
+pub struct IdentifierAndSigningCommitment {
+    pub identifier: IdentifierOpaque,
+    pub commitment: SigningCommitmentOpaque,
+}
+
+type SignatureShareOpaque = RustOpaque<frost::round2::SignatureShare>;
+type SignPart2Result = Result<SyncReturn<SignatureShareOpaque>>;
+
+pub fn sign_part_2(
+    nonce_commitments: Vec<IdentifierAndSigningCommitment>,
+    message: Vec<u8>,
+    signing_nonce: SigningNonceOpaque,
+    identifier: IdentifierOpaque,
+    private_share: Vec<u8>,
+    group_pk: Vec<u8>,
+    threshold: u16,
+) -> SignPart2Result {
+
+    let signing_package = frost::SigningPackage::new(
+        nonce_commitments.into_iter().map(
+            |v| (*v.identifier, (*v.commitment).clone())
+        ).collect(),
+        &message
+    );
+
+    let signing_share = vector_to_signing_share(private_share)?;
+
+    let group_array = vec_to_array::<33, u8>(group_pk, "Group key")?;
+    let group_verifying_key = frost::VerifyingKey::deserialize(group_array)
+        .map_err(|_| anyhow!("Could not deserialize group key"))?;
+
+    let key_package = frost::keys::KeyPackage::new(
+        *identifier,
+        signing_share,
+        signing_share.try_into()?,
+        group_verifying_key,
+        threshold,
+    );
+
+    Ok(SyncReturn(RustOpaque::new(
+        frost::round2::sign(
+            &signing_package,
+            &signing_nonce,
+            &key_package,
+        )?
+    )))
+
+}
+
+pub fn signature_share_from_bytes(
+    bytes: Vec<u8>
+) -> Result<SyncReturn<SignatureShareOpaque>> {
+    let array = vec_to_array::<32, u8>(bytes, "Signature share")?;
+    in_to_ext_result(frost::round2::SignatureShare::deserialize(array))
+}
+
+pub fn signature_share_to_bytes(
+    share: SignatureShareOpaque
+) -> SyncReturn<Vec<u8>> {
+    SyncReturn(share.serialize().to_vec())
 }

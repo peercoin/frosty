@@ -42,3 +42,13 @@ final publicShares = [
    ),
   ),
 ];
+
+FrostPrivateInfo getPrivateInfo(int i) => FrostPrivateInfo(
+  identifier: Identifier.fromUint16(i+1),
+  privateShare: privateShares[i],
+  public: FrostPublicInfo(
+    groupPublicKey: groupPublicKey,
+    publicShares: publicShares,
+    threshold: 2,
+  ),
+);

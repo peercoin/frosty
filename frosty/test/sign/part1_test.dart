@@ -5,9 +5,7 @@ import "../data.dart";
 void main() {
   group("SignPart1", () {
 
-    setUp(() async {
-      await loadFrosty();
-    });
+    setUp(loadFrosty);
 
     test("is different each time", () {
       expect(

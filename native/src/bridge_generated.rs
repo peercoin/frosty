@@ -244,6 +244,71 @@ fn wire_signing_commitment_to_bytes_impl(
         },
     )
 }
+fn wire_sign_part_2_impl(
+    nonce_commitments: impl Wire2Api<Vec<IdentifierAndSigningCommitment>> + UnwindSafe,
+    message: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    signing_nonce: impl Wire2Api<RustOpaque<frost::round1::SigningNonces>> + UnwindSafe,
+    identifier: impl Wire2Api<RustOpaque<frost::Identifier>> + UnwindSafe,
+    private_share: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    group_pk: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    threshold: impl Wire2Api<u16> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "sign_part_2",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_nonce_commitments = nonce_commitments.wire2api();
+            let api_message = message.wire2api();
+            let api_signing_nonce = signing_nonce.wire2api();
+            let api_identifier = identifier.wire2api();
+            let api_private_share = private_share.wire2api();
+            let api_group_pk = group_pk.wire2api();
+            let api_threshold = threshold.wire2api();
+            sign_part_2(
+                api_nonce_commitments,
+                api_message,
+                api_signing_nonce,
+                api_identifier,
+                api_private_share,
+                api_group_pk,
+                api_threshold,
+            )
+        },
+    )
+}
+fn wire_signature_share_from_bytes_impl(
+    bytes: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "signature_share_from_bytes",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_bytes = bytes.wire2api();
+            signature_share_from_bytes(api_bytes)
+        },
+    )
+}
+fn wire_signature_share_to_bytes_impl(
+    share: impl Wire2Api<RustOpaque<frost::round2::SignatureShare>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "signature_share_to_bytes",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_share = share.wire2api();
+            Result::<_, ()>::Ok(signature_share_to_bytes(api_share))
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -439,6 +504,41 @@ mod io {
         wire_signing_commitment_to_bytes_impl(commitment)
     }
 
+    #[no_mangle]
+    pub extern "C" fn wire_sign_part_2(
+        nonce_commitments: *mut wire_list_identifier_and_signing_commitment,
+        message: *mut wire_uint_8_list,
+        signing_nonce: wire_FrostRound1SigningNonces,
+        identifier: wire_FrostIdentifier,
+        private_share: *mut wire_uint_8_list,
+        group_pk: *mut wire_uint_8_list,
+        threshold: u16,
+    ) -> support::WireSyncReturn {
+        wire_sign_part_2_impl(
+            nonce_commitments,
+            message,
+            signing_nonce,
+            identifier,
+            private_share,
+            group_pk,
+            threshold,
+        )
+    }
+
+    #[no_mangle]
+    pub extern "C" fn wire_signature_share_from_bytes(
+        bytes: *mut wire_uint_8_list,
+    ) -> support::WireSyncReturn {
+        wire_signature_share_from_bytes_impl(bytes)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn wire_signature_share_to_bytes(
+        share: wire_FrostRound2SignatureShare,
+    ) -> support::WireSyncReturn {
+        wire_signature_share_to_bytes_impl(share)
+    }
+
     // Section: allocate functions
 
     #[no_mangle]
@@ -472,6 +572,16 @@ mod io {
     }
 
     #[no_mangle]
+    pub extern "C" fn new_FrostRound1SigningNonces() -> wire_FrostRound1SigningNonces {
+        wire_FrostRound1SigningNonces::new_with_null_ptr()
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_FrostRound2SignatureShare() -> wire_FrostRound2SignatureShare {
+        wire_FrostRound2SignatureShare::new_with_null_ptr()
+    }
+
+    #[no_mangle]
     pub extern "C" fn new_list_dkg_commitment_for_identifier_0(
         len: i32,
     ) -> *mut wire_list_dkg_commitment_for_identifier {
@@ -492,6 +602,20 @@ mod io {
         let wrap = wire_list_dkg_round_2_identifier_and_share {
             ptr: support::new_leak_vec_ptr(
                 <wire_DkgRound2IdentifierAndShare>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        support::new_leak_box_ptr(wrap)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_list_identifier_and_signing_commitment_0(
+        len: i32,
+    ) -> *mut wire_list_identifier_and_signing_commitment {
+        let wrap = wire_list_identifier_and_signing_commitment {
+            ptr: support::new_leak_vec_ptr(
+                <wire_IdentifierAndSigningCommitment>::new_with_null_ptr(),
                 len,
             ),
             len,
@@ -617,6 +741,21 @@ mod io {
         }
     }
 
+    #[no_mangle]
+    pub extern "C" fn drop_opaque_FrostRound2SignatureShare(ptr: *const c_void) {
+        unsafe {
+            Arc::<frost::round2::SignatureShare>::decrement_strong_count(ptr as _);
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn share_opaque_FrostRound2SignatureShare(ptr: *const c_void) -> *const c_void {
+        unsafe {
+            Arc::<frost::round2::SignatureShare>::increment_strong_count(ptr as _);
+            ptr
+        }
+    }
+
     // Section: impl Wire2Api
 
     impl Wire2Api<RustOpaque<dkg::round1::Package>> for wire_DkgRound1Package {
@@ -651,6 +790,16 @@ mod io {
             unsafe { support::opaque_from_dart(self.ptr as _) }
         }
     }
+    impl Wire2Api<RustOpaque<frost::round1::SigningNonces>> for wire_FrostRound1SigningNonces {
+        fn wire2api(self) -> RustOpaque<frost::round1::SigningNonces> {
+            unsafe { support::opaque_from_dart(self.ptr as _) }
+        }
+    }
+    impl Wire2Api<RustOpaque<frost::round2::SignatureShare>> for wire_FrostRound2SignatureShare {
+        fn wire2api(self) -> RustOpaque<frost::round2::SignatureShare> {
+            unsafe { support::opaque_from_dart(self.ptr as _) }
+        }
+    }
     impl Wire2Api<String> for *mut wire_uint_8_list {
         fn wire2api(self) -> String {
             let vec: Vec<u8> = self.wire2api();
@@ -673,6 +822,14 @@ mod io {
             }
         }
     }
+    impl Wire2Api<IdentifierAndSigningCommitment> for wire_IdentifierAndSigningCommitment {
+        fn wire2api(self) -> IdentifierAndSigningCommitment {
+            IdentifierAndSigningCommitment {
+                identifier: self.identifier.wire2api(),
+                commitment: self.commitment.wire2api(),
+            }
+        }
+    }
     impl Wire2Api<Vec<DkgCommitmentForIdentifier>> for *mut wire_list_dkg_commitment_for_identifier {
         fn wire2api(self) -> Vec<DkgCommitmentForIdentifier> {
             let vec = unsafe {
@@ -686,6 +843,17 @@ mod io {
         for *mut wire_list_dkg_round_2_identifier_and_share
     {
         fn wire2api(self) -> Vec<DkgRound2IdentifierAndShare> {
+            let vec = unsafe {
+                let wrap = support::box_from_leak_ptr(self);
+                support::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(Wire2Api::wire2api).collect()
+        }
+    }
+    impl Wire2Api<Vec<IdentifierAndSigningCommitment>>
+        for *mut wire_list_identifier_and_signing_commitment
+    {
+        fn wire2api(self) -> Vec<IdentifierAndSigningCommitment> {
             let vec = unsafe {
                 let wrap = support::box_from_leak_ptr(self);
                 support::vec_from_leak_ptr(wrap.ptr, wrap.len)
@@ -742,6 +910,18 @@ mod io {
 
     #[repr(C)]
     #[derive(Clone)]
+    pub struct wire_FrostRound1SigningNonces {
+        ptr: *const core::ffi::c_void,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
+    pub struct wire_FrostRound2SignatureShare {
+        ptr: *const core::ffi::c_void,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
     pub struct wire_DkgCommitmentForIdentifier {
         identifier: wire_FrostIdentifier,
         commitment: wire_DkgRound1Package,
@@ -756,6 +936,13 @@ mod io {
 
     #[repr(C)]
     #[derive(Clone)]
+    pub struct wire_IdentifierAndSigningCommitment {
+        identifier: wire_FrostIdentifier,
+        commitment: wire_FrostRound1SigningCommitments,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
     pub struct wire_list_dkg_commitment_for_identifier {
         ptr: *mut wire_DkgCommitmentForIdentifier,
         len: i32,
@@ -765,6 +952,13 @@ mod io {
     #[derive(Clone)]
     pub struct wire_list_dkg_round_2_identifier_and_share {
         ptr: *mut wire_DkgRound2IdentifierAndShare,
+        len: i32,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
+    pub struct wire_list_identifier_and_signing_commitment {
+        ptr: *mut wire_IdentifierAndSigningCommitment,
         len: i32,
     }
 
@@ -829,6 +1023,20 @@ mod io {
             }
         }
     }
+    impl NewWithNullPtr for wire_FrostRound1SigningNonces {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                ptr: core::ptr::null(),
+            }
+        }
+    }
+    impl NewWithNullPtr for wire_FrostRound2SignatureShare {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                ptr: core::ptr::null(),
+            }
+        }
+    }
 
     impl NewWithNullPtr for wire_DkgCommitmentForIdentifier {
         fn new_with_null_ptr() -> Self {
@@ -855,6 +1063,21 @@ mod io {
     }
 
     impl Default for wire_DkgRound2IdentifierAndShare {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+
+    impl NewWithNullPtr for wire_IdentifierAndSigningCommitment {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                identifier: wire_FrostIdentifier::new_with_null_ptr(),
+                commitment: wire_FrostRound1SigningCommitments::new_with_null_ptr(),
+            }
+        }
+    }
+
+    impl Default for wire_IdentifierAndSigningCommitment {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }
