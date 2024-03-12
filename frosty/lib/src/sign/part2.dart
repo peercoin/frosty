@@ -20,6 +20,9 @@ class SignPart2 {
 
   /// After the signature share is generated, the [ourNonce] should be disposed.
   /// The [commitments] are also no longer needed.
+  ///
+  /// The message should be agreed upon and for Peercoin transactions is the
+  /// taproot signature hash.
   SignPart2({
     required Identifier identifier,
     required Uint8List message,

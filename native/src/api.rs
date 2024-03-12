@@ -3,6 +3,7 @@ pub use frost_secp256k1::keys::dkg as dkg;
 use rand::thread_rng;
 use anyhow::{anyhow, Result};
 use flutter_rust_bridge::{SyncReturn, RustOpaque, DartSafe};
+use std::collections::HashMap;
 
 // Common
 
@@ -51,6 +52,30 @@ fn vector_to_signing_share(
     let array = vec_to_array::<32, u8>(vec, "Private share")?;
     frost::keys::SigningShare::deserialize(array)
         .map_err(|_| anyhow!("Could not deserialize private share"))
+}
+
+fn construct_signing_package(
+    nonce_commitments: Vec<IdentifierAndSigningCommitment>,
+    message: Vec<u8>,
+) -> frost::SigningPackage {
+    frost::SigningPackage::new(
+        nonce_commitments.into_iter().map(
+            |v| (*v.identifier, (*v.commitment).clone())
+        ).collect(),
+        &message
+    )
+}
+
+fn vector_to_group_key(vec: Vec<u8>) -> Result<frost::VerifyingKey> {
+    let array = vec_to_array::<33, u8>(vec, "Group key")?;
+    frost::VerifyingKey::deserialize(array)
+        .map_err(|_| anyhow!("Could not deserialize group key"))
+}
+
+fn vector_to_verifying_share(vec: Vec<u8>) -> Result<frost::keys::VerifyingShare> {
+    let array = vec_to_array::<33, u8>(vec, "Verifying share")?;
+    frost::keys::VerifyingShare::deserialize(array)
+        .map_err(|_| anyhow!("Could not deserialize verifying share"))
 }
 
 // Participant identifiers
@@ -298,18 +323,9 @@ pub fn sign_part_2(
     threshold: u16,
 ) -> SignPart2Result {
 
-    let signing_package = frost::SigningPackage::new(
-        nonce_commitments.into_iter().map(
-            |v| (*v.identifier, (*v.commitment).clone())
-        ).collect(),
-        &message
-    );
-
+    let signing_package = construct_signing_package(nonce_commitments, message);
     let signing_share = vector_to_signing_share(private_share)?;
-
-    let group_array = vec_to_array::<33, u8>(group_pk, "Group key")?;
-    let group_verifying_key = frost::VerifyingKey::deserialize(group_array)
-        .map_err(|_| anyhow!("Could not deserialize group key"))?;
+    let group_verifying_key = vector_to_group_key(group_pk)?;
 
     let key_package = frost::keys::KeyPackage::new(
         *identifier,
@@ -340,4 +356,53 @@ pub fn signature_share_to_bytes(
     share: SignatureShareOpaque
 ) -> SyncReturn<Vec<u8>> {
     SyncReturn(share.serialize().to_vec())
+}
+
+// Final aggregation
+
+pub struct IdentifierAndSignatureShare {
+    pub identifier: IdentifierOpaque,
+    pub share: SignatureShareOpaque,
+}
+
+pub fn aggregate_signature(
+    nonce_commitments: Vec<IdentifierAndSigningCommitment>,
+    message: Vec<u8>,
+    shares: Vec<IdentifierAndSignatureShare>,
+    group_pk: Vec<u8>,
+    public_shares: Vec<IdentifierAndPublicShare>,
+) -> Result<SyncReturn<Vec<u8>>> {
+
+    let signing_package = construct_signing_package(nonce_commitments, message);
+    let group_verifying_key = vector_to_group_key(group_pk)?;
+
+    let pubkey_package = frost::keys::PublicKeyPackage::new(
+        public_shares.into_iter().try_fold(
+            HashMap::new(),
+            |mut acc, v|
+            -> Result<HashMap<frost::Identifier, frost::keys::VerifyingShare>> {
+                acc.insert(
+                    *v.identifier,
+                    vector_to_verifying_share(v.public_share)?,
+                );
+                Ok(acc)
+            }
+        )?,
+        group_verifying_key,
+    );
+
+    let signature = frost::aggregate(
+        &signing_package,
+        &shares.into_iter().map(
+            |v| (*v.identifier, (*v.share).clone())
+        ).collect(),
+        &pubkey_package,
+    )?;
+
+    // Serialise, removing the first byte of the point as Schnorr signatures in
+    // Peercoin expect no odd/even bit.
+    let bytes = signature.serialize()[1..].to_vec();
+
+    Ok(SyncReturn(bytes))
+
 }

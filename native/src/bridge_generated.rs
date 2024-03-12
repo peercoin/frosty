@@ -309,6 +309,35 @@ fn wire_signature_share_to_bytes_impl(
         },
     )
 }
+fn wire_aggregate_signature_impl(
+    nonce_commitments: impl Wire2Api<Vec<IdentifierAndSigningCommitment>> + UnwindSafe,
+    message: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    shares: impl Wire2Api<Vec<IdentifierAndSignatureShare>> + UnwindSafe,
+    group_pk: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    public_shares: impl Wire2Api<Vec<IdentifierAndPublicShare>> + UnwindSafe,
+) -> support::WireSyncReturn {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync(
+        WrapInfo {
+            debug_name: "aggregate_signature",
+            port: None,
+            mode: FfiCallMode::Sync,
+        },
+        move || {
+            let api_nonce_commitments = nonce_commitments.wire2api();
+            let api_message = message.wire2api();
+            let api_shares = shares.wire2api();
+            let api_group_pk = group_pk.wire2api();
+            let api_public_shares = public_shares.wire2api();
+            aggregate_signature(
+                api_nonce_commitments,
+                api_message,
+                api_shares,
+                api_group_pk,
+                api_public_shares,
+            )
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -539,6 +568,17 @@ mod io {
         wire_signature_share_to_bytes_impl(share)
     }
 
+    #[no_mangle]
+    pub extern "C" fn wire_aggregate_signature(
+        nonce_commitments: *mut wire_list_identifier_and_signing_commitment,
+        message: *mut wire_uint_8_list,
+        shares: *mut wire_list_identifier_and_signature_share,
+        group_pk: *mut wire_uint_8_list,
+        public_shares: *mut wire_list_identifier_and_public_share,
+    ) -> support::WireSyncReturn {
+        wire_aggregate_signature_impl(nonce_commitments, message, shares, group_pk, public_shares)
+    }
+
     // Section: allocate functions
 
     #[no_mangle]
@@ -602,6 +642,34 @@ mod io {
         let wrap = wire_list_dkg_round_2_identifier_and_share {
             ptr: support::new_leak_vec_ptr(
                 <wire_DkgRound2IdentifierAndShare>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        support::new_leak_box_ptr(wrap)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_list_identifier_and_public_share_0(
+        len: i32,
+    ) -> *mut wire_list_identifier_and_public_share {
+        let wrap = wire_list_identifier_and_public_share {
+            ptr: support::new_leak_vec_ptr(
+                <wire_IdentifierAndPublicShare>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        support::new_leak_box_ptr(wrap)
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_list_identifier_and_signature_share_0(
+        len: i32,
+    ) -> *mut wire_list_identifier_and_signature_share {
+        let wrap = wire_list_identifier_and_signature_share {
+            ptr: support::new_leak_vec_ptr(
+                <wire_IdentifierAndSignatureShare>::new_with_null_ptr(),
                 len,
             ),
             len,
@@ -822,6 +890,22 @@ mod io {
             }
         }
     }
+    impl Wire2Api<IdentifierAndPublicShare> for wire_IdentifierAndPublicShare {
+        fn wire2api(self) -> IdentifierAndPublicShare {
+            IdentifierAndPublicShare {
+                identifier: self.identifier.wire2api(),
+                public_share: self.public_share.wire2api(),
+            }
+        }
+    }
+    impl Wire2Api<IdentifierAndSignatureShare> for wire_IdentifierAndSignatureShare {
+        fn wire2api(self) -> IdentifierAndSignatureShare {
+            IdentifierAndSignatureShare {
+                identifier: self.identifier.wire2api(),
+                share: self.share.wire2api(),
+            }
+        }
+    }
     impl Wire2Api<IdentifierAndSigningCommitment> for wire_IdentifierAndSigningCommitment {
         fn wire2api(self) -> IdentifierAndSigningCommitment {
             IdentifierAndSigningCommitment {
@@ -843,6 +927,24 @@ mod io {
         for *mut wire_list_dkg_round_2_identifier_and_share
     {
         fn wire2api(self) -> Vec<DkgRound2IdentifierAndShare> {
+            let vec = unsafe {
+                let wrap = support::box_from_leak_ptr(self);
+                support::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(Wire2Api::wire2api).collect()
+        }
+    }
+    impl Wire2Api<Vec<IdentifierAndPublicShare>> for *mut wire_list_identifier_and_public_share {
+        fn wire2api(self) -> Vec<IdentifierAndPublicShare> {
+            let vec = unsafe {
+                let wrap = support::box_from_leak_ptr(self);
+                support::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(Wire2Api::wire2api).collect()
+        }
+    }
+    impl Wire2Api<Vec<IdentifierAndSignatureShare>> for *mut wire_list_identifier_and_signature_share {
+        fn wire2api(self) -> Vec<IdentifierAndSignatureShare> {
             let vec = unsafe {
                 let wrap = support::box_from_leak_ptr(self);
                 support::vec_from_leak_ptr(wrap.ptr, wrap.len)
@@ -936,6 +1038,20 @@ mod io {
 
     #[repr(C)]
     #[derive(Clone)]
+    pub struct wire_IdentifierAndPublicShare {
+        identifier: wire_FrostIdentifier,
+        public_share: *mut wire_uint_8_list,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
+    pub struct wire_IdentifierAndSignatureShare {
+        identifier: wire_FrostIdentifier,
+        share: wire_FrostRound2SignatureShare,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
     pub struct wire_IdentifierAndSigningCommitment {
         identifier: wire_FrostIdentifier,
         commitment: wire_FrostRound1SigningCommitments,
@@ -952,6 +1068,20 @@ mod io {
     #[derive(Clone)]
     pub struct wire_list_dkg_round_2_identifier_and_share {
         ptr: *mut wire_DkgRound2IdentifierAndShare,
+        len: i32,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
+    pub struct wire_list_identifier_and_public_share {
+        ptr: *mut wire_IdentifierAndPublicShare,
+        len: i32,
+    }
+
+    #[repr(C)]
+    #[derive(Clone)]
+    pub struct wire_list_identifier_and_signature_share {
+        ptr: *mut wire_IdentifierAndSignatureShare,
         len: i32,
     }
 
@@ -1063,6 +1193,36 @@ mod io {
     }
 
     impl Default for wire_DkgRound2IdentifierAndShare {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+
+    impl NewWithNullPtr for wire_IdentifierAndPublicShare {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                identifier: wire_FrostIdentifier::new_with_null_ptr(),
+                public_share: core::ptr::null_mut(),
+            }
+        }
+    }
+
+    impl Default for wire_IdentifierAndPublicShare {
+        fn default() -> Self {
+            Self::new_with_null_ptr()
+        }
+    }
+
+    impl NewWithNullPtr for wire_IdentifierAndSignatureShare {
+        fn new_with_null_ptr() -> Self {
+            Self {
+                identifier: wire_FrostIdentifier::new_with_null_ptr(),
+                share: wire_FrostRound2SignatureShare::new_with_null_ptr(),
+            }
+        }
+    }
+
+    impl Default for wire_IdentifierAndSignatureShare {
         fn default() -> Self {
             Self::new_with_null_ptr()
         }

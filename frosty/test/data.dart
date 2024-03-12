@@ -43,12 +43,48 @@ final publicShares = [
   ),
 ];
 
+final publicInfo = FrostPublicInfo(
+  groupPublicKey: groupPublicKey,
+  publicShares: publicShares,
+  threshold: 2,
+);
+
 FrostPrivateInfo getPrivateInfo(int i) => FrostPrivateInfo(
   identifier: Identifier.fromUint16(i+1),
   privateShare: privateShares[i],
-  public: FrostPublicInfo(
-    groupPublicKey: groupPublicKey,
-    publicShares: publicShares,
-    threshold: 2,
+  public: publicInfo,
+);
+
+List<SignPart1> getPart1s() => List.generate(
+  3,
+  (i) => SignPart1(privateShare: privateShares[i]),
+);
+
+final signMsgHash = hexToBytes(
+  "2514a6272f85cfa0f45eb907fcb0d121b808ed37c6ea160a5a9046ed5526d555",
+);
+
+SigningCommitmentSet getSignatureCommitments(
+  List<SignPart1> part1s,
+) => SigningCommitmentSet(
+  List.generate(
+    2, (i) => (Identifier.fromUint16(i+1), part1s[i].commitment),
   ),
 );
+
+SignatureShare getShare(
+  List<SignPart1> part1s, int i, {
+    Identifier? identifier,
+    SignNonce? ourNonce,
+    SigningCommitmentList? commitmentList,
+    FrostPrivateInfo? privateInfo,
+  }
+) => SignPart2(
+  identifier: identifier ?? Identifier.fromUint16(i+1),
+  message: signMsgHash,
+  ourNonce: ourNonce ?? part1s[i].nonce,
+  commitments: commitmentList != null
+    ? SigningCommitmentSet(commitmentList)
+    : getSignatureCommitments(part1s),
+  privateInfo: privateInfo ?? getPrivateInfo(i),
+).share;

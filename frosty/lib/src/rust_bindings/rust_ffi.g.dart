@@ -88,6 +88,10 @@ abstract class FrostyRust {
 
   FlutterRustBridgeTaskConstMeta get kSignatureShareToBytesConstMeta;
 
+  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kAggregateSignatureConstMeta;
+
   DropFnType get dropOpaqueDkgRound1Package;
   ShareFnType get shareOpaqueDkgRound1Package;
   OpaqueTypeFinalizer get DkgRound1PackageFinalizer;
@@ -276,6 +280,16 @@ class IdentifierAndPublicShare {
   const IdentifierAndPublicShare({
     required this.identifier,
     required this.publicShare,
+  });
+}
+
+class IdentifierAndSignatureShare {
+  final FrostIdentifier identifier;
+  final FrostRound2SignatureShare share;
+
+  const IdentifierAndSignatureShare({
+    required this.identifier,
+    required this.share,
   });
 }
 
@@ -695,6 +709,39 @@ class FrostyRustImpl implements FrostyRust {
         ],
       );
 
+  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint}) {
+    var arg0 = _platform.api2wire_list_identifier_and_signing_commitment(nonceCommitments);
+    var arg1 = _platform.api2wire_uint_8_list(message);
+    var arg2 = _platform.api2wire_list_identifier_and_signature_share(shares);
+    var arg3 = _platform.api2wire_uint_8_list(groupPk);
+    var arg4 = _platform.api2wire_list_identifier_and_public_share(publicShares);
+    return _platform.executeSync(FlutterRustBridgeSyncTask(
+      callFfi: () => _platform.inner.wire_aggregate_signature(arg0, arg1, arg2, arg3, arg4),
+      parseSuccessData: _wire2api_uint_8_list,
+      parseErrorData: _wire2api_FrbAnyhowException,
+      constMeta: kAggregateSignatureConstMeta,
+      argValues: [
+        nonceCommitments,
+        message,
+        shares,
+        groupPk,
+        publicShares
+      ],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kAggregateSignatureConstMeta => const FlutterRustBridgeTaskConstMeta(
+        debugName: "aggregate_signature",
+        argNames: [
+          "nonceCommitments",
+          "message",
+          "shares",
+          "groupPk",
+          "publicShares"
+        ],
+      );
+
   DropFnType get dropOpaqueDkgRound1Package => _platform.inner.drop_opaque_DkgRound1Package;
   ShareFnType get shareOpaqueDkgRound1Package => _platform.inner.share_opaque_DkgRound1Package;
   OpaqueTypeFinalizer get DkgRound1PackageFinalizer => _platform.DkgRound1PackageFinalizer;
@@ -964,6 +1011,24 @@ class FrostyRustPlatform extends FlutterRustBridgeBase<FrostyRustWire> {
   }
 
   @protected
+  ffi.Pointer<wire_list_identifier_and_public_share> api2wire_list_identifier_and_public_share(List<IdentifierAndPublicShare> raw) {
+    final ans = inner.new_list_identifier_and_public_share_0(raw.length);
+    for (var i = 0; i < raw.length; ++i) {
+      _api_fill_to_wire_identifier_and_public_share(raw[i], ans.ref.ptr[i]);
+    }
+    return ans;
+  }
+
+  @protected
+  ffi.Pointer<wire_list_identifier_and_signature_share> api2wire_list_identifier_and_signature_share(List<IdentifierAndSignatureShare> raw) {
+    final ans = inner.new_list_identifier_and_signature_share_0(raw.length);
+    for (var i = 0; i < raw.length; ++i) {
+      _api_fill_to_wire_identifier_and_signature_share(raw[i], ans.ref.ptr[i]);
+    }
+    return ans;
+  }
+
+  @protected
   ffi.Pointer<wire_list_identifier_and_signing_commitment> api2wire_list_identifier_and_signing_commitment(List<IdentifierAndSigningCommitment> raw) {
     final ans = inner.new_list_identifier_and_signing_commitment_0(raw.length);
     for (var i = 0; i < raw.length; ++i) {
@@ -1038,6 +1103,16 @@ class FrostyRustPlatform extends FlutterRustBridgeBase<FrostyRustWire> {
   void _api_fill_to_wire_dkg_round_2_identifier_and_share(DkgRound2IdentifierAndShare apiObj, wire_DkgRound2IdentifierAndShare wireObj) {
     wireObj.identifier = api2wire_FrostIdentifier(apiObj.identifier);
     wireObj.secret = api2wire_DkgRound2Package(apiObj.secret);
+  }
+
+  void _api_fill_to_wire_identifier_and_public_share(IdentifierAndPublicShare apiObj, wire_IdentifierAndPublicShare wireObj) {
+    wireObj.identifier = api2wire_FrostIdentifier(apiObj.identifier);
+    wireObj.public_share = api2wire_uint_8_list(apiObj.publicShare);
+  }
+
+  void _api_fill_to_wire_identifier_and_signature_share(IdentifierAndSignatureShare apiObj, wire_IdentifierAndSignatureShare wireObj) {
+    wireObj.identifier = api2wire_FrostIdentifier(apiObj.identifier);
+    wireObj.share = api2wire_FrostRound2SignatureShare(apiObj.share);
   }
 
   void _api_fill_to_wire_identifier_and_signing_commitment(IdentifierAndSigningCommitment apiObj, wire_IdentifierAndSigningCommitment wireObj) {
@@ -1331,6 +1406,25 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
   late final _wire_signature_share_to_bytesPtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(wire_FrostRound2SignatureShare)>>('wire_signature_share_to_bytes');
   late final _wire_signature_share_to_bytes = _wire_signature_share_to_bytesPtr.asFunction<WireSyncReturn Function(wire_FrostRound2SignatureShare)>();
 
+  WireSyncReturn wire_aggregate_signature(
+    ffi.Pointer<wire_list_identifier_and_signing_commitment> nonce_commitments,
+    ffi.Pointer<wire_uint_8_list> message,
+    ffi.Pointer<wire_list_identifier_and_signature_share> shares,
+    ffi.Pointer<wire_uint_8_list> group_pk,
+    ffi.Pointer<wire_list_identifier_and_public_share> public_shares,
+  ) {
+    return _wire_aggregate_signature(
+      nonce_commitments,
+      message,
+      shares,
+      group_pk,
+      public_shares,
+    );
+  }
+
+  late final _wire_aggregate_signaturePtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_signature_share>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_public_share>)>>('wire_aggregate_signature');
+  late final _wire_aggregate_signature = _wire_aggregate_signaturePtr.asFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_signature_share>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_public_share>)>();
+
   wire_DkgRound1Package new_DkgRound1Package() {
     return _new_DkgRound1Package();
   }
@@ -1408,6 +1502,28 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
 
   late final _new_list_dkg_round_2_identifier_and_share_0Ptr = _lookup<ffi.NativeFunction<ffi.Pointer<wire_list_dkg_round_2_identifier_and_share> Function(ffi.Int32)>>('new_list_dkg_round_2_identifier_and_share_0');
   late final _new_list_dkg_round_2_identifier_and_share_0 = _new_list_dkg_round_2_identifier_and_share_0Ptr.asFunction<ffi.Pointer<wire_list_dkg_round_2_identifier_and_share> Function(int)>();
+
+  ffi.Pointer<wire_list_identifier_and_public_share> new_list_identifier_and_public_share_0(
+    int len,
+  ) {
+    return _new_list_identifier_and_public_share_0(
+      len,
+    );
+  }
+
+  late final _new_list_identifier_and_public_share_0Ptr = _lookup<ffi.NativeFunction<ffi.Pointer<wire_list_identifier_and_public_share> Function(ffi.Int32)>>('new_list_identifier_and_public_share_0');
+  late final _new_list_identifier_and_public_share_0 = _new_list_identifier_and_public_share_0Ptr.asFunction<ffi.Pointer<wire_list_identifier_and_public_share> Function(int)>();
+
+  ffi.Pointer<wire_list_identifier_and_signature_share> new_list_identifier_and_signature_share_0(
+    int len,
+  ) {
+    return _new_list_identifier_and_signature_share_0(
+      len,
+    );
+  }
+
+  late final _new_list_identifier_and_signature_share_0Ptr = _lookup<ffi.NativeFunction<ffi.Pointer<wire_list_identifier_and_signature_share> Function(ffi.Int32)>>('new_list_identifier_and_signature_share_0');
+  late final _new_list_identifier_and_signature_share_0 = _new_list_identifier_and_signature_share_0Ptr.asFunction<ffi.Pointer<wire_list_identifier_and_signature_share> Function(int)>();
 
   ffi.Pointer<wire_list_identifier_and_signing_commitment> new_list_identifier_and_signing_commitment_0(
     int len,
@@ -1697,6 +1813,32 @@ final class wire_FrostRound1SigningNonces extends ffi.Struct {
 
 final class wire_FrostRound2SignatureShare extends ffi.Struct {
   external ffi.Pointer<ffi.Void> ptr;
+}
+
+final class wire_IdentifierAndSignatureShare extends ffi.Struct {
+  external wire_FrostIdentifier identifier;
+
+  external wire_FrostRound2SignatureShare share;
+}
+
+final class wire_list_identifier_and_signature_share extends ffi.Struct {
+  external ffi.Pointer<wire_IdentifierAndSignatureShare> ptr;
+
+  @ffi.Int32()
+  external int len;
+}
+
+final class wire_IdentifierAndPublicShare extends ffi.Struct {
+  external wire_FrostIdentifier identifier;
+
+  external ffi.Pointer<wire_uint_8_list> public_share;
+}
+
+final class wire_list_identifier_and_public_share extends ffi.Struct {
+  external ffi.Pointer<wire_IdentifierAndPublicShare> ptr;
+
+  @ffi.Int32()
+  external int len;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<ffi.NativeFunction<ffi.Bool Function(DartPort port_id, ffi.Pointer<ffi.Void> message)>>;
