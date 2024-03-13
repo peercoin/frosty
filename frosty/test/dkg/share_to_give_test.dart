@@ -9,7 +9,7 @@ void main() {
     setUp(loadFrosty);
 
     final validBytes = hexToBytes(
-      "a3ee9514c0c431a4fc8eb815f2e472d389e60c86692398a7ff9e20d57a33a6cef49d8cce",
+      "00230f8ab3086cb9f7c5e975af7c925ae4fef5e2a7291e877cf2e54a8c64abc4d6994ced23",
     );
 
     writableObjTests<DkgShareToGive, InvalidShareToGive>(

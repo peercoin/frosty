@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'helpers.dart';
 
 final testIdHex
-  = "42c9baf42b1cdefb007e286c44a4b9f23430b99f0f038447619c2ce111e737f4";
+  = "d10672c45e416c0e096ca08686e3f5226d3d7ed8fcc2d758624e396445bfdb9f";
 
 void main() {
   group("Identifier", () {
@@ -47,7 +47,7 @@ void main() {
       );
       expect(
         bytesToHex(Identifier.fromString("TEST").toBytes()),
-        "df3674e99032636afb6c921a413efe58d6848743bd1957fedb585d97416f60da",
+        "5d7a4e95f0c8bfc95cd7d834354cca30a94106a33701b621ad37f68636a7e654",
       );
     });
 

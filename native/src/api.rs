@@ -1,9 +1,9 @@
-pub use frost_secp256k1 as frost;
-pub use frost_secp256k1::keys::dkg as dkg;
+pub use frost_secp256k1_tr as frost;
+pub use frost_secp256k1_tr::keys::dkg as dkg;
 use rand::thread_rng;
 use anyhow::{anyhow, Result};
 use flutter_rust_bridge::{SyncReturn, RustOpaque, DartSafe};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 // Common
 
@@ -249,11 +249,11 @@ pub fn dkg_part_3(
         DkgRound3Data {
             identifier: RustOpaque::new(*result.0.identifier()),
             // Get private share as scalar
-            private_share: result.0.secret_share().serialize().to_vec(),
-            // Get the threshold public key
-            group_pk: result.1.group_public().serialize().to_vec(),
+            private_share: result.0.signing_share().serialize().to_vec(),
+            // Get the group public key
+            group_pk: result.1.verifying_key().serialize().to_vec(),
             // Collect all the identifier public key shares into a vector
-            public_key_shares: result.1.signer_pubkeys().into_iter().map(
+            public_key_shares: result.1.verifying_shares().into_iter().map(
                 |v| IdentifierAndPublicShare {
                     identifier: RustOpaque::new(*v.0),
                     public_share: v.1.serialize().to_vec(),
@@ -378,9 +378,9 @@ pub fn aggregate_signature(
 
     let pubkey_package = frost::keys::PublicKeyPackage::new(
         public_shares.into_iter().try_fold(
-            HashMap::new(),
+            BTreeMap::new(),
             |mut acc, v|
-            -> Result<HashMap<frost::Identifier, frost::keys::VerifyingShare>> {
+            -> Result<BTreeMap<frost::Identifier, frost::keys::VerifyingShare>> {
                 acc.insert(
                     *v.identifier,
                     vector_to_verifying_share(v.public_share)?,

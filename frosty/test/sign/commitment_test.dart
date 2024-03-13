@@ -9,7 +9,7 @@ void main() {
     setUp(loadFrosty);
 
     final validBytes = hexToBytes(
-      "0236e4add85a835007b52bc49b00bd53baa1587c209b03e5419c9e6d3033b1873e02f270e7862fd54af404a76e0978aa3a80f5056987dc965e9a00c1823562b3390bf49d8cce",
+      "00230f8ab302de8e5cc1582be4b6b5a1e8be2d482dabe86d2e3368d1a98785fb27bfcdfdf72902ec04d9f8bb9b423927defe454295d07e0609c029f6c6778a218fe9d575c125d9",
     );
 
     writableObjTests<SigningCommitment, InvalidSigningCommitment>(
