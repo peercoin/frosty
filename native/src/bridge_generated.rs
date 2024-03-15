@@ -247,6 +247,7 @@ fn wire_signing_commitment_to_bytes_impl(
 fn wire_sign_part_2_impl(
     nonce_commitments: impl Wire2Api<Vec<IdentifierAndSigningCommitment>> + UnwindSafe,
     message: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    merkle_root: impl Wire2Api<Vec<u8>> + UnwindSafe,
     signing_nonce: impl Wire2Api<RustOpaque<frost::round1::SigningNonces>> + UnwindSafe,
     identifier: impl Wire2Api<RustOpaque<frost::Identifier>> + UnwindSafe,
     private_share: impl Wire2Api<Vec<u8>> + UnwindSafe,
@@ -262,6 +263,7 @@ fn wire_sign_part_2_impl(
         move || {
             let api_nonce_commitments = nonce_commitments.wire2api();
             let api_message = message.wire2api();
+            let api_merkle_root = merkle_root.wire2api();
             let api_signing_nonce = signing_nonce.wire2api();
             let api_identifier = identifier.wire2api();
             let api_private_share = private_share.wire2api();
@@ -270,6 +272,7 @@ fn wire_sign_part_2_impl(
             sign_part_2(
                 api_nonce_commitments,
                 api_message,
+                api_merkle_root,
                 api_signing_nonce,
                 api_identifier,
                 api_private_share,
@@ -312,6 +315,7 @@ fn wire_signature_share_to_bytes_impl(
 fn wire_aggregate_signature_impl(
     nonce_commitments: impl Wire2Api<Vec<IdentifierAndSigningCommitment>> + UnwindSafe,
     message: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    merkle_root: impl Wire2Api<Vec<u8>> + UnwindSafe,
     shares: impl Wire2Api<Vec<IdentifierAndSignatureShare>> + UnwindSafe,
     group_pk: impl Wire2Api<Vec<u8>> + UnwindSafe,
     public_shares: impl Wire2Api<Vec<IdentifierAndPublicShare>> + UnwindSafe,
@@ -325,12 +329,14 @@ fn wire_aggregate_signature_impl(
         move || {
             let api_nonce_commitments = nonce_commitments.wire2api();
             let api_message = message.wire2api();
+            let api_merkle_root = merkle_root.wire2api();
             let api_shares = shares.wire2api();
             let api_group_pk = group_pk.wire2api();
             let api_public_shares = public_shares.wire2api();
             aggregate_signature(
                 api_nonce_commitments,
                 api_message,
+                api_merkle_root,
                 api_shares,
                 api_group_pk,
                 api_public_shares,
@@ -537,6 +543,7 @@ mod io {
     pub extern "C" fn wire_sign_part_2(
         nonce_commitments: *mut wire_list_identifier_and_signing_commitment,
         message: *mut wire_uint_8_list,
+        merkle_root: *mut wire_uint_8_list,
         signing_nonce: wire_FrostRound1SigningNonces,
         identifier: wire_FrostIdentifier,
         private_share: *mut wire_uint_8_list,
@@ -546,6 +553,7 @@ mod io {
         wire_sign_part_2_impl(
             nonce_commitments,
             message,
+            merkle_root,
             signing_nonce,
             identifier,
             private_share,
@@ -572,11 +580,19 @@ mod io {
     pub extern "C" fn wire_aggregate_signature(
         nonce_commitments: *mut wire_list_identifier_and_signing_commitment,
         message: *mut wire_uint_8_list,
+        merkle_root: *mut wire_uint_8_list,
         shares: *mut wire_list_identifier_and_signature_share,
         group_pk: *mut wire_uint_8_list,
         public_shares: *mut wire_list_identifier_and_public_share,
     ) -> support::WireSyncReturn {
-        wire_aggregate_signature_impl(nonce_commitments, message, shares, group_pk, public_shares)
+        wire_aggregate_signature_impl(
+            nonce_commitments,
+            message,
+            merkle_root,
+            shares,
+            group_pk,
+            public_shares,
+        )
     }
 
     // Section: allocate functions

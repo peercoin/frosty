@@ -6,6 +6,9 @@ import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'commitment_set.dart';
 import 'signature_share.dart';
+import 'details.dart';
+
+typedef ShareList = List<(Identifier, SignatureShare)>;
 
 /// Thrown when the signature shares cannot be aggregated into a valid signature
 class InvalidAggregation extends MessageException {
@@ -21,8 +24,8 @@ class SignatureAggregation {
 
   SignatureAggregation({
     required SigningCommitmentSet commitments,
-    required Uint8List message,
-    required List<(Identifier, SignatureShare)> shares,
+    required SignDetails details,
+    required ShareList shares,
     required FrostPublicInfo publicInfo,
   }) {
 
@@ -30,7 +33,8 @@ class SignatureAggregation {
 
       final bytes = rust.rustApi.aggregateSignature(
         nonceCommitments: commitments.nativeList,
-        message: message,
+        message: details.message,
+        merkleRoot: details.mastHash,
         shares: shares.map((s) => rust.IdentifierAndSignatureShare(
             identifier: s.$1.underlying,
             share: s.$2.underlying,

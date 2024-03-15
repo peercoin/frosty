@@ -76,7 +76,7 @@ abstract class FrostyRust {
 
   FlutterRustBridgeTaskConstMeta get kSigningCommitmentToBytesConstMeta;
 
-  FrostRound2SignatureShare signPart2({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required FrostRound1SigningNonces signingNonce, required FrostIdentifier identifier, required Uint8List privateShare, required Uint8List groupPk, required int threshold, dynamic hint});
+  FrostRound2SignatureShare signPart2({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required Uint8List merkleRoot, required FrostRound1SigningNonces signingNonce, required FrostIdentifier identifier, required Uint8List privateShare, required Uint8List groupPk, required int threshold, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSignPart2ConstMeta;
 
@@ -88,7 +88,7 @@ abstract class FrostyRust {
 
   FlutterRustBridgeTaskConstMeta get kSignatureShareToBytesConstMeta;
 
-  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint});
+  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required Uint8List merkleRoot, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kAggregateSignatureConstMeta;
 
@@ -628,22 +628,24 @@ class FrostyRustImpl implements FrostyRust {
         ],
       );
 
-  FrostRound2SignatureShare signPart2({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required FrostRound1SigningNonces signingNonce, required FrostIdentifier identifier, required Uint8List privateShare, required Uint8List groupPk, required int threshold, dynamic hint}) {
+  FrostRound2SignatureShare signPart2({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required Uint8List merkleRoot, required FrostRound1SigningNonces signingNonce, required FrostIdentifier identifier, required Uint8List privateShare, required Uint8List groupPk, required int threshold, dynamic hint}) {
     var arg0 = _platform.api2wire_list_identifier_and_signing_commitment(nonceCommitments);
     var arg1 = _platform.api2wire_uint_8_list(message);
-    var arg2 = _platform.api2wire_FrostRound1SigningNonces(signingNonce);
-    var arg3 = _platform.api2wire_FrostIdentifier(identifier);
-    var arg4 = _platform.api2wire_uint_8_list(privateShare);
-    var arg5 = _platform.api2wire_uint_8_list(groupPk);
-    var arg6 = api2wire_u16(threshold);
+    var arg2 = _platform.api2wire_uint_8_list(merkleRoot);
+    var arg3 = _platform.api2wire_FrostRound1SigningNonces(signingNonce);
+    var arg4 = _platform.api2wire_FrostIdentifier(identifier);
+    var arg5 = _platform.api2wire_uint_8_list(privateShare);
+    var arg6 = _platform.api2wire_uint_8_list(groupPk);
+    var arg7 = api2wire_u16(threshold);
     return _platform.executeSync(FlutterRustBridgeSyncTask(
-      callFfi: () => _platform.inner.wire_sign_part_2(arg0, arg1, arg2, arg3, arg4, arg5, arg6),
+      callFfi: () => _platform.inner.wire_sign_part_2(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7),
       parseSuccessData: _wire2api_FrostRound2SignatureShare,
       parseErrorData: _wire2api_FrbAnyhowException,
       constMeta: kSignPart2ConstMeta,
       argValues: [
         nonceCommitments,
         message,
+        merkleRoot,
         signingNonce,
         identifier,
         privateShare,
@@ -659,6 +661,7 @@ class FrostyRustImpl implements FrostyRust {
         argNames: [
           "nonceCommitments",
           "message",
+          "merkleRoot",
           "signingNonce",
           "identifier",
           "privateShare",
@@ -709,20 +712,22 @@ class FrostyRustImpl implements FrostyRust {
         ],
       );
 
-  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint}) {
+  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required Uint8List merkleRoot, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint}) {
     var arg0 = _platform.api2wire_list_identifier_and_signing_commitment(nonceCommitments);
     var arg1 = _platform.api2wire_uint_8_list(message);
-    var arg2 = _platform.api2wire_list_identifier_and_signature_share(shares);
-    var arg3 = _platform.api2wire_uint_8_list(groupPk);
-    var arg4 = _platform.api2wire_list_identifier_and_public_share(publicShares);
+    var arg2 = _platform.api2wire_uint_8_list(merkleRoot);
+    var arg3 = _platform.api2wire_list_identifier_and_signature_share(shares);
+    var arg4 = _platform.api2wire_uint_8_list(groupPk);
+    var arg5 = _platform.api2wire_list_identifier_and_public_share(publicShares);
     return _platform.executeSync(FlutterRustBridgeSyncTask(
-      callFfi: () => _platform.inner.wire_aggregate_signature(arg0, arg1, arg2, arg3, arg4),
+      callFfi: () => _platform.inner.wire_aggregate_signature(arg0, arg1, arg2, arg3, arg4, arg5),
       parseSuccessData: _wire2api_uint_8_list,
       parseErrorData: _wire2api_FrbAnyhowException,
       constMeta: kAggregateSignatureConstMeta,
       argValues: [
         nonceCommitments,
         message,
+        merkleRoot,
         shares,
         groupPk,
         publicShares
@@ -736,6 +741,7 @@ class FrostyRustImpl implements FrostyRust {
         argNames: [
           "nonceCommitments",
           "message",
+          "merkleRoot",
           "shares",
           "groupPk",
           "publicShares"
@@ -1364,6 +1370,7 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
   WireSyncReturn wire_sign_part_2(
     ffi.Pointer<wire_list_identifier_and_signing_commitment> nonce_commitments,
     ffi.Pointer<wire_uint_8_list> message,
+    ffi.Pointer<wire_uint_8_list> merkle_root,
     wire_FrostRound1SigningNonces signing_nonce,
     wire_FrostIdentifier identifier,
     ffi.Pointer<wire_uint_8_list> private_share,
@@ -1373,6 +1380,7 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
     return _wire_sign_part_2(
       nonce_commitments,
       message,
+      merkle_root,
       signing_nonce,
       identifier,
       private_share,
@@ -1381,8 +1389,8 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
     );
   }
 
-  late final _wire_sign_part_2Ptr = _lookup<ffi.NativeFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, wire_FrostRound1SigningNonces, wire_FrostIdentifier, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>, ffi.Uint16)>>('wire_sign_part_2');
-  late final _wire_sign_part_2 = _wire_sign_part_2Ptr.asFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, wire_FrostRound1SigningNonces, wire_FrostIdentifier, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>, int)>();
+  late final _wire_sign_part_2Ptr = _lookup<ffi.NativeFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>, wire_FrostRound1SigningNonces, wire_FrostIdentifier, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>, ffi.Uint16)>>('wire_sign_part_2');
+  late final _wire_sign_part_2 = _wire_sign_part_2Ptr.asFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>, wire_FrostRound1SigningNonces, wire_FrostIdentifier, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>, int)>();
 
   WireSyncReturn wire_signature_share_from_bytes(
     ffi.Pointer<wire_uint_8_list> bytes,
@@ -1409,6 +1417,7 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
   WireSyncReturn wire_aggregate_signature(
     ffi.Pointer<wire_list_identifier_and_signing_commitment> nonce_commitments,
     ffi.Pointer<wire_uint_8_list> message,
+    ffi.Pointer<wire_uint_8_list> merkle_root,
     ffi.Pointer<wire_list_identifier_and_signature_share> shares,
     ffi.Pointer<wire_uint_8_list> group_pk,
     ffi.Pointer<wire_list_identifier_and_public_share> public_shares,
@@ -1416,14 +1425,15 @@ class FrostyRustWire implements FlutterRustBridgeWireBase {
     return _wire_aggregate_signature(
       nonce_commitments,
       message,
+      merkle_root,
       shares,
       group_pk,
       public_shares,
     );
   }
 
-  late final _wire_aggregate_signaturePtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_signature_share>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_public_share>)>>('wire_aggregate_signature');
-  late final _wire_aggregate_signature = _wire_aggregate_signaturePtr.asFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_signature_share>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_public_share>)>();
+  late final _wire_aggregate_signaturePtr = _lookup<ffi.NativeFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_signature_share>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_public_share>)>>('wire_aggregate_signature');
+  late final _wire_aggregate_signature = _wire_aggregate_signaturePtr.asFunction<WireSyncReturn Function(ffi.Pointer<wire_list_identifier_and_signing_commitment>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_signature_share>, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_list_identifier_and_public_share>)>();
 
   wire_DkgRound1Package new_DkgRound1Package() {
     return _new_DkgRound1Package();

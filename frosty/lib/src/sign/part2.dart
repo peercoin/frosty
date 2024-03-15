@@ -3,6 +3,7 @@ import 'package:frosty/src/frost_private_info.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
+import 'details.dart';
 import 'commitment_set.dart';
 import 'part1.dart';
 import 'signature_share.dart';
@@ -20,12 +21,9 @@ class SignPart2 {
 
   /// After the signature share is generated, the [ourNonce] should be disposed.
   /// The [commitments] are also no longer needed.
-  ///
-  /// The message should be agreed upon and for Peercoin transactions is the
-  /// taproot signature hash.
   SignPart2({
     required Identifier identifier,
-    required Uint8List message,
+    required SignDetails details,
     required SignNonce ourNonce,
     required SigningCommitmentSet commitments,
     required FrostPrivateInfo privateInfo,
@@ -36,7 +34,8 @@ class SignPart2 {
       share = SignatureShare.fromUnderlying(
         rust.rustApi.signPart2(
           nonceCommitments: commitments.nativeList,
-          message: message,
+          message: details.message,
+          merkleRoot: details.mastHash,
           signingNonce: ourNonce.underlying,
           identifier: identifier.underlying,
           privateShare: privateInfo.privateShare.data,

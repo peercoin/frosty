@@ -6,6 +6,7 @@ export "dkg/part3.dart";
 export "dkg/share_to_give.dart";
 export "sign/commitment.dart";
 export "sign/commitment_set.dart";
+export "sign/details.dart";
 export "sign/part1.dart";
 export "sign/part2.dart";
 export "sign/signature_aggregation.dart";

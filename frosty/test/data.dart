@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
 import 'package:frosty/frosty.dart';
 
@@ -78,10 +79,11 @@ SignatureShare getShare(
     SignNonce? ourNonce,
     SigningCommitmentList? commitmentList,
     FrostPrivateInfo? privateInfo,
+    Uint8List? mastHash,
   }
 ) => SignPart2(
   identifier: identifier ?? Identifier.fromUint16(i+1),
-  message: signMsgHash,
+  details: SignDetails(message: signMsgHash, mastHash: mastHash),
   ourNonce: ourNonce ?? part1s[i].nonce,
   commitments: commitmentList != null
     ? SigningCommitmentSet(commitmentList)
