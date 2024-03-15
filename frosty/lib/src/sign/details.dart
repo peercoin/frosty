@@ -15,7 +15,7 @@ class SignDetails {
 
   /// The message should be agreed upon and for Peercoin transactions is the
   /// taproot signature hash. The [mastHash] can be used when there is a MAST
-  /// tree as part of the taproot key.
+  /// tree as part of the taproot key, otherwise it should be omitted.
   SignDetails({
     required this.message,
     Uint8List? mastHash,
