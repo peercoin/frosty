@@ -7,16 +7,22 @@ void main() {
 
     test("succeeds", () {
 
-      final noMast = SignDetails(message: Uint8List(32));
-      expect(noMast.message, Uint8List(32));
-      expect(noMast.mastHash, Uint8List(0));
+      final scriptSpend = SignDetails.scriptSpend(message: Uint8List(32));
+      expect(scriptSpend.message, Uint8List(32));
+      expect(scriptSpend.mastHash, null);
 
-      final withMast = SignDetails(
+      final withMast = SignDetails.keySpend(
         message: Uint8List(32),
         mastHash: Uint8List(32)..last = 1,
       );
       expect(withMast.message, Uint8List(32));
       expect(withMast.mastHash, Uint8List(32)..last = 1);
+
+      final emptyMast = SignDetails.keySpend(
+        message: Uint8List(32),
+      );
+      expect(emptyMast.message, Uint8List(32));
+      expect(emptyMast.mastHash, Uint8List(0));
 
     });
 

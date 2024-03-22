@@ -76,7 +76,7 @@ abstract class FrostyRust {
 
   FlutterRustBridgeTaskConstMeta get kSigningCommitmentToBytesConstMeta;
 
-  FrostRound2SignatureShare signPart2({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required Uint8List merkleRoot, required FrostRound1SigningNonces signingNonce, required FrostIdentifier identifier, required Uint8List privateShare, required Uint8List groupPk, required int threshold, dynamic hint});
+  FrostRound2SignatureShare signPart2({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, Uint8List? merkleRoot, required FrostRound1SigningNonces signingNonce, required FrostIdentifier identifier, required Uint8List privateShare, required Uint8List groupPk, required int threshold, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSignPart2ConstMeta;
 
@@ -88,7 +88,7 @@ abstract class FrostyRust {
 
   FlutterRustBridgeTaskConstMeta get kSignatureShareToBytesConstMeta;
 
-  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required Uint8List merkleRoot, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint});
+  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, Uint8List? merkleRoot, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kAggregateSignatureConstMeta;
 
@@ -628,10 +628,10 @@ class FrostyRustImpl implements FrostyRust {
         ],
       );
 
-  FrostRound2SignatureShare signPart2({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required Uint8List merkleRoot, required FrostRound1SigningNonces signingNonce, required FrostIdentifier identifier, required Uint8List privateShare, required Uint8List groupPk, required int threshold, dynamic hint}) {
+  FrostRound2SignatureShare signPart2({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, Uint8List? merkleRoot, required FrostRound1SigningNonces signingNonce, required FrostIdentifier identifier, required Uint8List privateShare, required Uint8List groupPk, required int threshold, dynamic hint}) {
     var arg0 = _platform.api2wire_list_identifier_and_signing_commitment(nonceCommitments);
     var arg1 = _platform.api2wire_uint_8_list(message);
-    var arg2 = _platform.api2wire_uint_8_list(merkleRoot);
+    var arg2 = _platform.api2wire_opt_uint_8_list(merkleRoot);
     var arg3 = _platform.api2wire_FrostRound1SigningNonces(signingNonce);
     var arg4 = _platform.api2wire_FrostIdentifier(identifier);
     var arg5 = _platform.api2wire_uint_8_list(privateShare);
@@ -712,10 +712,10 @@ class FrostyRustImpl implements FrostyRust {
         ],
       );
 
-  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, required Uint8List merkleRoot, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint}) {
+  Uint8List aggregateSignature({required List<IdentifierAndSigningCommitment> nonceCommitments, required Uint8List message, Uint8List? merkleRoot, required List<IdentifierAndSignatureShare> shares, required Uint8List groupPk, required List<IdentifierAndPublicShare> publicShares, dynamic hint}) {
     var arg0 = _platform.api2wire_list_identifier_and_signing_commitment(nonceCommitments);
     var arg1 = _platform.api2wire_uint_8_list(message);
-    var arg2 = _platform.api2wire_uint_8_list(merkleRoot);
+    var arg2 = _platform.api2wire_opt_uint_8_list(merkleRoot);
     var arg3 = _platform.api2wire_list_identifier_and_signature_share(shares);
     var arg4 = _platform.api2wire_uint_8_list(groupPk);
     var arg5 = _platform.api2wire_list_identifier_and_public_share(publicShares);
@@ -1041,6 +1041,11 @@ class FrostyRustPlatform extends FlutterRustBridgeBase<FrostyRustWire> {
       _api_fill_to_wire_identifier_and_signing_commitment(raw[i], ans.ref.ptr[i]);
     }
     return ans;
+  }
+
+  @protected
+  ffi.Pointer<wire_uint_8_list> api2wire_opt_uint_8_list(Uint8List? raw) {
+    return raw == null ? ffi.nullptr : api2wire_uint_8_list(raw);
   }
 
   @protected

@@ -20,7 +20,6 @@ final privateShares = [
   ECPrivateKey.fromHex(
     "f4be7c29d13c44c71a66c8fd555f7fd4cca8a7961d3be01772f20f432f627580",
   ),
-
 ];
 
 final publicShares = [
@@ -83,7 +82,7 @@ SignatureShare getShare(
   }
 ) => SignPart2(
   identifier: identifier ?? Identifier.fromUint16(i+1),
-  details: SignDetails(message: signMsgHash, mastHash: mastHash),
+  details: SignDetails.keySpend(message: signMsgHash, mastHash: mastHash),
   ourNonce: ourNonce ?? part1s[i].nonce,
   commitments: commitmentList != null
     ? SigningCommitmentSet(commitmentList)

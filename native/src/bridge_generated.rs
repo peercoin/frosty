@@ -247,7 +247,7 @@ fn wire_signing_commitment_to_bytes_impl(
 fn wire_sign_part_2_impl(
     nonce_commitments: impl Wire2Api<Vec<IdentifierAndSigningCommitment>> + UnwindSafe,
     message: impl Wire2Api<Vec<u8>> + UnwindSafe,
-    merkle_root: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    merkle_root: impl Wire2Api<Option<Vec<u8>>> + UnwindSafe,
     signing_nonce: impl Wire2Api<RustOpaque<frost::round1::SigningNonces>> + UnwindSafe,
     identifier: impl Wire2Api<RustOpaque<frost::Identifier>> + UnwindSafe,
     private_share: impl Wire2Api<Vec<u8>> + UnwindSafe,
@@ -315,7 +315,7 @@ fn wire_signature_share_to_bytes_impl(
 fn wire_aggregate_signature_impl(
     nonce_commitments: impl Wire2Api<Vec<IdentifierAndSigningCommitment>> + UnwindSafe,
     message: impl Wire2Api<Vec<u8>> + UnwindSafe,
-    merkle_root: impl Wire2Api<Vec<u8>> + UnwindSafe,
+    merkle_root: impl Wire2Api<Option<Vec<u8>>> + UnwindSafe,
     shares: impl Wire2Api<Vec<IdentifierAndSignatureShare>> + UnwindSafe,
     group_pk: impl Wire2Api<Vec<u8>> + UnwindSafe,
     public_shares: impl Wire2Api<Vec<IdentifierAndPublicShare>> + UnwindSafe,

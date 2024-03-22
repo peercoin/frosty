@@ -26,7 +26,7 @@ void main() {
 
       final signature = SignatureAggregation(
         commitments: getSignatureCommitments(part1s),
-        details: SignDetails(message: signMsgHash, mastHash: mast?.hash),
+        details: SignDetails.keySpend(message: signMsgHash, mastHash: mast?.hash),
         shares: getShares(mast),
         publicInfo: publicInfo,
       ).signature;
@@ -62,7 +62,7 @@ void main() {
 
       SignatureAggregation(
         commitments: getSignatureCommitments(part1s),
-        details: SignDetails(message: signMsgHash),
+        details: SignDetails.scriptSpend(message: signMsgHash),
         shares: sharesWithInvalid,
         publicInfo: publicInfo,
       );
@@ -77,7 +77,7 @@ void main() {
           commitments: SigningCommitmentSet([
             (Identifier.fromUint16(1), part1s[0].commitment),
           ]),
-          details: SignDetails(message: signMsgHash),
+          details: SignDetails.scriptSpend(message: signMsgHash),
           shares: getShares(null),
           publicInfo: publicInfo,
         ),
@@ -88,7 +88,7 @@ void main() {
       expect(
         () => SignatureAggregation(
           commitments: getSignatureCommitments(part1s),
-          details: SignDetails(message: signMsgHash),
+          details: SignDetails.scriptSpend(message: signMsgHash),
           shares: getShares(null).take(1).toList(),
           publicInfo: publicInfo,
         ),
@@ -102,7 +102,7 @@ void main() {
             (Identifier.fromUint16(2), part1s[1].commitment),
             (Identifier.fromUint16(3), part1s[2].commitment),
           ]),
-          details: SignDetails(message: signMsgHash),
+          details: SignDetails.scriptSpend(message: signMsgHash),
           shares: getShares(null),
           publicInfo: publicInfo,
         ),

@@ -57,7 +57,7 @@ fn vector_to_signing_share(
 fn construct_signing_package(
     nonce_commitments: Vec<IdentifierAndSigningCommitment>,
     message: Vec<u8>,
-    merkle_root: Vec<u8>,
+    merkle_root: Option<Vec<u8>>,
 ) -> frost::SigningPackage {
     frost::SigningPackage::new(
         nonce_commitments.into_iter().map(
@@ -65,7 +65,7 @@ fn construct_signing_package(
         ).collect(),
         frost::SigningTarget::new(
             &message,
-            frost::SigningParameters { tapscript_merkle_root: Some(merkle_root) },
+            frost::SigningParameters { tapscript_merkle_root: merkle_root },
         )
     )
 }
@@ -320,7 +320,7 @@ type SignPart2Result = Result<SyncReturn<SignatureShareOpaque>>;
 pub fn sign_part_2(
     nonce_commitments: Vec<IdentifierAndSigningCommitment>,
     message: Vec<u8>,
-    merkle_root: Vec<u8>,
+    merkle_root: Option<Vec<u8>>,
     signing_nonce: SigningNonceOpaque,
     identifier: IdentifierOpaque,
     private_share: Vec<u8>,
@@ -375,7 +375,7 @@ pub struct IdentifierAndSignatureShare {
 pub fn aggregate_signature(
     nonce_commitments: Vec<IdentifierAndSigningCommitment>,
     message: Vec<u8>,
-    merkle_root: Vec<u8>,
+    merkle_root: Option<Vec<u8>>,
     shares: Vec<IdentifierAndSignatureShare>,
     group_pk: Vec<u8>,
     public_shares: Vec<IdentifierAndPublicShare>,
