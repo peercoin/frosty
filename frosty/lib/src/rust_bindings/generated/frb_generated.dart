@@ -238,7 +238,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_AnyhowException,
+        decodeErrorData: sse_decode_sign_aggregation_error,
       ),
       constMeta: kAggregateSignatureConstMeta,
       argValues: [
@@ -1067,6 +1067,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SignAggregationError dco_decode_sign_aggregation_error(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return SignAggregationError_General(
+          message: dco_decode_String(raw[1]),
+        );
+      case 1:
+        return SignAggregationError_InvalidSignShare(
+          culprit: dco_decode_RustOpaque_frostIdentifier(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
   int dco_decode_u_16(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
@@ -1372,6 +1389,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SignAggregationError sse_decode_sign_aggregation_error(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_message = sse_decode_String(deserializer);
+        return SignAggregationError_General(message: var_message);
+      case 1:
+        var var_culprit = sse_decode_RustOpaque_frostIdentifier(deserializer);
+        return SignAggregationError_InvalidSignShare(culprit: var_culprit);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
   int sse_decode_u_16(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getUint16();
@@ -1634,6 +1669,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_RustOpaque_frostround1SigningNonces(self.$1, serializer);
     sse_encode_RustOpaque_frostround1SigningCommitments(self.$2, serializer);
+  }
+
+  @protected
+  void sse_encode_sign_aggregation_error(
+      SignAggregationError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case SignAggregationError_General(message: final message):
+        sse_encode_i_32(0, serializer);
+        sse_encode_String(message, serializer);
+      case SignAggregationError_InvalidSignShare(culprit: final culprit):
+        sse_encode_i_32(1, serializer);
+        sse_encode_RustOpaque_frostIdentifier(culprit, serializer);
+    }
   }
 
   @protected

@@ -5,6 +5,8 @@
 
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+part 'main.freezed.dart';
 
 FrostIdentifier identifierFromString({required String s, dynamic hint}) =>
     RustLib.instance.api.identifierFromString(s: s, hint: hint);
@@ -415,4 +417,16 @@ class IdentifierAndSigningCommitment {
           runtimeType == other.runtimeType &&
           identifier == other.identifier &&
           commitment == other.commitment;
+}
+
+@freezed
+sealed class SignAggregationError
+    with _$SignAggregationError
+    implements FrbException {
+  const factory SignAggregationError.general({
+    required String message,
+  }) = SignAggregationError_General;
+  const factory SignAggregationError.invalidSignShare({
+    required FrostIdentifier culprit,
+  }) = SignAggregationError_InvalidSignShare;
 }

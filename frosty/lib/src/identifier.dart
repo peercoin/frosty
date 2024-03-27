@@ -66,4 +66,7 @@ class Identifier
   @override
   int compareTo(Identifier other) => compareBytes(toBytes(), other.toBytes());
 
+  @override
+  String toString() => bytesToHex(toBytes());
+
 }

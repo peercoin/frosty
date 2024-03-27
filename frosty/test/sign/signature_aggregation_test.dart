@@ -60,11 +60,17 @@ void main() {
         ),
       ];
 
-      SignatureAggregation(
-        commitments: getSignatureCommitments(part1s),
-        details: SignDetails.scriptSpend(message: signMsgHash),
-        shares: sharesWithInvalid,
-        publicInfo: publicInfo,
+      expect(
+        () => SignatureAggregation(
+          commitments: getSignatureCommitments(part1s),
+          details: SignDetails.keySpend(message: signMsgHash),
+          shares: sharesWithInvalid,
+          publicInfo: publicInfo,
+        ),
+        throwsA(
+          isA<InvalidAggregationShare>()
+          .having((err) => err.culprit, "culprit", Identifier.fromUint16(2)),
+        ),
       );
 
     });
@@ -77,7 +83,7 @@ void main() {
           commitments: SigningCommitmentSet([
             (Identifier.fromUint16(1), part1s[0].commitment),
           ]),
-          details: SignDetails.scriptSpend(message: signMsgHash),
+          details: SignDetails.keySpend(message: signMsgHash),
           shares: getShares(null),
           publicInfo: publicInfo,
         ),
@@ -88,7 +94,7 @@ void main() {
       expect(
         () => SignatureAggregation(
           commitments: getSignatureCommitments(part1s),
-          details: SignDetails.scriptSpend(message: signMsgHash),
+          details: SignDetails.keySpend(message: signMsgHash),
           shares: getShares(null).take(1).toList(),
           publicInfo: publicInfo,
         ),
@@ -102,7 +108,7 @@ void main() {
             (Identifier.fromUint16(2), part1s[1].commitment),
             (Identifier.fromUint16(3), part1s[2].commitment),
           ]),
-          details: SignDetails.scriptSpend(message: signMsgHash),
+          details: SignDetails.keySpend(message: signMsgHash),
           shares: getShares(null),
           publicInfo: publicInfo,
         ),

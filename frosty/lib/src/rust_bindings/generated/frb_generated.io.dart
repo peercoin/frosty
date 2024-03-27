@@ -158,6 +158,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  SignAggregationError dco_decode_sign_aggregation_error(dynamic raw);
+
+  @protected
   int dco_decode_u_16(dynamic raw);
 
   @protected
@@ -283,6 +286,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     FrostRound1SigningNonces,
     FrostRound1SigningCommitments
   ) sse_decode_record_rust_opaque_frostround_1_signing_nonces_rust_opaque_frostround_1_signing_commitments(
+      SseDeserializer deserializer);
+
+  @protected
+  SignAggregationError sse_decode_sign_aggregation_error(
       SseDeserializer deserializer);
 
   @protected
@@ -414,6 +421,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       sse_encode_record_rust_opaque_frostround_1_signing_nonces_rust_opaque_frostround_1_signing_commitments(
           (FrostRound1SigningNonces, FrostRound1SigningCommitments) self,
           SseSerializer serializer);
+
+  @protected
+  void sse_encode_sign_aggregation_error(
+      SignAggregationError self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_16(int self, SseSerializer serializer);

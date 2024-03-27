@@ -1,5 +1,4 @@
 import 'package:coinlib/coinlib.dart';
-import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:frosty/src/frost_public_info.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
@@ -11,8 +10,17 @@ import 'details.dart';
 typedef ShareList = List<(Identifier, SignatureShare)>;
 
 /// Thrown when the signature shares cannot be aggregated into a valid signature
+/// and this is not due to an identifiably incorrect signature share (use
+/// [InvalidAggregationShare]).
 class InvalidAggregation extends MessageException {
   InvalidAggregation(super.message);
+}
+
+/// Thrown when a participant provided an invalid share. The participant is
+/// identified with [culprit].
+class InvalidAggregationShare implements Exception {
+  final Identifier? culprit;
+  InvalidAggregationShare(this.culprit);
 }
 
 /// Allows the coordinator to aggregate signature shares taken from selected
@@ -50,8 +58,10 @@ class SignatureAggregation {
 
       signature = SchnorrSignature(bytes);
 
-    } on AnyhowException catch(e) {
+    } on rust.SignAggregationError_General catch(e) {
       throw InvalidAggregation(e.message);
+    } on rust.SignAggregationError_InvalidSignShare catch(e) {
+      throw InvalidAggregationShare(Identifier.fromUnderlying(e.culprit));
     }
 
   }

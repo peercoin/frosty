@@ -917,6 +917,30 @@ impl SseDecode
     }
 }
 
+impl SseDecode for crate::api::main::SignAggregationError {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                let mut var_message = <String>::sse_decode(deserializer);
+                return crate::api::main::SignAggregationError::General {
+                    message: var_message,
+                };
+            }
+            1 => {
+                let mut var_culprit = <RustOpaqueMoi<frost::Identifier>>::sse_decode(deserializer);
+                return crate::api::main::SignAggregationError::InvalidSignShare {
+                    culprit: var_culprit,
+                };
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseDecode for u16 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1128,6 +1152,30 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::main::IdentifierAndSigningCom
     for crate::api::main::IdentifierAndSigningCommitment
 {
     fn into_into_dart(self) -> crate::api::main::IdentifierAndSigningCommitment {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::main::SignAggregationError {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::main::SignAggregationError::General { message } => {
+                [0.into_dart(), message.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::main::SignAggregationError::InvalidSignShare { culprit } => {
+                [1.into_dart(), culprit.into_into_dart().into_dart()].into_dart()
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::main::SignAggregationError
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::main::SignAggregationError>
+    for crate::api::main::SignAggregationError
+{
+    fn into_into_dart(self) -> crate::api::main::SignAggregationError {
         self
     }
 }
@@ -1378,6 +1426,22 @@ impl SseEncode
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <RustOpaqueMoi<frost::round1::SigningNonces>>::sse_encode(self.0, serializer);
         <RustOpaqueMoi<frost::round1::SigningCommitments>>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for crate::api::main::SignAggregationError {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::main::SignAggregationError::General { message } => {
+                <i32>::sse_encode(0, serializer);
+                <String>::sse_encode(message, serializer);
+            }
+            crate::api::main::SignAggregationError::InvalidSignShare { culprit } => {
+                <i32>::sse_encode(1, serializer);
+                <RustOpaqueMoi<frost::Identifier>>::sse_encode(culprit, serializer);
+            }
+        }
     }
 }
 

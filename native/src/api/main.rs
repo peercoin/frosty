@@ -390,6 +390,11 @@ pub struct IdentifierAndSignatureShare {
     pub share: SignatureShareOpaque,
 }
 
+pub enum SignAggregationError {
+    General { message: String },
+    InvalidSignShare { culprit: IdentifierOpaque },
+}
+
 #[frb(sync)]
 pub fn aggregate_signature(
     nonce_commitments: Vec<IdentifierAndSigningCommitment>,
@@ -398,12 +403,13 @@ pub fn aggregate_signature(
     shares: Vec<IdentifierAndSignatureShare>,
     group_pk: Vec<u8>,
     public_shares: Vec<IdentifierAndPublicShare>,
-) -> Result<Vec<u8>> {
+) -> Result<Vec<u8>, SignAggregationError> {
 
     let signing_package = construct_signing_package(
         nonce_commitments, message, merkle_root,
     );
-    let group_verifying_key = vector_to_group_key(group_pk)?;
+    let group_verifying_key = vector_to_group_key(group_pk)
+        .map_err(|e| SignAggregationError::General { message: e.to_string() })?;
 
     let pubkey_package = frost::keys::PublicKeyPackage::new(
         public_shares.into_iter().try_fold(
@@ -416,7 +422,7 @@ pub fn aggregate_signature(
                 );
                 Ok(acc)
             }
-        )?,
+        ).map_err(|e| SignAggregationError::General { message: e.to_string() })?,
         group_verifying_key,
     );
 
@@ -426,6 +432,17 @@ pub fn aggregate_signature(
             |v| (*v.identifier, (*v.share).clone())
         ).collect(),
         &pubkey_package,
+    ).map_err(|e|
+        match e {
+            frost::Error::InvalidSignatureShare {
+                culprit : identifier
+            } => SignAggregationError::InvalidSignShare {
+                culprit: RustOpaque::new(identifier)
+            },
+            _ => SignAggregationError::General {
+                message: e.to_string()
+            }
+        }
     )?;
 
     // Serialise, removing the first byte of the point as Schnorr signatures in
