@@ -1,4 +1,4 @@
-import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
@@ -46,7 +46,7 @@ class DkgPart2 {
 
     try {
 
-      final record = rust.rustApi.dkgPart2(
+      final record = rust.dkgPart2(
         round1Secret: round1Secret.underlying,
         round1Commitments: commitments.nativeList,
       );
@@ -59,8 +59,8 @@ class DkgPart2 {
         ),
       ).toList();
 
-    } on FrbAnyhowException catch(e) {
-      throw InvalidPart2(e.anyhow);
+    } on AnyhowException catch(e) {
+      throw InvalidPart2(e.message);
     }
 
   }

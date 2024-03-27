@@ -1,4 +1,4 @@
-import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'dart:typed_data';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
@@ -20,7 +20,7 @@ extends WritableRustObjectWrapper<rust.FrostRound2SignatureShare> {
   /// [InvalidSignatureShare] if invalid.
   SignatureShare.fromBytes(Uint8List data) : super(
     handleGetObject(
-      () => rust.rustApi.signatureShareFromBytes(bytes: data),
+      () => rust.signatureShareFromBytes(bytes: data),
       (e) => InvalidSignatureShare(e),
     ),
     data,
@@ -29,7 +29,7 @@ extends WritableRustObjectWrapper<rust.FrostRound2SignatureShare> {
   /// Obtains serialised data for the signature share that can be shared with
   /// the signature aggregator.
   @override
-  Uint8List serializeImpl() => rust.rustApi.signatureShareToBytes(
+  Uint8List serializeImpl() => rust.signatureShareToBytes(
     share: underlying,
   );
 

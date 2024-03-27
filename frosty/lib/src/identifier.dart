@@ -1,5 +1,5 @@
+import "dart:typed_data";
 import "package:coinlib/coinlib.dart";
-import "package:flutter_rust_bridge/flutter_rust_bridge.dart";
 import "package:frosty/src/helpers/message_exception.dart";
 import "package:frosty/src/rust_bindings/invalid_object.dart";
 import "package:frosty/src/rust_bindings/rust_object_wrapper.dart";
@@ -29,26 +29,26 @@ class Identifier
 
   /// Creates an identifier from a non-zero 16-bit integer
   Identifier.fromUint16(int i) : super(_handleGetIdentifier(
-    () => rust.rustApi.identifierFromU16(i: i),
+    () => rust.identifierFromU16(i: i),
   ),);
 
   /// Creates an identifier from an arbitrary string
   Identifier.fromString(String s) : super(_handleGetIdentifier(
-    () => rust.rustApi.identifierFromString(s: s),
+    () => rust.identifierFromString(s: s),
   ),);
 
   /// Creates an identifier from a 32-byte non-zero secp256k1 scalar in
   /// big-endian
   Identifier.fromBytes(Uint8List data) : super(
     _handleGetIdentifier(
-      () => rust.rustApi.identifierFromBytes(bytes: data),
+      () => rust.identifierFromBytes(bytes: data),
     ),
     data,
   );
 
   /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
   @override
-  Uint8List serializeImpl() => rust.rustApi.identifierToBytes(
+  Uint8List serializeImpl() => rust.identifierToBytes(
     identifier: underlying,
   );
 

@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   ffi: ^2.1.0
-  flutter_rust_bridge: ^1.82.4
+  flutter_rust_bridge: 2.0.0-dev.28
   path: ^1.8.3
   coinlib: ^2.0.0-rc.9
 

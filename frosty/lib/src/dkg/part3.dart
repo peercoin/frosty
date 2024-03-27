@@ -38,7 +38,7 @@ class DkgPart3 {
 
     try {
 
-      final record = rust.rustApi.dkgPart3(
+      final record = rust.dkgPart3(
         round2Secret: round2Secret.underlying,
         round1Commitments: commitments.nativeList,
         round2Shares: receivedShares.map(
@@ -64,8 +64,8 @@ class DkgPart3 {
         ),
       );
 
-    } on FrbAnyhowException catch(e) {
-      throw InvalidPart3(e.anyhow);
+    } on AnyhowException catch(e) {
+      throw InvalidPart3(e.message);
     }
 
   }

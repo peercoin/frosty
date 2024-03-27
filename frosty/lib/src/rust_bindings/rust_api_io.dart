@@ -1,10 +1,7 @@
-import 'dart:ffi';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:path/path.dart';
 import 'dart:io';
-import 'rust_ffi.g.dart';
-export 'rust_ffi.g.dart';
-
-late FrostyRust rustApi;
+import 'generated/frb_generated.dart';
 
 const _name = "frosty_rust";
 
@@ -34,6 +31,6 @@ String _libraryPath() {
 
 }
 
-Future<void> loadFrostyImpl() async {
-  rustApi = FrostyRustImpl(DynamicLibrary.open(_libraryPath()));
-}
+Future<void> loadFrostyImpl() => RustLib.init(
+  externalLibrary: ExternalLibrary.open(_libraryPath()),
+);

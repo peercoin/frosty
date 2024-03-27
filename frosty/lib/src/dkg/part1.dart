@@ -45,7 +45,7 @@ class DkgPart1 {
       );
     }
 
-    final record = rust.rustApi.dkgPart1(
+    final record = rust.dkgPart1(
       identifier: identifier.underlying,
       maxSigners: n,
       minSigners: threshold,

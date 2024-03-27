@@ -1,4 +1,4 @@
-import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'dart:typed_data';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
@@ -25,7 +25,7 @@ class DkgShareToGive extends WritableRustObjectWrapper<rust.DkgRound2Package> {
   /// [InvalidShareToGive] if invalid.
   DkgShareToGive.fromBytes(Uint8List data) : super(
     handleGetObject(
-      () => rust.rustApi.shareToGiveFromBytes(bytes: data),
+      () => rust.shareToGiveFromBytes(bytes: data),
       (e) => InvalidShareToGive(e),
     ),
     data,
@@ -35,6 +35,6 @@ class DkgShareToGive extends WritableRustObjectWrapper<rust.DkgRound2Package> {
   /// recipient participant. Shared secrets must be encrypted and authenticated
   /// and must only be sent to the required recipient.
   @override
-  Uint8List serializeImpl() => rust.rustApi.shareToGiveToBytes(share: underlying);
+  Uint8List serializeImpl() => rust.shareToGiveToBytes(share: underlying);
 
 }

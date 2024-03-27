@@ -1,15 +1,15 @@
-import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 class UseAfterFree implements Exception {}
 
-class RustObjectWrapper<T extends FrbOpaque> {
+class RustObjectWrapper<T extends RustOpaque> {
 
   final T _underlying;
 
   RustObjectWrapper(this._underlying);
 
   T get underlying {
-    if (_underlying.isStale()) {
+    if (_underlying.isDisposed) {
       throw UseAfterFree();
     }
     return _underlying;
@@ -21,7 +21,7 @@ class RustObjectWrapper<T extends FrbOpaque> {
 
 }
 
-abstract class WritableRustObjectWrapper<T extends FrbOpaque>
+abstract class WritableRustObjectWrapper<T extends RustOpaque>
 extends RustObjectWrapper<T> {
 
   WritableRustObjectWrapper(super._underlying, [Uint8List? bytes])

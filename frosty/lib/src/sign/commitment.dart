@@ -1,4 +1,4 @@
-import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'dart:typed_data';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
@@ -20,7 +20,7 @@ extends WritableRustObjectWrapper<rust.FrostRound1SigningCommitments> {
   /// [InvalidSigningCommitment] if invalid.
   SigningCommitment.fromBytes(Uint8List data) : super(
     handleGetObject(
-      () => rust.rustApi.signingCommitmentFromBytes(bytes: data),
+      () => rust.signingCommitmentFromBytes(bytes: data),
       (e) => InvalidSigningCommitment(e),
     ),
     data,
@@ -29,7 +29,7 @@ extends WritableRustObjectWrapper<rust.FrostRound1SigningCommitments> {
   /// Obtains serialised data for the commitment that can be shared with
   /// the signature aggregator.
   @override
-  Uint8List serializeImpl() => rust.rustApi.signingCommitmentToBytes(
+  Uint8List serializeImpl() => rust.signingCommitmentToBytes(
     commitment: underlying,
   );
 

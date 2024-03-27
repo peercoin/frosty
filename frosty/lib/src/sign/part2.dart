@@ -32,7 +32,7 @@ class SignPart2 {
     try {
 
       share = SignatureShare.fromUnderlying(
-        rust.rustApi.signPart2(
+        rust.signPart2(
           nonceCommitments: commitments.nativeList,
           message: details.message,
           merkleRoot: details.mastHash,
@@ -44,8 +44,8 @@ class SignPart2 {
         ),
       );
 
-    } on FrbAnyhowException catch(e) {
-      throw InvalidSignPart2(e.anyhow);
+    } on AnyhowException catch(e) {
+      throw InvalidSignPart2(e.message);
     }
 
   }

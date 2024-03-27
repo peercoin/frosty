@@ -2,23 +2,24 @@ pub use frost_secp256k1_tr as frost;
 pub use frost_secp256k1_tr::keys::dkg as dkg;
 use rand::thread_rng;
 use anyhow::{anyhow, Result};
-use flutter_rust_bridge::{SyncReturn, RustOpaque, DartSafe};
+use crate::frb_generated::{RustOpaque, MoiArcValue};
 use std::collections::BTreeMap;
+use flutter_rust_bridge::frb;
 
 // Common
 
-fn in_to_ext_result<T: Sized + DartSafe>(
+fn in_to_ext_result<T: Sized + MoiArcValue>(
    internal: Result<T, frost::Error>
-) -> Result<SyncReturn<RustOpaque<T>>> {
-    Ok(SyncReturn(RustOpaque::new(internal?)))
+) -> Result<RustOpaque<T>> {
+    Ok(RustOpaque::new(internal?))
 }
 
-fn from_bytes<T: Sized + DartSafe, DFunc, SFunc>(
+fn from_bytes<T: Sized + MoiArcValue, DFunc, SFunc>(
     bytes: Vec<u8>,
     deserialize: DFunc,
     serialize: SFunc,
     obj_name: &str
-) -> Result<SyncReturn<RustOpaque<T>>>
+) -> Result<RustOpaque<T>>
 where
     DFunc: FnOnce(&[u8]) -> Result<T, frost::Error>,
     SFunc: FnOnce(&T) -> Result<Vec<u8>, frost::Error> {
@@ -34,7 +35,7 @@ where
         ));
     }
 
-    Ok(SyncReturn(RustOpaque::new(obj)))
+    Ok(RustOpaque::new(obj))
 
 }
 
@@ -85,23 +86,27 @@ fn vector_to_verifying_share(vec: Vec<u8>) -> Result<frost::keys::VerifyingShare
 // Participant identifiers
 
 type IdentifierOpaque = RustOpaque<frost::Identifier>;
-type IdentifierResult = Result<SyncReturn<IdentifierOpaque>>;
+type IdentifierResult = Result<IdentifierOpaque>;
 
+#[frb(sync)]
 pub fn identifier_from_string(s: String) -> IdentifierResult {
     in_to_ext_result(frost::Identifier::derive(s.as_bytes()))
 }
 
+#[frb(sync)]
 pub fn identifier_from_u16(i: u16) -> IdentifierResult {
     in_to_ext_result(frost::Identifier::try_from(i))
 }
 
+#[frb(sync)]
 pub fn identifier_from_bytes(bytes: Vec<u8>) -> IdentifierResult {
     let array = vec_to_array::<32, u8>(bytes, "Identifier")?;
     in_to_ext_result(frost::Identifier::deserialize(&array))
 }
 
-pub fn identifier_to_bytes(identifier: IdentifierOpaque) -> SyncReturn<Vec<u8>> {
-    SyncReturn(identifier.serialize().to_vec())
+#[frb(sync)]
+pub fn identifier_to_bytes(identifier: IdentifierOpaque) -> Vec<u8> {
+    identifier.serialize().to_vec()
 }
 
 // DKG Part 1
@@ -111,8 +116,9 @@ pub fn identifier_to_bytes(identifier: IdentifierOpaque) -> SyncReturn<Vec<u8>> 
 type DkgPublicCommitmentOpaque = RustOpaque<dkg::round1::Package>;
 type DkgRound1SecretOpaque = RustOpaque<dkg::round1::SecretPackage>;
 type DkgRound1Data = (DkgRound1SecretOpaque, DkgPublicCommitmentOpaque);
-type DkgPart1Result = Result<SyncReturn<DkgRound1Data>>;
+type DkgPart1Result = Result<DkgRound1Data>;
 
+#[frb(sync)]
 pub fn dkg_part_1(
     identifier: IdentifierOpaque,
     max_signers: u16,
@@ -121,7 +127,7 @@ pub fn dkg_part_1(
 
     let mut rng = thread_rng();
 
-    Ok(SyncReturn(
+    Ok(
         dkg::part1(
             *identifier,
             max_signers,
@@ -129,13 +135,14 @@ pub fn dkg_part_1(
             &mut rng,
         )
         .map(|result| (RustOpaque::new(result.0), RustOpaque::new(result.1)))?
-    ))
+    )
 
 }
 
+#[frb(sync)]
 pub fn public_commitment_from_bytes(
     bytes: Vec<u8>
-) -> Result<SyncReturn<DkgPublicCommitmentOpaque>> {
+) -> Result<DkgPublicCommitmentOpaque> {
     from_bytes(
         bytes,
         |b| dkg::round1::Package::deserialize(&b),
@@ -144,10 +151,11 @@ pub fn public_commitment_from_bytes(
     )
 }
 
+#[frb(sync)]
 pub fn public_commitment_to_bytes(
     commitment: DkgPublicCommitmentOpaque
-) -> Result<SyncReturn<Vec<u8>>> {
-    Ok(SyncReturn(commitment.serialize()?))
+) -> Result<Vec<u8>> {
+    Ok(commitment.serialize()?)
 }
 
 // DKG Part 2
@@ -166,8 +174,9 @@ pub struct DkgRound2IdentifierAndShare {
 }
 
 type DkgRound2Data = (DkgRound2SecretOpaque, Vec<DkgRound2IdentifierAndShare>);
-type DkgPart2Result = Result<SyncReturn<DkgRound2Data>>;
+type DkgPart2Result = Result<DkgRound2Data>;
 
+#[frb(sync)]
 pub fn dkg_part_2(
     round_1_secret: DkgRound1SecretOpaque,
     round_1_commitments: Vec<DkgCommitmentForIdentifier>,
@@ -181,7 +190,7 @@ pub fn dkg_part_2(
     let result = dkg::part2((*round_1_secret).clone(), &commitment_map)?;
 
     // Convert result to DkgPart2Result
-    Ok(SyncReturn(
+    Ok(
         (
             RustOpaque::new(result.0),
             result.1.into_iter().map(
@@ -191,13 +200,14 @@ pub fn dkg_part_2(
                 }
             ).collect()
         )
-    ))
+    )
 
 }
 
+#[frb(sync)]
 pub fn share_to_give_from_bytes(
     bytes: Vec<u8>
-) -> Result<SyncReturn<DkgShareToGiveOpaque>> {
+) -> Result<DkgShareToGiveOpaque> {
     from_bytes(
         bytes,
         |b| dkg::round2::Package::deserialize(&b),
@@ -206,10 +216,11 @@ pub fn share_to_give_from_bytes(
     )
 }
 
+#[frb(sync)]
 pub fn share_to_give_to_bytes(
     share: DkgShareToGiveOpaque
-) -> Result<SyncReturn<Vec<u8>>> {
-    Ok(SyncReturn(share.serialize()?))
+) -> Result<Vec<u8>> {
+    Ok(share.serialize()?)
 }
 
 // DKG Part 3
@@ -225,8 +236,9 @@ pub struct DkgRound3Data {
     pub public_key_shares: Vec<IdentifierAndPublicShare>,
     pub threshold: u16,
 }
-type DkgPart3Result = Result<SyncReturn<DkgRound3Data>>;
+type DkgPart3Result = Result<DkgRound3Data>;
 
+#[frb(sync)]
 pub fn dkg_part_3(
     round_2_secret: DkgRound2SecretOpaque,
     round_1_commitments: Vec<DkgCommitmentForIdentifier>,
@@ -249,7 +261,7 @@ pub fn dkg_part_3(
         &secrets_map,
     )?;
 
-    Ok(SyncReturn(
+    Ok(
         DkgRound3Data {
             identifier: RustOpaque::new(*result.0.identifier()),
             // Get private share as scalar
@@ -265,7 +277,7 @@ pub fn dkg_part_3(
             ).collect(),
             threshold: *result.0.min_signers(),
         }
-    ))
+    )
 
 }
 
@@ -273,8 +285,9 @@ pub fn dkg_part_3(
 
 type SigningNonceOpaque = RustOpaque<frost::round1::SigningNonces>;
 type SigningCommitmentOpaque = RustOpaque<frost::round1::SigningCommitments>;
-type SignPart1Result = Result<SyncReturn<(SigningNonceOpaque, SigningCommitmentOpaque)>>;
+type SignPart1Result = Result<(SigningNonceOpaque, SigningCommitmentOpaque)>;
 
+#[frb(sync)]
 pub fn sign_part_1(
     private_share: Vec<u8>
 ) -> SignPart1Result {
@@ -286,13 +299,14 @@ pub fn sign_part_1(
         &mut rng,
     );
 
-    Ok(SyncReturn((RustOpaque::new(nonce), RustOpaque::new(commitment))))
+    Ok((RustOpaque::new(nonce), RustOpaque::new(commitment)))
 
 }
 
+#[frb(sync)]
 pub fn signing_commitment_from_bytes(
     bytes: Vec<u8>
-) -> Result<SyncReturn<SigningCommitmentOpaque>> {
+) -> Result<SigningCommitmentOpaque> {
     from_bytes(
         bytes,
         |b| frost::round1::SigningCommitments::deserialize(&b),
@@ -301,10 +315,11 @@ pub fn signing_commitment_from_bytes(
     )
 }
 
+#[frb(sync)]
 pub fn signing_commitment_to_bytes(
     commitment: SigningCommitmentOpaque
-) -> Result<SyncReturn<Vec<u8>>> {
-    Ok(SyncReturn(commitment.serialize()?))
+) -> Result<Vec<u8>> {
+    Ok(commitment.serialize()?)
 }
 
 // Sign Part 2: Generate signature share
@@ -315,8 +330,9 @@ pub struct IdentifierAndSigningCommitment {
 }
 
 type SignatureShareOpaque = RustOpaque<frost::round2::SignatureShare>;
-type SignPart2Result = Result<SyncReturn<SignatureShareOpaque>>;
+type SignPart2Result = Result<SignatureShareOpaque>;
 
+#[frb(sync)]
 pub fn sign_part_2(
     nonce_commitments: Vec<IdentifierAndSigningCommitment>,
     message: Vec<u8>,
@@ -342,27 +358,29 @@ pub fn sign_part_2(
         threshold,
     );
 
-    Ok(SyncReturn(RustOpaque::new(
+    Ok(RustOpaque::new(
         frost::round2::sign(
             &signing_package,
             &signing_nonce,
             &key_package,
         )?
-    )))
+    ))
 
 }
 
+#[frb(sync)]
 pub fn signature_share_from_bytes(
     bytes: Vec<u8>
-) -> Result<SyncReturn<SignatureShareOpaque>> {
+) -> Result<SignatureShareOpaque> {
     let array = vec_to_array::<32, u8>(bytes, "Signature share")?;
     in_to_ext_result(frost::round2::SignatureShare::deserialize(array))
 }
 
+#[frb(sync)]
 pub fn signature_share_to_bytes(
     share: SignatureShareOpaque
-) -> SyncReturn<Vec<u8>> {
-    SyncReturn(share.serialize().to_vec())
+) -> Vec<u8> {
+    share.serialize().to_vec()
 }
 
 // Final aggregation
@@ -372,6 +390,7 @@ pub struct IdentifierAndSignatureShare {
     pub share: SignatureShareOpaque,
 }
 
+#[frb(sync)]
 pub fn aggregate_signature(
     nonce_commitments: Vec<IdentifierAndSigningCommitment>,
     message: Vec<u8>,
@@ -379,7 +398,7 @@ pub fn aggregate_signature(
     shares: Vec<IdentifierAndSignatureShare>,
     group_pk: Vec<u8>,
     public_shares: Vec<IdentifierAndPublicShare>,
-) -> Result<SyncReturn<Vec<u8>>> {
+) -> Result<Vec<u8>> {
 
     let signing_package = construct_signing_package(
         nonce_commitments, message, merkle_root,
@@ -413,6 +432,6 @@ pub fn aggregate_signature(
     // Peercoin expect no odd/even bit.
     let bytes = signature.serialize()[1..].to_vec();
 
-    Ok(SyncReturn(bytes))
+    Ok(bytes)
 
 }

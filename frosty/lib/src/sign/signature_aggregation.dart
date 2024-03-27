@@ -31,7 +31,7 @@ class SignatureAggregation {
 
     try {
 
-      final bytes = rust.rustApi.aggregateSignature(
+      final bytes = rust.aggregateSignature(
         nonceCommitments: commitments.nativeList,
         message: details.message,
         merkleRoot: details.mastHash,
@@ -50,8 +50,8 @@ class SignatureAggregation {
 
       signature = SchnorrSignature(bytes);
 
-    } on FrbAnyhowException catch(e) {
-      throw InvalidAggregation(e.anyhow);
+    } on AnyhowException catch(e) {
+      throw InvalidAggregation(e.message);
     }
 
   }

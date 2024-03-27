@@ -1,4 +1,4 @@
-import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'dart:typed_data';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
@@ -25,7 +25,7 @@ class DkgPublicCommitment extends WritableRustObjectWrapper<rust.DkgRound1Packag
   /// [InvalidPublicCommitment] if invalid.
   DkgPublicCommitment.fromBytes(Uint8List data) : super(
     handleGetObject(
-      () => rust.rustApi.publicCommitmentFromBytes(bytes: data),
+      () => rust.publicCommitmentFromBytes(bytes: data),
       (e) => InvalidPublicCommitment(e),
     ),
     data,
@@ -34,7 +34,7 @@ class DkgPublicCommitment extends WritableRustObjectWrapper<rust.DkgRound1Packag
   /// Obtains serialised data for the commitment that can be shared with other
   /// participants.
   @override
-  Uint8List serializeImpl() => rust.rustApi.publicCommitmentToBytes(
+  Uint8List serializeImpl() => rust.publicCommitmentToBytes(
     commitment: underlying,
   );
 

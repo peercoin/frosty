@@ -1,4 +1,4 @@
-import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'dart:typed_data';
 import 'package:frosty/src/helpers/message_exception.dart';
 
 /// Thrown when the message or MAST hash details are invalid

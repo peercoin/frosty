@@ -25,7 +25,7 @@ class SignPart1 {
   SignPart1({
     required ECPrivateKey privateShare,
   }) {
-    final record = rust.rustApi.signPart1(privateShare: privateShare.data);
+    final record = rust.signPart1(privateShare: privateShare.data);
     nonce = SignNonce.fromUnderlying(record.$1);
     commitment = SigningCommitment.fromUnderlying(record.$2);
   }
