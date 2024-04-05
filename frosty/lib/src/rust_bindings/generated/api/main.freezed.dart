@@ -15,6 +15,356 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
+mixin _$DkgRound2Error {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) general,
+    required TResult Function(FrostIdentifier culprit) invalidProofOfKnowledge,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String message)? general,
+    TResult? Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message)? general,
+    TResult Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(DkgRound2Error_General value) general,
+    required TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)
+        invalidProofOfKnowledge,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(DkgRound2Error_General value)? general,
+    TResult? Function(DkgRound2Error_InvalidProofOfKnowledge value)?
+        invalidProofOfKnowledge,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(DkgRound2Error_General value)? general,
+    TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)?
+        invalidProofOfKnowledge,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $DkgRound2ErrorCopyWith<$Res> {
+  factory $DkgRound2ErrorCopyWith(
+          DkgRound2Error value, $Res Function(DkgRound2Error) then) =
+      _$DkgRound2ErrorCopyWithImpl<$Res, DkgRound2Error>;
+}
+
+/// @nodoc
+class _$DkgRound2ErrorCopyWithImpl<$Res, $Val extends DkgRound2Error>
+    implements $DkgRound2ErrorCopyWith<$Res> {
+  _$DkgRound2ErrorCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$DkgRound2Error_GeneralImplCopyWith<$Res> {
+  factory _$$DkgRound2Error_GeneralImplCopyWith(
+          _$DkgRound2Error_GeneralImpl value,
+          $Res Function(_$DkgRound2Error_GeneralImpl) then) =
+      __$$DkgRound2Error_GeneralImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String message});
+}
+
+/// @nodoc
+class __$$DkgRound2Error_GeneralImplCopyWithImpl<$Res>
+    extends _$DkgRound2ErrorCopyWithImpl<$Res, _$DkgRound2Error_GeneralImpl>
+    implements _$$DkgRound2Error_GeneralImplCopyWith<$Res> {
+  __$$DkgRound2Error_GeneralImplCopyWithImpl(
+      _$DkgRound2Error_GeneralImpl _value,
+      $Res Function(_$DkgRound2Error_GeneralImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+  }) {
+    return _then(_$DkgRound2Error_GeneralImpl(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$DkgRound2Error_GeneralImpl implements DkgRound2Error_General {
+  const _$DkgRound2Error_GeneralImpl({required this.message});
+
+  @override
+  final String message;
+
+  @override
+  String toString() {
+    return 'DkgRound2Error.general(message: $message)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DkgRound2Error_GeneralImpl &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DkgRound2Error_GeneralImplCopyWith<_$DkgRound2Error_GeneralImpl>
+      get copyWith => __$$DkgRound2Error_GeneralImplCopyWithImpl<
+          _$DkgRound2Error_GeneralImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) general,
+    required TResult Function(FrostIdentifier culprit) invalidProofOfKnowledge,
+  }) {
+    return general(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String message)? general,
+    TResult? Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+  }) {
+    return general?.call(message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message)? general,
+    TResult Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    required TResult orElse(),
+  }) {
+    if (general != null) {
+      return general(message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(DkgRound2Error_General value) general,
+    required TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)
+        invalidProofOfKnowledge,
+  }) {
+    return general(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(DkgRound2Error_General value)? general,
+    TResult? Function(DkgRound2Error_InvalidProofOfKnowledge value)?
+        invalidProofOfKnowledge,
+  }) {
+    return general?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(DkgRound2Error_General value)? general,
+    TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)?
+        invalidProofOfKnowledge,
+    required TResult orElse(),
+  }) {
+    if (general != null) {
+      return general(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DkgRound2Error_General implements DkgRound2Error {
+  const factory DkgRound2Error_General({required final String message}) =
+      _$DkgRound2Error_GeneralImpl;
+
+  String get message;
+  @JsonKey(ignore: true)
+  _$$DkgRound2Error_GeneralImplCopyWith<_$DkgRound2Error_GeneralImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<$Res> {
+  factory _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith(
+          _$DkgRound2Error_InvalidProofOfKnowledgeImpl value,
+          $Res Function(_$DkgRound2Error_InvalidProofOfKnowledgeImpl) then) =
+      __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({FrostIdentifier culprit});
+}
+
+/// @nodoc
+class __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<$Res>
+    extends _$DkgRound2ErrorCopyWithImpl<$Res,
+        _$DkgRound2Error_InvalidProofOfKnowledgeImpl>
+    implements _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<$Res> {
+  __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl(
+      _$DkgRound2Error_InvalidProofOfKnowledgeImpl _value,
+      $Res Function(_$DkgRound2Error_InvalidProofOfKnowledgeImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? culprit = null,
+  }) {
+    return _then(_$DkgRound2Error_InvalidProofOfKnowledgeImpl(
+      culprit: null == culprit
+          ? _value.culprit
+          : culprit // ignore: cast_nullable_to_non_nullable
+              as FrostIdentifier,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$DkgRound2Error_InvalidProofOfKnowledgeImpl
+    implements DkgRound2Error_InvalidProofOfKnowledge {
+  const _$DkgRound2Error_InvalidProofOfKnowledgeImpl({required this.culprit});
+
+  @override
+  final FrostIdentifier culprit;
+
+  @override
+  String toString() {
+    return 'DkgRound2Error.invalidProofOfKnowledge(culprit: $culprit)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DkgRound2Error_InvalidProofOfKnowledgeImpl &&
+            (identical(other.culprit, culprit) || other.culprit == culprit));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, culprit);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<
+          _$DkgRound2Error_InvalidProofOfKnowledgeImpl>
+      get copyWith =>
+          __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<
+              _$DkgRound2Error_InvalidProofOfKnowledgeImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) general,
+    required TResult Function(FrostIdentifier culprit) invalidProofOfKnowledge,
+  }) {
+    return invalidProofOfKnowledge(culprit);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String message)? general,
+    TResult? Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+  }) {
+    return invalidProofOfKnowledge?.call(culprit);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message)? general,
+    TResult Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    required TResult orElse(),
+  }) {
+    if (invalidProofOfKnowledge != null) {
+      return invalidProofOfKnowledge(culprit);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(DkgRound2Error_General value) general,
+    required TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)
+        invalidProofOfKnowledge,
+  }) {
+    return invalidProofOfKnowledge(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(DkgRound2Error_General value)? general,
+    TResult? Function(DkgRound2Error_InvalidProofOfKnowledge value)?
+        invalidProofOfKnowledge,
+  }) {
+    return invalidProofOfKnowledge?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(DkgRound2Error_General value)? general,
+    TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)?
+        invalidProofOfKnowledge,
+    required TResult orElse(),
+  }) {
+    if (invalidProofOfKnowledge != null) {
+      return invalidProofOfKnowledge(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DkgRound2Error_InvalidProofOfKnowledge
+    implements DkgRound2Error {
+  const factory DkgRound2Error_InvalidProofOfKnowledge(
+          {required final FrostIdentifier culprit}) =
+      _$DkgRound2Error_InvalidProofOfKnowledgeImpl;
+
+  FrostIdentifier get culprit;
+  @JsonKey(ignore: true)
+  _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<
+          _$DkgRound2Error_InvalidProofOfKnowledgeImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$SignAggregationError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({

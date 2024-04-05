@@ -300,6 +300,16 @@ class DkgCommitmentForIdentifier {
           commitment == other.commitment;
 }
 
+@freezed
+sealed class DkgRound2Error with _$DkgRound2Error implements FrbException {
+  const factory DkgRound2Error.general({
+    required String message,
+  }) = DkgRound2Error_General;
+  const factory DkgRound2Error.invalidProofOfKnowledge({
+    required FrostIdentifier culprit,
+  }) = DkgRound2Error_InvalidProofOfKnowledge;
+}
+
 class DkgRound2IdentifierAndShare {
   final FrostIdentifier identifier;
   final DkgRound2Package secret;

@@ -712,6 +712,30 @@ impl SseDecode for crate::api::main::DkgCommitmentForIdentifier {
     }
 }
 
+impl SseDecode for crate::api::main::DkgRound2Error {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                let mut var_message = <String>::sse_decode(deserializer);
+                return crate::api::main::DkgRound2Error::General {
+                    message: var_message,
+                };
+            }
+            1 => {
+                let mut var_culprit = <RustOpaqueMoi<frost::Identifier>>::sse_decode(deserializer);
+                return crate::api::main::DkgRound2Error::InvalidProofOfKnowledge {
+                    culprit: var_culprit,
+                };
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseDecode for crate::api::main::DkgRound2IdentifierAndShare {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -1048,6 +1072,30 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::main::DkgCommitmentForIdentif
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::main::DkgRound2Error {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::main::DkgRound2Error::General { message } => {
+                [0.into_dart(), message.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::main::DkgRound2Error::InvalidProofOfKnowledge { culprit } => {
+                [1.into_dart(), culprit.into_into_dart().into_dart()].into_dart()
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::main::DkgRound2Error
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::main::DkgRound2Error>
+    for crate::api::main::DkgRound2Error
+{
+    fn into_into_dart(self) -> crate::api::main::DkgRound2Error {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::main::DkgRound2IdentifierAndShare {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -1271,6 +1319,22 @@ impl SseEncode for crate::api::main::DkgCommitmentForIdentifier {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <RustOpaqueMoi<frost::Identifier>>::sse_encode(self.identifier, serializer);
         <RustOpaqueMoi<dkg::round1::Package>>::sse_encode(self.commitment, serializer);
+    }
+}
+
+impl SseEncode for crate::api::main::DkgRound2Error {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::main::DkgRound2Error::General { message } => {
+                <i32>::sse_encode(0, serializer);
+                <String>::sse_encode(message, serializer);
+            }
+            crate::api::main::DkgRound2Error::InvalidProofOfKnowledge { culprit } => {
+                <i32>::sse_encode(1, serializer);
+                <RustOpaqueMoi<frost::Identifier>>::sse_encode(culprit, serializer);
+            }
+        }
     }
 }
 

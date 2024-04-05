@@ -90,6 +90,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  DkgRound2Error dco_decode_dkg_round_2_error(dynamic raw);
+
+  @protected
   DkgRound2IdentifierAndShare dco_decode_dkg_round_2_identifier_and_share(
       dynamic raw);
 
@@ -214,6 +217,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgCommitmentForIdentifier sse_decode_dkg_commitment_for_identifier(
       SseDeserializer deserializer);
+
+  @protected
+  DkgRound2Error sse_decode_dkg_round_2_error(SseDeserializer deserializer);
 
   @protected
   DkgRound2IdentifierAndShare sse_decode_dkg_round_2_identifier_and_share(
@@ -352,6 +358,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_dkg_commitment_for_identifier(
       DkgCommitmentForIdentifier self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_dkg_round_2_error(
+      DkgRound2Error self, SseSerializer serializer);
 
   @protected
   void sse_encode_dkg_round_2_identifier_and_share(

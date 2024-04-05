@@ -313,7 +313,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       codec: SseCodec(
         decodeSuccessData:
             sse_decode_record_rust_opaque_dkground_2_secret_package_list_dkg_round_2_identifier_and_share,
-        decodeErrorData: sse_decode_AnyhowException,
+        decodeErrorData: sse_decode_dkg_round_2_error,
       ),
       constMeta: kDkgPart2ConstMeta,
       argValues: [round1Secret, round1Commitments],
@@ -887,6 +887,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  DkgRound2Error dco_decode_dkg_round_2_error(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return DkgRound2Error_General(
+          message: dco_decode_String(raw[1]),
+        );
+      case 1:
+        return DkgRound2Error_InvalidProofOfKnowledge(
+          culprit: dco_decode_RustOpaque_frostIdentifier(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
   DkgRound2IdentifierAndShare dco_decode_dkg_round_2_identifier_and_share(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -1194,6 +1211,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_commitment = sse_decode_RustOpaque_dkground1Package(deserializer);
     return DkgCommitmentForIdentifier(
         identifier: var_identifier, commitment: var_commitment);
+  }
+
+  @protected
+  DkgRound2Error sse_decode_dkg_round_2_error(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_message = sse_decode_String(deserializer);
+        return DkgRound2Error_General(message: var_message);
+      case 1:
+        var var_culprit = sse_decode_RustOpaque_frostIdentifier(deserializer);
+        return DkgRound2Error_InvalidProofOfKnowledge(culprit: var_culprit);
+      default:
+        throw UnimplementedError('');
+    }
   }
 
   @protected
@@ -1516,6 +1550,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_RustOpaque_frostIdentifier(self.identifier, serializer);
     sse_encode_RustOpaque_dkground1Package(self.commitment, serializer);
+  }
+
+  @protected
+  void sse_encode_dkg_round_2_error(
+      DkgRound2Error self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case DkgRound2Error_General(message: final message):
+        sse_encode_i_32(0, serializer);
+        sse_encode_String(message, serializer);
+      case DkgRound2Error_InvalidProofOfKnowledge(culprit: final culprit):
+        sse_encode_i_32(1, serializer);
+        sse_encode_RustOpaque_frostIdentifier(culprit, serializer);
+    }
   }
 
   @protected

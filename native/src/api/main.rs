@@ -173,21 +173,39 @@ pub struct DkgRound2IdentifierAndShare {
     pub secret: DkgShareToGiveOpaque,
 }
 
+pub enum DkgRound2Error {
+    General { message: String },
+    InvalidProofOfKnowledge { culprit: IdentifierOpaque },
+}
+
 type DkgRound2Data = (DkgRound2SecretOpaque, Vec<DkgRound2IdentifierAndShare>);
-type DkgPart2Result = Result<DkgRound2Data>;
 
 #[frb(sync)]
 pub fn dkg_part_2(
     round_1_secret: DkgRound1SecretOpaque,
     round_1_commitments: Vec<DkgCommitmentForIdentifier>,
-) -> DkgPart2Result {
+) -> Result<DkgRound2Data, DkgRound2Error> {
 
     // Convert vector into hashmap
     let commitment_map = round_1_commitments.into_iter().map(
         |v| (*v.identifier, (*v.commitment).clone())
     ).collect();
 
-    let result = dkg::part2((*round_1_secret).clone(), &commitment_map)?;
+    let result = dkg::part2(
+        (*round_1_secret).clone(),
+        &commitment_map
+    ).map_err(
+        |e| match e {
+            frost::Error::InvalidProofOfKnowledge {
+                culprit: identifier
+            } => DkgRound2Error::InvalidProofOfKnowledge {
+                culprit: RustOpaque::new(identifier)
+            },
+            _ => DkgRound2Error::General {
+                message: e.to_string()
+            }
+        }
+    )?;
 
     // Convert result to DkgPart2Result
     Ok(
@@ -432,8 +450,8 @@ pub fn aggregate_signature(
             |v| (*v.identifier, (*v.share).clone())
         ).collect(),
         &pubkey_package,
-    ).map_err(|e|
-        match e {
+    ).map_err(
+        |e| match e {
             frost::Error::InvalidSignatureShare {
                 culprit : identifier
             } => SignAggregationError::InvalidSignShare {

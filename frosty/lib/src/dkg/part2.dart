@@ -1,4 +1,3 @@
-import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
@@ -16,6 +15,15 @@ class DkgRound2Secret extends RustObjectWrapper<rust.DkgRound2SecretPackage> {
 /// Thrown when data provided into part 2 is not valid
 class InvalidPart2 extends MessageException {
   InvalidPart2(super.message);
+}
+
+/// Thrown when a participant does not provide a valid commitment
+/// proof-of-knowledge. [culprit] contains the identifier of the participant
+/// with the invalid commitment. There may be other participants with invalid
+/// proof-of-knowledge but only one of them is provided.
+class InvalidPart2ProofOfKnowledge implements Exception {
+  final Identifier? culprit;
+  InvalidPart2ProofOfKnowledge(this.culprit);
 }
 
 /// The second step to generate a distributed FROST key. This provides the
@@ -59,8 +67,10 @@ class DkgPart2 {
         ),
       ).toList();
 
-    } on AnyhowException catch(e) {
+    } on rust.DkgRound2Error_General catch(e) {
       throw InvalidPart2(e.message);
+    } on rust.DkgRound2Error_InvalidProofOfKnowledge catch(e) {
+      throw InvalidPart2ProofOfKnowledge(Identifier.fromUnderlying(e.culprit));
     }
 
   }

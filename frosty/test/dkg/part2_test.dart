@@ -63,15 +63,19 @@ void main() {
         throwsA(isA<InvalidPart2>()),
       );
 
-      // Invalid proof of knowledge by swapping them around
+      // Invalid proof of knowledge by giving the third commitment to the second
       expect(
         () => DkgPart2(
           round1Secret: eachPart1[0].secret,
           commitments: DkgCommitmentSet([
-            for (int j = 1; j < 3; j++) (ids[j], eachPart1[3-j].public),
+            (ids[1], eachPart1[2].public),
+            (ids[2], eachPart1[2].public),
           ]),
         ),
-        throwsA(isA<InvalidPart2>()),
+        throwsA(
+          isA<InvalidPart2ProofOfKnowledge>()
+          .having((err) => err.culprit, "culprit", Identifier.fromUint16(2)),
+        ),
       );
 
     });
