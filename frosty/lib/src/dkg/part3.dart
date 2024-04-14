@@ -1,9 +1,11 @@
 import 'package:coinlib/coinlib.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
-import 'package:frosty/src/frost_private_info.dart';
-import 'package:frosty/src/frost_public_info.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
+import 'package:frosty/src/key_info/group.dart';
+import 'package:frosty/src/key_info/participant.dart';
+import 'package:frosty/src/key_info/private.dart';
+import 'package:frosty/src/key_info/public_shares.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'commitment_set.dart';
 import 'part1.dart';
@@ -15,7 +17,7 @@ class InvalidPart3 extends MessageException{
   InvalidPart3(super.message);
 }
 
-/// The third and final part of the DKG. This provides the [frostPrivateInfo]
+/// The third and final part of the DKG. This provides the [participantInfo]
 /// which allows the participant to produce signature shares.
 ///
 /// The information that went into producing the key can be diposed of
@@ -25,7 +27,7 @@ class DkgPart3 {
 
   /// All the information required for a participant to begin producing
   /// signature shares.
-  late FrostPrivateInfo frostPrivateInfo;
+  late ParticipantKeyInfo participantInfo;
 
   /// Takes the secret from [DkgPart2.secret], the commitments from [DkgPart1]
   /// and all received shares from [DkgPart2]. The received shares should be
@@ -49,19 +51,27 @@ class DkgPart3 {
         ).toList(),
       );
 
-      frostPrivateInfo = FrostPrivateInfo(
-        identifier: Identifier.fromUnderlying(record.identifier),
-        privateShare: ECPrivateKey(record.privateShare),
-        public: FrostPublicInfo(
-          groupPublicKey: ECPublicKey(record.groupPk),
+      participantInfo = ParticipantKeyInfo(
+
+        group: GroupKeyInfo(
+          publicKey: ECPublicKey(record.groupPk),
+          threshold: record.threshold,
+        ),
+
+        publicShares: PublicSharesKeyInfo(
           publicShares: [
             for (final share in record.publicKeyShares) (
               Identifier.fromUnderlying(share.identifier),
               ECPublicKey(share.publicShare),
             ),
           ],
-          threshold: record.threshold,
         ),
+
+        private: PrivateKeyInfo(
+           identifier: Identifier.fromUnderlying(record.identifier),
+           share: ECPrivateKey(record.privateShare),
+        ),
+
       );
 
     } on AnyhowException catch(e) {

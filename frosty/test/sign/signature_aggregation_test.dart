@@ -28,7 +28,7 @@ void main() {
         commitments: getSignatureCommitments(part1s),
         details: SignDetails.keySpend(message: signMsgHash, mastHash: mast?.hash),
         shares: getShares(mast),
-        publicInfo: publicInfo,
+        info: aggregateInfo,
       ).signature;
 
       expect(signature.verify(taproot.tweakedKey, signMsgHash), true);
@@ -65,7 +65,7 @@ void main() {
           commitments: getSignatureCommitments(part1s),
           details: SignDetails.keySpend(message: signMsgHash),
           shares: sharesWithInvalid,
-          publicInfo: publicInfo,
+          info: aggregateInfo,
         ),
         throwsA(
           isA<InvalidAggregationShare>()
@@ -85,7 +85,7 @@ void main() {
           ]),
           details: SignDetails.keySpend(message: signMsgHash),
           shares: getShares(null),
-          publicInfo: publicInfo,
+          info: aggregateInfo,
         ),
         throwsA(isA<InvalidAggregation>()),
       );
@@ -96,7 +96,7 @@ void main() {
           commitments: getSignatureCommitments(part1s),
           details: SignDetails.keySpend(message: signMsgHash),
           shares: getShares(null).take(1).toList(),
-          publicInfo: publicInfo,
+          info: aggregateInfo,
         ),
         throwsA(isA<InvalidAggregation>()),
       );
@@ -110,7 +110,7 @@ void main() {
           ]),
           details: SignDetails.keySpend(message: signMsgHash),
           shares: getShares(null),
-          publicInfo: publicInfo,
+          info: aggregateInfo,
         ),
         throwsA(isA<InvalidAggregation>()),
       );

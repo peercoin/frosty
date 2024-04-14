@@ -1,7 +1,7 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
-import 'package:frosty/src/frost_private_info.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
+import 'package:frosty/src/key_info/signing.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'details.dart';
 import 'commitment_set.dart';
@@ -26,7 +26,7 @@ class SignPart2 {
     required SignDetails details,
     required SignNonce ourNonce,
     required SigningCommitmentSet commitments,
-    required FrostPrivateInfo privateInfo,
+    required SigningKeyInfo info,
   }) {
 
     try {
@@ -38,9 +38,9 @@ class SignPart2 {
           merkleRoot: details.mastHash,
           signingNonce: ourNonce.underlying,
           identifier: identifier.underlying,
-          privateShare: privateInfo.privateShare.data,
-          groupPk: privateInfo.public.groupPublicKey.data,
-          threshold: privateInfo.public.threshold,
+          privateShare: info.private.share.data,
+          groupPk: info.group.publicKey.data,
+          threshold: info.group.threshold,
         ),
       );
 

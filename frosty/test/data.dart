@@ -43,16 +43,23 @@ final publicShares = [
   ),
 ];
 
-final publicInfo = FrostPublicInfo(
-  groupPublicKey: groupPublicKey,
-  publicShares: publicShares,
+final groupInfo = GroupKeyInfo(
+  publicKey: groupPublicKey,
   threshold: 2,
 );
+final publicSharesInfo = PublicSharesKeyInfo(publicShares: publicShares);
+final aggregateInfo = AggregateKeyInfo(
+  group: groupInfo,
+  publicShares: publicSharesInfo,
+);
 
-FrostPrivateInfo getPrivateInfo(int i) => FrostPrivateInfo(
-  identifier: Identifier.fromUint16(i+1),
-  privateShare: privateShares[i],
-  public: publicInfo,
+ParticipantKeyInfo getParticipantInfo(int i) => ParticipantKeyInfo(
+  group: groupInfo,
+  publicShares: publicSharesInfo,
+  private: PrivateKeyInfo(
+    identifier: Identifier.fromUint16(i+1),
+    share: privateShares[i],
+  ),
 );
 
 List<SignPart1> getPart1s() => List.generate(
@@ -77,7 +84,7 @@ SignatureShare getShare(
     Identifier? identifier,
     SignNonce? ourNonce,
     SigningCommitmentList? commitmentList,
-    FrostPrivateInfo? privateInfo,
+    SigningKeyInfo? info,
     Uint8List? mastHash,
   }
 ) => SignPart2(
@@ -87,5 +94,5 @@ SignatureShare getShare(
   commitments: commitmentList != null
     ? SigningCommitmentSet(commitmentList)
     : getSignatureCommitments(part1s),
-  privateInfo: privateInfo ?? getPrivateInfo(i),
+  info: info ?? getParticipantInfo(i).signing,
 ).share;

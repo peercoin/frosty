@@ -47,38 +47,38 @@ void main() {
           round2Secret: eachPart2[i].secret,
           commitments: eachCommitmentSet[i],
           receivedShares: eachReceivedShares[i],
-        ).frostPrivateInfo,
+        ).participantInfo,
       );
 
       for (int i = 0; i < 3; i++) {
 
         final info = infos[i];
-        final pkShares = info.public.publicShares;
+        final pkShares = info.publicShares.list;
 
-        expect(info.identifier, ids[i]);
+        expect(info.private.identifier, ids[i]);
         expect(
-          info.identifier,
+          info.private.identifier,
           isIn(pkShares.map((e) => e.$1)),
         );
         expect(
-          info.privateShare.pubkey,
+          info.private.share.pubkey,
           isIn(pkShares.map((e) => e.$2)),
         );
-        expect(info.public.threshold, 2);
-        expect(info.public.groupPublicKey.compressed, true);
+        expect(info.group.threshold, 2);
+        expect(info.group.publicKey.compressed, true);
         expect(pkShares.map((e) => e.$2.compressed), everyElement(true));
 
       }
 
       // Expect private shares to be unique
       expect(
-        infos.map((i) => bytesToHex(i.privateShare.data)).toSet().length,
+        infos.map((i) => bytesToHex(i.private.share.data)).toSet().length,
         3,
       );
 
       // Expect public shares to be identical and encode to the same bytes
       expect(
-        infos.map((i) => i.public.toHex()).toSet().length,
+        infos.map((i) => i.publicShares.toHex()).toSet().length,
         1,
       );
 
