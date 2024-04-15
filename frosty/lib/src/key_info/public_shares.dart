@@ -1,12 +1,13 @@
+import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
 import 'package:frosty/src/identifier.dart';
-
+import 'key_info.dart';
 import 'invalid_info.dart';
 
 typedef PublicShareList = List<(Identifier, ECPublicKey)>;
 
 /// Contains the public shares for a FROST shared key
-class PublicSharesKeyInfo with Writable {
+class PublicSharesKeyInfo extends KeyInfo {
 
   /// The public shares for each participant, ordered by identifier
   final PublicShareList list;
@@ -51,6 +52,26 @@ class PublicSharesKeyInfo with Writable {
       writer.writeSlice(share.$1.toBytes());
       writer.writeSlice(share.$2.data);
     }
+  }
+
+  @override
+  /// Tweaks the public shares by a scalar. null may be returned if the scalar
+  /// was crafted to lead to any invalid public key.
+  PublicSharesKeyInfo? tweak(Uint8List scalar) {
+
+    final newShares = list.map(
+      (share) {
+        final newPk = share.$2.tweak(scalar);
+        return newPk == null ? null : (share.$1, newPk);
+      }
+    ).toList();
+
+    return newShares.any((share) => share == null)
+      ? null
+      : PublicSharesKeyInfo(
+        publicShares: newShares.map((share) => share!).toList(),
+      );
+
   }
 
 }

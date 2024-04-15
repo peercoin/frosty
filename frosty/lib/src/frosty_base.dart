@@ -14,6 +14,7 @@ export "sign/signature_share.dart";
 export "key_info/aggregate.dart";
 export "key_info/group.dart";
 export "key_info/invalid_info.dart";
+export "key_info/key_info.dart";
 export "key_info/participant.dart";
 export "key_info/private.dart";
 export "key_info/public_shares.dart";

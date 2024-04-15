@@ -4,8 +4,8 @@ import 'package:test/test.dart';
 import '../data.dart';
 import 'helpers.dart';
 
-final validHex
-  = "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b20200";
+final validHex = "${groupPublicKeyHex}0200";
+final tweakedHex = "${tweakedGroupKeyHex}0200";
 
 void main() {
   group("GroupKeyInfo", () {
@@ -13,8 +13,8 @@ void main() {
     setUp(loadFrosty);
 
     basicInfoTests(
-      name: "group",
       validHex: validHex,
+      tweakHex: tweakedHex,
       fromReader: (reader) => GroupKeyInfo.fromReader(reader),
       getValidObj: () => groupInfo,
     );

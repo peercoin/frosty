@@ -1,9 +1,11 @@
+import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
-import 'package:frosty/src/key_info/invalid_info.dart';
+import 'invalid_info.dart';
+import 'key_info.dart';
 
 /// Contains information of a FROST key required for all participants and the
 /// coordinator. This includes the group public key and the threshold number.
-class GroupKeyInfo with Writable {
+class GroupKeyInfo extends KeyInfo {
 
   /// The public key of the overall FROST key
   final ECPublicKey publicKey;
@@ -36,6 +38,17 @@ class GroupKeyInfo with Writable {
   void write(Writer writer) {
     writer.writeSlice(publicKey.data);
     writer.writeUInt16(threshold);
+  }
+
+  @override
+  /// Tweaks the group key by a scalar. null may be returned if the scalar was
+  /// crafted to lead to an invalid public key.
+  GroupKeyInfo? tweak(Uint8List scalar) {
+    final newPk = publicKey.tweak(scalar);
+    return newPk == null ? null : GroupKeyInfo(
+      publicKey: newPk,
+      threshold: threshold,
+    );
   }
 
 }

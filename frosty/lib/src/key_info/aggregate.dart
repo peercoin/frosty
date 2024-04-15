@@ -1,11 +1,13 @@
+import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
-import 'package:frosty/src/key_info/invalid_info.dart';
+import 'invalid_info.dart';
+import 'key_info.dart';
 import 'group.dart';
 import 'public_shares.dart';
 
 /// Contains the group details and public shares used to aggregate a signature
 /// from shares.
-class AggregateKeyInfo with Writable {
+class AggregateKeyInfo extends KeyInfo {
 
   final GroupKeyInfo group;
   final PublicSharesKeyInfo publicShares;
@@ -36,6 +38,17 @@ class AggregateKeyInfo with Writable {
   void write(Writer writer) {
     group.write(writer);
     publicShares.write(writer);
+  }
+
+  @override
+  /// Tweaks the aggregate key info by a scalar. null may be returned if the
+  /// scalar was crafted to lead to an invalid key or shares.
+  AggregateKeyInfo? tweak(Uint8List scalar) {
+    final newGroup = group.tweak(scalar);
+    final newShares = publicShares.tweak(scalar);
+    return newGroup == null || newShares == null
+      ? null
+      : AggregateKeyInfo(group: newGroup, publicShares: newShares);
   }
 
 }

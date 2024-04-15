@@ -1,13 +1,15 @@
+import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
-import 'package:frosty/src/key_info/aggregate.dart';
-import 'package:frosty/src/key_info/signing.dart';
+import 'key_info.dart';
+import 'aggregate.dart';
+import 'signing.dart';
 import 'group.dart';
 import 'public_shares.dart';
 import 'private.dart';
 
 /// Contains all details for a given participant, including the group key,
 /// threshold, public shares and private share.
-class ParticipantKeyInfo with Writable {
+class ParticipantKeyInfo extends KeyInfo {
 
   final GroupKeyInfo group;
   final PublicSharesKeyInfo publicShares;
@@ -45,5 +47,21 @@ class ParticipantKeyInfo with Writable {
     group: group,
     publicShares: publicShares,
   );
+
+  @override
+  /// Tweaks the signing key info by a scalar. null may be returned if the
+  /// scalar was crafted to lead to an invalid key or private share.
+  ParticipantKeyInfo? tweak(Uint8List scalar) {
+    final newGroup = group.tweak(scalar);
+    final newShares = publicShares.tweak(scalar);
+    final newPrivate = private.tweak(scalar);
+    return newGroup == null || newShares == null || newPrivate == null
+      ? null
+      : ParticipantKeyInfo(
+        group: newGroup,
+        publicShares: newShares,
+        private: newPrivate,
+      );
+  }
 
 }
