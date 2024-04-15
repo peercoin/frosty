@@ -33,7 +33,8 @@ void main() {
 
     basicInfoTests(
       validHex: validHex,
-      tweakHex: tweakedHex,
+      tweakedHex: tweakedHex,
+      invalidTweakHex: invalidGroupTweak,
       fromReader: (reader) => ParticipantKeyInfo.fromReader(reader),
       getValidObj: () => getParticipantInfo(0),
     );

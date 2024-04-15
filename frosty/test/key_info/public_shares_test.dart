@@ -27,7 +27,8 @@ void main() {
 
     basicInfoTests(
       validHex: validHex,
-      tweakHex: tweakedHex,
+      tweakedHex: tweakedHex,
+      invalidTweakHex: invalidShareTweak,
       fromReader: (reader) => PublicSharesKeyInfo.fromReader(reader),
       getValidObj: () => publicSharesInfo,
     );

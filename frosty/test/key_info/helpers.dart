@@ -9,7 +9,8 @@ final tweak = hexToBytes(
 
 void basicInfoTests<T extends KeyInfo>({
   required String validHex,
-  required String tweakHex,
+  required String tweakedHex,
+  required String invalidTweakHex,
   required T Function(BytesReader reader) fromReader,
   required T Function() getValidObj,
 }) {
@@ -23,9 +24,14 @@ void basicInfoTests<T extends KeyInfo>({
     });
 
     test("tweaks as expected", () {
-      expect(getValidObj().tweak(tweak)!.toHex(), tweakHex);
+      expect(getValidObj().tweak(tweak)!.toHex(), tweakedHex);
       expect(getValidObj().tweak(Uint8List(32))!.toHex(), validHex);
     });
+
+    test(
+      "invalid tweak",
+      () => expect(getValidObj().tweak(hexToBytes(invalidTweakHex)), null),
+    );
 
     test("invalid info bytes", () => expect(
         () => fromReader(BytesReader(Uint8List(0))),

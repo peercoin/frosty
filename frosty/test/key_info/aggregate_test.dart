@@ -29,7 +29,8 @@ void main() {
 
     basicInfoTests(
       validHex: validHex,
-      tweakHex: tweakedHex,
+      tweakedHex: tweakedHex,
+      invalidTweakHex: invalidGroupTweak,
       fromReader: (reader) => AggregateKeyInfo.fromReader(reader),
       // Test getting from ParticipantKeyInfo
       getValidObj: () => getParticipantInfo(0).aggregate,

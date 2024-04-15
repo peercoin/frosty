@@ -21,7 +21,8 @@ void main() {
 
     basicInfoTests(
       validHex: validHex,
-      tweakHex: tweakedHex,
+      tweakedHex: tweakedHex,
+      invalidTweakHex: invalidShareTweak,
       fromReader: (reader) => SigningKeyInfo.fromReader(reader),
       // Test getting from ParticipantKeyInfo
       getValidObj: () => getParticipantInfo(0).signing,

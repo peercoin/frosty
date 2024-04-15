@@ -14,7 +14,8 @@ void main() {
 
     basicInfoTests(
       validHex: validHex,
-      tweakHex: tweakedHex,
+      tweakedHex: tweakedHex,
+      invalidTweakHex: invalidGroupTweak,
       fromReader: (reader) => GroupKeyInfo.fromReader(reader),
       getValidObj: () => groupInfo,
     );

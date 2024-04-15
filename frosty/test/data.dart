@@ -50,6 +50,15 @@ final publicShares = List.generate(
   ),
 );
 
+// Determined as an invalid tweak for the underlying private key obtained via
+// Lagrange interpolation of private shares.
+final invalidGroupTweak
+  = "e1e1c694059fccb472e02f56340c5b3630d60b90121d0ee20d9f3ac85ac2d315";
+
+// Invalid tweak for the first share that leads to scalar equal to 0
+final invalidShareTweak
+  = "4501b054be011c35ee7331e5063dbcdd31abcfd8acff69e43819776f2cb6658e";
+
 final groupInfo = GroupKeyInfo(
   publicKey: groupPublicKey,
   threshold: 2,
