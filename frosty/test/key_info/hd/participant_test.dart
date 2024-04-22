@@ -1,3 +1,4 @@
+import 'package:coinlib/coinlib.dart';
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 import '../../data.dart';
@@ -36,6 +37,72 @@ void main() {
       expectDerivedGroup(newHdParticipant.group);
       expectDerivedPublicShares(newHdParticipant.publicShares);
       expectDerivedPrivate(newHdParticipant.private);
+    });
+
+    test("can produce valid signatures", () {
+
+      final derivedParticipantInfos = List.generate(
+        2, // Only need 2
+        (i) => ParticipantKeyInfo(
+          group: groupInfo,
+          publicShares: publicSharesInfo,
+          private: getParticipantInfo(i).signing.private,
+        ),
+      );
+
+      final nonces = derivedParticipantInfos.map(
+        (info) => SignPart1(privateShare: info.private.share),
+      ).toList();
+
+      // Collect commitments
+      final commitments = SigningCommitmentSet(
+        List.generate(
+          2,
+          (i) => (Identifier.fromUint16(i+1), nonces[i].commitment),
+        ),
+      );
+
+      final signMsgHash = hexToBytes(
+        "2514a6272f85cfa0f45eb907fcb0d121b808ed37c6ea160a5a9046ed5526d555",
+      );
+      final details = SignDetails.keySpend(message: signMsgHash);
+
+      // Generate signature shares
+      final shares = List.generate(
+        2,
+        (i) {
+          final id = Identifier.fromUint16(i+1);
+          return (
+            id,
+            SignPart2(
+              identifier: id,
+              details: details,
+              ourNonce: nonces[i].nonce,
+              commitments: commitments,
+              info: derivedParticipantInfos[i].signing,
+            ).share
+          );
+        }
+      );
+
+      // Aggregate signature shares into final signature
+      final sig = SignatureAggregation(
+        commitments: commitments,
+        details: details,
+        shares: shares,
+        info: derivedParticipantInfos.first.aggregate,
+      ).signature;
+
+      expect(
+        sig.verify(
+          Taproot(
+            internalKey: derivedParticipantInfos.first.group.publicKey,
+          ).tweakedKey,
+          signMsgHash,
+        ),
+        true,
+      );
+
     });
 
   });
