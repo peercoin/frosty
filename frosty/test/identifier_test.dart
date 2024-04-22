@@ -10,7 +10,7 @@ final testIdHex
 void main() {
   group("Identifier", () {
 
-    setUp(loadFrosty);
+    setUpAll(loadFrosty);
 
     writableObjTests<Identifier, InvalidIdentifier>(
       hexToBytes(testIdHex),

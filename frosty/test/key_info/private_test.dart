@@ -15,7 +15,7 @@ final tweakedHex
 void main() {
   group("PrivateKeyInfo", () {
 
-    setUp(loadFrosty);
+    setUpAll(loadFrosty);
 
     basicInfoTests(
       validHex: validHex,

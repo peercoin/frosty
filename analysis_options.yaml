@@ -6,7 +6,7 @@ analyzer:
     strict-inference: true
     strict-raw-types: true
   exclude:
-    - frosty/lib/src/rust_bindings/rust_ffi.g.dart
+    - frosty/lib/src/rust_bindings/generated/**.dart
 
 # Lint rules and documentation, see http://dart-lang.github.io/linter/lints
 linter:

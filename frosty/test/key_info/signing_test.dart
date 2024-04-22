@@ -17,7 +17,7 @@ final tweakedHex
 void main() {
   group("SigningKeyInfo", () {
 
-    setUp(loadFrosty);
+    setUpAll(loadFrosty);
 
     basicInfoTests(
       validHex: validHex,

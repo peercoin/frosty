@@ -37,10 +37,23 @@ void main() async {
     (i) => (Identifier.fromUint16(i+1), publicShareKeys[i]),
   );
 
-  final publicInfo = FrostPublicInfo(
-    groupPublicKey: groupKey,
-    publicShares: publicShares,
+  final groupInfo = GroupKeyInfo(
+    publicKey: groupKey,
     threshold: 2,
+  );
+
+  final publicSharesInfo = PublicSharesKeyInfo(publicShares: publicShares);
+
+  final participantInfos = List.generate(
+    3,
+    (i) => ParticipantKeyInfo(
+      group: groupInfo,
+      publicShares: publicSharesInfo,
+      private: PrivateKeyInfo(
+        identifier: Identifier.fromUint16(i+1),
+        share: privateShares[i],
+      ),
+    ),
   );
 
   // Construct Taproot information
@@ -127,11 +140,7 @@ void main() async {
             details: details,
             ourNonce: nonces[i].nonce,
             commitments: commitments,
-            privateInfo: FrostPrivateInfo(
-              identifier: id,
-              privateShare: privateShares[i],
-              public: publicInfo,
-            ),
+            info: participantInfos[i].signing,
           ).share
         );
       }
@@ -142,7 +151,7 @@ void main() async {
       commitments: commitments,
       details: details,
       shares: shares,
-      publicInfo: publicInfo,
+      info: participantInfos.first.aggregate,
     ).signature;
 
   }

@@ -23,7 +23,7 @@ final tweakedHex
 void main() {
   group("PublicSharesKeyInfo", () {
 
-    setUp(loadFrosty);
+    setUpAll(loadFrosty);
 
     basicInfoTests(
       validHex: validHex,

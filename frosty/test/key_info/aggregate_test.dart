@@ -25,7 +25,7 @@ final tweakedHex
 void main() {
   group("AggregateKeyInfo", () {
 
-    setUp(loadFrosty);
+    setUpAll(loadFrosty);
 
     basicInfoTests(
       validHex: validHex,

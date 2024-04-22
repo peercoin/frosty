@@ -8,7 +8,7 @@ void main() {
 
     late List<SignPart1> part1s;
 
-    setUp(() async {
+    setUpAll(() async {
       await loadFrosty();
       part1s = getPart1s();
     });

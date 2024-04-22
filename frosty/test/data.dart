@@ -6,6 +6,8 @@ final groupPublicKeyHex
   = "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b2";
 final groupPublicKey = ECPublicKey.fromHex(groupPublicKeyHex);
 
+final chainCodeHex = bytesToHex(HDKeyInfo.fixedChaincode);
+
 final tweakedGroupKeyHex
   = "025cb7dcabf7173e27de4dae2944e2b9ba1153ef2af326a12ed1c71f11d8b53cc8";
 final tweakedGroupKey = ECPublicKey.fromHex(tweakedGroupKeyHex);
@@ -63,6 +65,7 @@ final groupInfo = GroupKeyInfo(
   publicKey: groupPublicKey,
   threshold: 2,
 );
+
 final publicSharesInfo = PublicSharesKeyInfo(publicShares: publicShares);
 final aggregateInfo = AggregateKeyInfo(
   group: groupInfo,

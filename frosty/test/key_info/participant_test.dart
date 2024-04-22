@@ -29,7 +29,7 @@ final tweakedHex
 void main() {
   group("ParticipantKeyInfo", () {
 
-    setUp(loadFrosty);
+    setUpAll(loadFrosty);
 
     basicInfoTests(
       validHex: validHex,

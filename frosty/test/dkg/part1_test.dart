@@ -5,7 +5,7 @@ void main() {
   group("DkgPart1", () {
 
     late Identifier id;
-    setUp(() async {
+    setUpAll(() async {
       await loadFrosty();
       id = Identifier.fromUint16(1);
     });

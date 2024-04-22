@@ -10,7 +10,7 @@ final tweakedHex = "${tweakedGroupKeyHex}0200";
 void main() {
   group("GroupKeyInfo", () {
 
-    setUp(loadFrosty);
+    setUpAll(loadFrosty);
 
     basicInfoTests(
       validHex: validHex,

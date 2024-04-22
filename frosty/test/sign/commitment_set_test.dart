@@ -22,7 +22,7 @@ void main() {
     final validBytes = commitmentSetBytes(commitBytes);
 
     late List<SigningCommitmentPair> pairs;
-    setUp(() async {
+    setUpAll(() async {
       await loadFrosty();
       pairs = List.generate(
         3,
