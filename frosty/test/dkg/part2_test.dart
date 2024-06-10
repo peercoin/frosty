@@ -23,7 +23,7 @@ void main() {
         expect(part2.sharesToGive.length, 2);
         // Should have other identifiers
         expect(
-          part2.sharesToGive.map((sts) => sts.$1).toList(),
+          part2.sharesToGive.keys,
           unorderedEquals(
             [for (final id in ids) if (id != ids[i]) id],
           ),

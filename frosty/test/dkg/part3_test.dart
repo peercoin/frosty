@@ -10,7 +10,7 @@ void main() {
     late List<DkgPart1> eachPart1;
     late List<DkgCommitmentSet> eachCommitmentSet;
     late List<DkgPart2> eachPart2;
-    late List<List<(Identifier, DkgShareToGive)>> eachReceivedShares;
+    late List<Map<Identifier, DkgShareToGive>> eachReceivedShares;
 
     setUp(() async {
 
@@ -26,15 +26,10 @@ void main() {
       );
 
       eachReceivedShares = List.generate(
-        3, (i) => [
+        3, (i) => {
           for (int j = 0; j < 3; j++)
-            if (j != i) (
-              ids[j],
-              eachPart2[j].sharesToGive
-              .firstWhere((e) => e.$1 == ids[i])
-              .$2,
-            ),
-        ],
+            if (j != i) ids[j] : eachPart2[j].sharesToGive[ids[i]]!,
+        },
       );
 
     });
@@ -106,7 +101,7 @@ void main() {
     });
 
     test("cannot use received share after free", () {
-      eachReceivedShares[0][0].$2.dispose();
+      eachReceivedShares[0][ids[1]]!.dispose();
       expectUseAfterFree();
     });
 
@@ -127,7 +122,7 @@ void main() {
         () => DkgPart3(
           round2Secret: eachPart2.first.secret,
           commitments: eachCommitmentSet.first,
-          receivedShares: eachReceivedShares.first.sublist(1),
+          receivedShares: { ids[1] : eachPart2[1].sharesToGive[ids[0]]! },
         ),
         throwsA(isA<InvalidPart3>()),
       );
@@ -137,13 +132,11 @@ void main() {
         () => DkgPart3(
           round2Secret: eachPart2.first.secret,
           commitments: eachCommitmentSet.first,
-          receivedShares: [
-            for (int i = 0; i < 2; i++) (
+          receivedShares: {
+            for (int i = 0; i < 2; i++)
               // Incorrect ID for share
-              ids[2-i],
-              eachReceivedShares.first[i].$2,
-            ),
-          ],
+              ids[2-i] : eachReceivedShares.first[ids[i+1]]!,
+          },
         ),
         throwsA(isA<InvalidPart3>()),
       );

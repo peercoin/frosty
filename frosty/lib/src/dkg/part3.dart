@@ -35,7 +35,7 @@ class DkgPart3 {
   DkgPart3({
     required DkgRound2Secret round2Secret,
     required DkgCommitmentSet commitments,
-    required List<(Identifier, DkgShareToGive)> receivedShares,
+    required Map<Identifier, DkgShareToGive> receivedShares,
   }) {
 
     try {
@@ -43,10 +43,10 @@ class DkgPart3 {
       final record = rust.dkgPart3(
         round2Secret: round2Secret.underlying,
         round1Commitments: commitments.nativeList,
-        round2Shares: receivedShares.map(
+        round2Shares: receivedShares.entries.map(
           (v) => rust.DkgRound2IdentifierAndShare(
-            identifier: v.$1.underlying,
-            secret: v.$2.underlying,
+            identifier: v.key.underlying,
+            secret: v.value.underlying,
           ),
         ).toList(),
       );

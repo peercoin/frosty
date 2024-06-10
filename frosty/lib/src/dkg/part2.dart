@@ -40,7 +40,7 @@ class DkgPart2 {
   /// Secret shares that are to be shared to participants given by each
   /// [Identifier]. They must be encrypted and authenticated and not shared with
   /// anyone else.
-  late final List<(Identifier, DkgShareToGive)> sharesToGive;
+  late final Map<Identifier, DkgShareToGive> sharesToGive;
 
   /// Takes the secret from [DkgPart1.secret] and a list of public commitments
   /// and identifiers from all of the other participants.
@@ -60,12 +60,11 @@ class DkgPart2 {
       );
 
       secret = DkgRound2Secret.fromUnderlying(record.$1);
-      sharesToGive = record.$2.map(
-        (s) => (
-          Identifier.fromUnderlying(s.identifier),
-          DkgShareToGive.fromUnderlying(s.secret),
-        ),
-      ).toList();
+      sharesToGive = {
+        for (final s in record.$2)
+          Identifier.fromUnderlying(s.identifier)
+            : DkgShareToGive.fromUnderlying(s.secret),
+      };
 
     } on rust.DkgRound2Error_General catch(e) {
       throw InvalidPart2(e.message);
