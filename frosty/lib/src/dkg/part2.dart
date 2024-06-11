@@ -42,12 +42,15 @@ class DkgPart2 {
   /// anyone else.
   late final Map<Identifier, DkgShareToGive> sharesToGive;
 
-  /// Takes the secret from [DkgPart1.secret] and a list of public commitments
-  /// and identifiers from all of the other participants.
+  /// Takes the participant's [identifier], secret from [DkgPart1.secret] and a
+  /// list of public commitments and identifiers from all participants,
+  /// including the calling participant.
+  ///
   /// The [commitments] must be the same as received by all other participants.
-  /// The participant should check the signatures from each participant of the
-  /// commitment hashes.
+  /// The participant should verify signatures from each participant for the
+  /// commitment set hash.
   DkgPart2({
+    required Identifier identifier,
     required DkgRound1Secret round1Secret,
     required DkgCommitmentSet commitments,
   }) {
@@ -56,7 +59,7 @@ class DkgPart2 {
 
       final record = rust.dkgPart2(
         round1Secret: round1Secret.underlying,
-        round1Commitments: commitments.nativeList,
+        round1Commitments: commitments.nativeListForId(identifier),
       );
 
       secret = DkgRound2Secret.fromUnderlying(record.$1);

@@ -29,10 +29,13 @@ class DkgPart3 {
   /// signature shares.
   late ParticipantKeyInfo participantInfo;
 
-  /// Takes the secret from [DkgPart2.secret], the commitments from [DkgPart1]
-  /// and all received shares from [DkgPart2]. The received shares should be
-  /// authenticated via a signature from the sending participant.
+  /// Takes the participant's [identifier], the secret from [DkgPart2.secret],
+  /// the commitments from [DkgPart1] and all received shares from [DkgPart2].
+  ///
+  /// The received shares should be authenticated via a signature from the
+  /// sending participant.
   DkgPart3({
+    required Identifier identifier,
     required DkgRound2Secret round2Secret,
     required DkgCommitmentSet commitments,
     required Map<Identifier, DkgShareToGive> receivedShares,
@@ -42,7 +45,7 @@ class DkgPart3 {
 
       final record = rust.dkgPart3(
         round2Secret: round2Secret.underlying,
-        round1Commitments: commitments.nativeList,
+        round1Commitments: commitments.nativeListForId(identifier),
         round2Shares: receivedShares.entries.map(
           (v) => rust.DkgRound2IdentifierAndShare(
             identifier: v.key.underlying,

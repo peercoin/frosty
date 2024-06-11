@@ -8,20 +8,21 @@ void main() {
 
     late List<Identifier> ids;
     late List<DkgPart1> eachPart1;
-    late List<DkgCommitmentSet> eachCommitmentSet;
+    late DkgCommitmentSet commitmentSet;
     late List<DkgPart2> eachPart2;
     late List<Map<Identifier, DkgShareToGive>> eachReceivedShares;
 
     setUp(() async {
 
       await loadFrosty();
-      (ids, eachPart1, eachCommitmentSet) = genPart1();
+      (ids, eachPart1, commitmentSet) = genPart1();
 
       eachPart2 = List.generate(
         3,
         (i) => DkgPart2(
+          identifier: ids[i],
           round1Secret: eachPart1[i].secret,
-          commitments: eachCommitmentSet[i],
+          commitments: commitmentSet,
         ),
       );
 
@@ -39,8 +40,9 @@ void main() {
       final infos = List.generate(
         3,
         (i) => DkgPart3(
+          identifier: ids[i],
           round2Secret: eachPart2[i].secret,
-          commitments: eachCommitmentSet[i],
+          commitments: commitmentSet,
           receivedShares: eachReceivedShares[i],
         ).participantInfo,
       );
@@ -82,8 +84,9 @@ void main() {
     void expectUseAfterFree() {
       expect(
         () => DkgPart3(
+          identifier: ids.first,
           round2Secret: eachPart2.first.secret,
-          commitments: eachCommitmentSet.first,
+          commitments: commitmentSet,
           receivedShares: eachReceivedShares.first,
         ),
         throwsA(isA<UseAfterFree>()),
@@ -96,7 +99,7 @@ void main() {
     });
 
     test("cannot use public commitment after free", () {
-      eachCommitmentSet[0].list[0].$2.dispose();
+      commitmentSet.list[1].$2.dispose();
       expectUseAfterFree();
     });
 
@@ -110,8 +113,9 @@ void main() {
       // Wrong amount of commitments
       expect(
         () => DkgPart3(
+          identifier: ids.first,
           round2Secret: eachPart2.first.secret,
-          commitments: DkgCommitmentSet([(ids[1], eachPart1[1].public)]),
+          commitments: DkgCommitmentSet(commitmentSet.list.sublist(0, 2)),
           receivedShares: eachReceivedShares.first,
         ),
         throwsA(isA<InvalidPart3>()),
@@ -120,8 +124,9 @@ void main() {
       // Wrong amont of shares
       expect(
         () => DkgPart3(
+          identifier: ids.first,
           round2Secret: eachPart2.first.secret,
-          commitments: eachCommitmentSet.first,
+          commitments: commitmentSet,
           receivedShares: { ids[1] : eachPart2[1].sharesToGive[ids[0]]! },
         ),
         throwsA(isA<InvalidPart3>()),
@@ -130,8 +135,9 @@ void main() {
       // Invalid shares.
       expect(
         () => DkgPart3(
+          identifier: ids.first,
           round2Secret: eachPart2.first.secret,
-          commitments: eachCommitmentSet.first,
+          commitments: commitmentSet,
           receivedShares: {
             for (int i = 0; i < 2; i++)
               // Incorrect ID for share

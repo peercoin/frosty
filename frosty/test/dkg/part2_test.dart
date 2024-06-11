@@ -7,18 +7,19 @@ void main() {
 
     late List<Identifier> ids;
     late List<DkgPart1> eachPart1;
-    late List<DkgCommitmentSet> eachCommitmentSet;
+    late DkgCommitmentSet commitmentSet;
     setUp(() async {
       await loadFrosty();
-      (ids, eachPart1, eachCommitmentSet) = genPart1();
+      (ids, eachPart1, commitmentSet) = genPart1();
     });
 
     test("gives expected secrets to share", () {
 
       for (int i = 0; i < 3; i++) {
         final part2 = DkgPart2(
+          identifier: ids[i],
           round1Secret: eachPart1[i].secret,
-          commitments: eachCommitmentSet[i],
+          commitments: commitmentSet,
         );
         expect(part2.sharesToGive.length, 2);
         // Should have other identifiers
@@ -35,8 +36,9 @@ void main() {
     void expectUseAfterFree() {
       expect(
         () => DkgPart2(
+          identifier: ids.first,
           round1Secret: eachPart1.first.secret,
-          commitments: eachCommitmentSet.first,
+          commitments: commitmentSet,
         ),
         throwsA(isA<UseAfterFree>()),
       );
@@ -57,6 +59,7 @@ void main() {
       // Wrong amount of commitments
       expect(
         () => DkgPart2(
+          identifier: ids.first,
           round1Secret: eachPart1[0].secret,
           commitments: DkgCommitmentSet([(ids[1], eachPart1[1].public)]),
         ),
@@ -66,8 +69,10 @@ void main() {
       // Invalid proof of knowledge by giving the third commitment to the second
       expect(
         () => DkgPart2(
+          identifier: ids.first,
           round1Secret: eachPart1[0].secret,
           commitments: DkgCommitmentSet([
+            (ids[0], eachPart1[0].public),
             (ids[1], eachPart1[2].public),
             (ids[2], eachPart1[2].public),
           ]),

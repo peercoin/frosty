@@ -3,7 +3,7 @@ import 'package:frosty/src/helpers/message_exception.dart';
 import 'dart:typed_data';
 import 'package:test/test.dart';
 
-(List<Identifier>, List<DkgPart1>, List<DkgCommitmentSet>) genPart1() {
+(List<Identifier>, List<DkgPart1>, DkgCommitmentSet) genPart1() {
 
   final ids = List.generate(3, (i) => Identifier.fromUint16(1+i));
   final eachPart1 = List.generate(
@@ -15,15 +15,11 @@ import 'package:test/test.dart';
     ),
   );
 
-  final eachCommitmentSet = List.generate(
-    3,
-    (i) => DkgCommitmentSet([
-      for (int j = 0; j < 3; j++)
-      if (j != i) (ids[j], eachPart1[j].public),
-    ]),
-  );
+  final commitmentSet = DkgCommitmentSet([
+    for (int j = 0; j < 3; j++) (ids[j], eachPart1[j].public),
+  ]);
 
-  return (ids, eachPart1, eachCommitmentSet);
+  return (ids, eachPart1, commitmentSet);
 
 }
 

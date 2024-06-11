@@ -41,12 +41,15 @@ class DkgCommitmentSet with Writable {
     ],),
   );
 
-  List<rust.DkgCommitmentForIdentifier> get nativeList => list.map(
-    (v) => rust.DkgCommitmentForIdentifier(
-      identifier: v.$1.underlying,
-      commitment: v.$2.underlying,
-    ),
-  ).toList();
+  /// Obtains the underlying native list to past to Rust with the entry removed
+  /// for the calling participant given by [id].
+  List<rust.DkgCommitmentForIdentifier> nativeListForId(Identifier id)
+    => list.where((e) => e.$1 != id).map(
+      (v) => rust.DkgCommitmentForIdentifier(
+        identifier: v.$1.underlying,
+        commitment: v.$2.underlying,
+      ),
+    ).toList();
 
   @override
   void write(Writer writer) {
