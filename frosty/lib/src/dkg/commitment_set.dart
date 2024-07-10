@@ -33,11 +33,15 @@ class DkgCommitmentSet with Writable {
     ),
   );
 
+  static final _hasher = getTaggedHasher("DkgCommitmentSet");
+
   Uint8List? _hashCache;
-  Uint8List get hash => _hashCache ??= sha256Hash(
+  Uint8List get hash => _hashCache ??= _hasher(
     Uint8List.fromList([
-      for (final commitment in list)
-      ...commitment.$2.toBytes(),
+      for (final commitment in list) ...[
+        ...commitment.$1.toBytes(),
+        ...commitment.$2.toBytes(),
+      ],
     ],),
   );
 

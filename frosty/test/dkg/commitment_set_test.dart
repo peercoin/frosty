@@ -35,7 +35,7 @@ void main() {
 
     void expectHash(DkgCommitmentSet commitments) => expect(
       bytesToHex(commitments.hash),
-      "0a6136d56c46488b7e51a77e0d07467b430fc586d18cd4d7efe8a7fc4aa0003b",
+      "d9adb595c2402bd0bd6c67d3ea73671075b4b3b05469da30a1ec0fb15278b731",
     );
 
     test("provides expected hash regardless of order", () {
