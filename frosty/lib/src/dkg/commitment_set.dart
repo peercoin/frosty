@@ -49,7 +49,7 @@ class DkgCommitmentSet with Writable {
   /// for the calling participant given by [id].
   List<rust.DkgCommitmentForIdentifier> nativeListForId(Identifier id)
     => list.where((e) => e.$1 != id).map(
-      (v) => rust.DkgCommitmentForIdentifier(
+      (v) => rust.DkgCommitmentForIdentifier.fromRefs(
         identifier: v.$1.underlying,
         commitment: v.$2.underlying,
       ),

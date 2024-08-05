@@ -13,6 +13,10 @@ scripts:
     run: bash scripts/build-linux.sh
     description: Build the Rust library for Linux using Podman/Docker
 
+  build:android:
+    run: bash scripts/build-android.sh
+    description: Build the Rust library for Android using Podman/Docker
+
   build:dev:
     run: bash scripts/build-dev.sh
     description: Build the debug Rust library for Linux and generate bindings

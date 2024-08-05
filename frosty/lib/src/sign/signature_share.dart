@@ -12,7 +12,7 @@ class InvalidSignatureShare extends MessageException {
 /// The signature share to be sent to the aggregator/coordinator over an
 /// authenticated channel.
 class SignatureShare
-extends WritableRustObjectWrapper<rust.FrostRound2SignatureShare> {
+extends WritableRustObjectWrapper<rust.SignatureShareOpaque> {
 
   SignatureShare.fromUnderlying(super._underlying);
 

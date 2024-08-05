@@ -47,7 +47,7 @@ class DkgPart3 {
         round2Secret: round2Secret.underlying,
         round1Commitments: commitments.nativeListForId(identifier),
         round2Shares: receivedShares.entries.map(
-          (v) => rust.DkgRound2IdentifierAndShare(
+          (v) => rust.DkgRound2IdentifierAndShare.fromRefs(
             identifier: v.key.underlying,
             secret: v.value.underlying,
           ),

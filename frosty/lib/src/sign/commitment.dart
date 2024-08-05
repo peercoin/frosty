@@ -12,7 +12,7 @@ class InvalidSigningCommitment extends MessageException {
 /// The commitment to the signature nonce to be used for signing. This should be
 /// shared with the signature aggregator.
 class SigningCommitment
-extends WritableRustObjectWrapper<rust.FrostRound1SigningCommitments> {
+extends WritableRustObjectWrapper<rust.SigningCommitments> {
 
   SigningCommitment.fromUnderlying(super._underlying);
 

@@ -3,7 +3,7 @@ import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
 import 'package:frosty/src/sign/commitment.dart';
 
-class SignNonce extends RustObjectWrapper<rust.FrostRound1SigningNonces> {
+class SignNonce extends RustObjectWrapper<rust.SigningNonces> {
   SignNonce.fromUnderlying(super._underlying);
 }
 

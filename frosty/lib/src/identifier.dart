@@ -10,8 +10,8 @@ class InvalidIdentifier extends MessageException {
   InvalidIdentifier(super.message);
 }
 
-rust.FrostIdentifier _handleGetIdentifier(
-  rust.FrostIdentifier Function() f,
+rust.IdentifierOpaque _handleGetIdentifier(
+  rust.IdentifierOpaque Function() f,
 ) => handleGetObject(f, (e) => InvalidIdentifier(e));
 
 /// The ID of a participant in a threshold signing group.
@@ -22,7 +22,7 @@ rust.FrostIdentifier _handleGetIdentifier(
 ///
 /// Identifiers can be compared for equality with `==`.
 class Identifier
-  extends WritableRustObjectWrapper<rust.FrostIdentifier>
+  extends WritableRustObjectWrapper<rust.IdentifierOpaque>
   implements Comparable<Identifier> {
 
   Identifier.fromUnderlying(super.underlying);

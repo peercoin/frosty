@@ -9,7 +9,7 @@ cd $NATIVEDIR
 cargo build || exit 1
 
 # Copy debug library to local location for frosty to use
-cd $THISDIR/../target
+cd $NATIVEDIR/target
 mkdir -p $OUTPUTDIR
 cp debug/libfrosty_rust.so "$OUTPUTDIR/libfrosty_rust.so"
 

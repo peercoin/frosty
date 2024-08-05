@@ -1,3 +1,4 @@
-rust_input: src/api/**/*.rs
+rust_input: crate::api
+rust_root: ./
 dart_output: ../frosty/lib/src/rust_bindings/generated/
 web: false

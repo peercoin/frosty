@@ -19,19 +19,19 @@ mixin _$DkgRound2Error {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) general,
-    required TResult Function(FrostIdentifier culprit) invalidProofOfKnowledge,
+    required TResult Function(IdentifierOpaque culprit) invalidProofOfKnowledge,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String message)? general,
-    TResult? Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    TResult? Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? general,
-    TResult Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    TResult Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -112,8 +112,8 @@ class __$$DkgRound2Error_GeneralImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DkgRound2Error_GeneralImpl implements DkgRound2Error_General {
-  const _$DkgRound2Error_GeneralImpl({required this.message});
+class _$DkgRound2Error_GeneralImpl extends DkgRound2Error_General {
+  const _$DkgRound2Error_GeneralImpl({required this.message}) : super._();
 
   @override
   final String message;
@@ -145,7 +145,7 @@ class _$DkgRound2Error_GeneralImpl implements DkgRound2Error_General {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) general,
-    required TResult Function(FrostIdentifier culprit) invalidProofOfKnowledge,
+    required TResult Function(IdentifierOpaque culprit) invalidProofOfKnowledge,
   }) {
     return general(message);
   }
@@ -154,7 +154,7 @@ class _$DkgRound2Error_GeneralImpl implements DkgRound2Error_General {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String message)? general,
-    TResult? Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    TResult? Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
   }) {
     return general?.call(message);
   }
@@ -163,7 +163,7 @@ class _$DkgRound2Error_GeneralImpl implements DkgRound2Error_General {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? general,
-    TResult Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    TResult Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
     required TResult orElse(),
   }) {
     if (general != null) {
@@ -207,9 +207,10 @@ class _$DkgRound2Error_GeneralImpl implements DkgRound2Error_General {
   }
 }
 
-abstract class DkgRound2Error_General implements DkgRound2Error {
+abstract class DkgRound2Error_General extends DkgRound2Error {
   const factory DkgRound2Error_General({required final String message}) =
       _$DkgRound2Error_GeneralImpl;
+  const DkgRound2Error_General._() : super._();
 
   String get message;
   @JsonKey(ignore: true)
@@ -224,7 +225,7 @@ abstract class _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<$Res> {
           $Res Function(_$DkgRound2Error_InvalidProofOfKnowledgeImpl) then) =
       __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({FrostIdentifier culprit});
+  $Res call({IdentifierOpaque culprit});
 }
 
 /// @nodoc
@@ -246,7 +247,7 @@ class __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<$Res>
       culprit: null == culprit
           ? _value.culprit
           : culprit // ignore: cast_nullable_to_non_nullable
-              as FrostIdentifier,
+              as IdentifierOpaque,
     ));
   }
 }
@@ -254,11 +255,12 @@ class __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DkgRound2Error_InvalidProofOfKnowledgeImpl
-    implements DkgRound2Error_InvalidProofOfKnowledge {
-  const _$DkgRound2Error_InvalidProofOfKnowledgeImpl({required this.culprit});
+    extends DkgRound2Error_InvalidProofOfKnowledge {
+  const _$DkgRound2Error_InvalidProofOfKnowledgeImpl({required this.culprit})
+      : super._();
 
   @override
-  final FrostIdentifier culprit;
+  final IdentifierOpaque culprit;
 
   @override
   String toString() {
@@ -289,7 +291,7 @@ class _$DkgRound2Error_InvalidProofOfKnowledgeImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) general,
-    required TResult Function(FrostIdentifier culprit) invalidProofOfKnowledge,
+    required TResult Function(IdentifierOpaque culprit) invalidProofOfKnowledge,
   }) {
     return invalidProofOfKnowledge(culprit);
   }
@@ -298,7 +300,7 @@ class _$DkgRound2Error_InvalidProofOfKnowledgeImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String message)? general,
-    TResult? Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    TResult? Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
   }) {
     return invalidProofOfKnowledge?.call(culprit);
   }
@@ -307,7 +309,7 @@ class _$DkgRound2Error_InvalidProofOfKnowledgeImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? general,
-    TResult Function(FrostIdentifier culprit)? invalidProofOfKnowledge,
+    TResult Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
     required TResult orElse(),
   }) {
     if (invalidProofOfKnowledge != null) {
@@ -351,13 +353,13 @@ class _$DkgRound2Error_InvalidProofOfKnowledgeImpl
   }
 }
 
-abstract class DkgRound2Error_InvalidProofOfKnowledge
-    implements DkgRound2Error {
+abstract class DkgRound2Error_InvalidProofOfKnowledge extends DkgRound2Error {
   const factory DkgRound2Error_InvalidProofOfKnowledge(
-          {required final FrostIdentifier culprit}) =
+          {required final IdentifierOpaque culprit}) =
       _$DkgRound2Error_InvalidProofOfKnowledgeImpl;
+  const DkgRound2Error_InvalidProofOfKnowledge._() : super._();
 
-  FrostIdentifier get culprit;
+  IdentifierOpaque get culprit;
   @JsonKey(ignore: true)
   _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<
           _$DkgRound2Error_InvalidProofOfKnowledgeImpl>
@@ -369,19 +371,19 @@ mixin _$SignAggregationError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) general,
-    required TResult Function(FrostIdentifier culprit) invalidSignShare,
+    required TResult Function(IdentifierOpaque culprit) invalidSignShare,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String message)? general,
-    TResult? Function(FrostIdentifier culprit)? invalidSignShare,
+    TResult? Function(IdentifierOpaque culprit)? invalidSignShare,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? general,
-    TResult Function(FrostIdentifier culprit)? invalidSignShare,
+    TResult Function(IdentifierOpaque culprit)? invalidSignShare,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -464,9 +466,8 @@ class __$$SignAggregationError_GeneralImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SignAggregationError_GeneralImpl
-    implements SignAggregationError_General {
-  const _$SignAggregationError_GeneralImpl({required this.message});
+class _$SignAggregationError_GeneralImpl extends SignAggregationError_General {
+  const _$SignAggregationError_GeneralImpl({required this.message}) : super._();
 
   @override
   final String message;
@@ -499,7 +500,7 @@ class _$SignAggregationError_GeneralImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) general,
-    required TResult Function(FrostIdentifier culprit) invalidSignShare,
+    required TResult Function(IdentifierOpaque culprit) invalidSignShare,
   }) {
     return general(message);
   }
@@ -508,7 +509,7 @@ class _$SignAggregationError_GeneralImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String message)? general,
-    TResult? Function(FrostIdentifier culprit)? invalidSignShare,
+    TResult? Function(IdentifierOpaque culprit)? invalidSignShare,
   }) {
     return general?.call(message);
   }
@@ -517,7 +518,7 @@ class _$SignAggregationError_GeneralImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? general,
-    TResult Function(FrostIdentifier culprit)? invalidSignShare,
+    TResult Function(IdentifierOpaque culprit)? invalidSignShare,
     required TResult orElse(),
   }) {
     if (general != null) {
@@ -561,9 +562,10 @@ class _$SignAggregationError_GeneralImpl
   }
 }
 
-abstract class SignAggregationError_General implements SignAggregationError {
+abstract class SignAggregationError_General extends SignAggregationError {
   const factory SignAggregationError_General({required final String message}) =
       _$SignAggregationError_GeneralImpl;
+  const SignAggregationError_General._() : super._();
 
   String get message;
   @JsonKey(ignore: true)
@@ -579,7 +581,7 @@ abstract class _$$SignAggregationError_InvalidSignShareImplCopyWith<$Res> {
           $Res Function(_$SignAggregationError_InvalidSignShareImpl) then) =
       __$$SignAggregationError_InvalidSignShareImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({FrostIdentifier culprit});
+  $Res call({IdentifierOpaque culprit});
 }
 
 /// @nodoc
@@ -601,7 +603,7 @@ class __$$SignAggregationError_InvalidSignShareImplCopyWithImpl<$Res>
       culprit: null == culprit
           ? _value.culprit
           : culprit // ignore: cast_nullable_to_non_nullable
-              as FrostIdentifier,
+              as IdentifierOpaque,
     ));
   }
 }
@@ -609,11 +611,12 @@ class __$$SignAggregationError_InvalidSignShareImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SignAggregationError_InvalidSignShareImpl
-    implements SignAggregationError_InvalidSignShare {
-  const _$SignAggregationError_InvalidSignShareImpl({required this.culprit});
+    extends SignAggregationError_InvalidSignShare {
+  const _$SignAggregationError_InvalidSignShareImpl({required this.culprit})
+      : super._();
 
   @override
-  final FrostIdentifier culprit;
+  final IdentifierOpaque culprit;
 
   @override
   String toString() {
@@ -643,7 +646,7 @@ class _$SignAggregationError_InvalidSignShareImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String message) general,
-    required TResult Function(FrostIdentifier culprit) invalidSignShare,
+    required TResult Function(IdentifierOpaque culprit) invalidSignShare,
   }) {
     return invalidSignShare(culprit);
   }
@@ -652,7 +655,7 @@ class _$SignAggregationError_InvalidSignShareImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String message)? general,
-    TResult? Function(FrostIdentifier culprit)? invalidSignShare,
+    TResult? Function(IdentifierOpaque culprit)? invalidSignShare,
   }) {
     return invalidSignShare?.call(culprit);
   }
@@ -661,7 +664,7 @@ class _$SignAggregationError_InvalidSignShareImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String message)? general,
-    TResult Function(FrostIdentifier culprit)? invalidSignShare,
+    TResult Function(IdentifierOpaque culprit)? invalidSignShare,
     required TResult orElse(),
   }) {
     if (invalidSignShare != null) {
@@ -706,12 +709,13 @@ class _$SignAggregationError_InvalidSignShareImpl
 }
 
 abstract class SignAggregationError_InvalidSignShare
-    implements SignAggregationError {
+    extends SignAggregationError {
   const factory SignAggregationError_InvalidSignShare(
-          {required final FrostIdentifier culprit}) =
+          {required final IdentifierOpaque culprit}) =
       _$SignAggregationError_InvalidSignShareImpl;
+  const SignAggregationError_InvalidSignShare._() : super._();
 
-  FrostIdentifier get culprit;
+  IdentifierOpaque get culprit;
   @JsonKey(ignore: true)
   _$$SignAggregationError_InvalidSignShareImplCopyWith<
           _$SignAggregationError_InvalidSignShareImpl>

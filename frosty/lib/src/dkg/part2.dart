@@ -8,7 +8,7 @@ import 'share_to_give.dart';
 
 /// The secret from part 2 that is to be held until part 3. After part 3 this
 /// can be disposed of with [dispose()].
-class DkgRound2Secret extends RustObjectWrapper<rust.DkgRound2SecretPackage> {
+class DkgRound2Secret extends RustObjectWrapper<rust.DkgRound2SecretOpaque> {
   DkgRound2Secret.fromUnderlying(super._underlying);
 }
 

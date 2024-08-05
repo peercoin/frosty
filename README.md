@@ -7,20 +7,32 @@ secp256k1.
 
 ## Installation and Usage
 
-Currently the library only has options available to build for Linux and cannot
-be used for flutter.
+Currently the library has options available to build for Linux and Android. A
+library binary much be built for the native Rust code.
 
-Podman or Docker can be used to build for Linux. Using these helps to provide a
-consistent and reliable build across machines.
+Podman or Docker can be used to build the library binaries. Using these helps to
+provide a consistent and reliable build across machines.
 
-To build the library `melos build:linux` can be run in the root repository
-directory if [Melos](https://melos.invertase.dev/getting-started) is installed.
-Otherwise `scripts/build-linux.sh` script can be executed directly with bash.
-This will build an archive to `platform-build` and the library will also be
-placed into `frosty/build`.
+[Melos](https://melos.invertase.dev/getting-started) or bash can be used to run
+the installation scripts.
 
-The Dart package will look for the library in the `build` directory of the
-working directory, or it will search for the library in the library paths.
+### Linux Builds
+
+If using Melos, `melos build:linux` can be run, otherwise the
+`scripts/build-linux.sh` script can be executed. An archive of the Linux library
+will be produced in `platform-build` and a copy will be placed in `frosty/build`
+so that the tests can be run using `melos test`.
+
+When using frosty, the shared library is expected within the `$PWD/build/`
+directory or within the library paths.
+
+### Android Builds
+
+If using Melos, `melos build:android` can be run, otherwise the
+`scripts/build-android.sh` script can be executed. An archive of the libraries
+for the armeabi-v7a and arm64-v8a architectures will be produced in
+`platform-build` as `jniLibs.tar.gz`. This can be extracted into the
+`android/app/src/main` directory of an Android flutter app.
 
 ## Development
 
@@ -31,4 +43,3 @@ bindings and it will build a debug library to `frosty/build` so that tests can
 be run.
 
 Dart code is found in `frosty` and native Rust code is found in `native`.
-

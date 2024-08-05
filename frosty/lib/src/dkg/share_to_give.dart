@@ -17,7 +17,7 @@ class InvalidShareToGive extends MessageException {
 ///
 /// After this secret has been successfully broadcast to the participant, it
 /// should be disposed with [dispose()].
-class DkgShareToGive extends WritableRustObjectWrapper<rust.DkgRound2Package> {
+class DkgShareToGive extends WritableRustObjectWrapper<rust.DkgShareToGiveOpaque> {
 
   DkgShareToGive.fromUnderlying(super._underlying);
 

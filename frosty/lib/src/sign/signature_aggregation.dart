@@ -44,14 +44,14 @@ class SignatureAggregation {
         message: details.message,
         merkleRoot: details.mastHash,
         shares: shares.map(
-          (s) => rust.IdentifierAndSignatureShare(
+          (s) => rust.IdentifierAndSignatureShare.fromRefs(
             identifier: s.$1.underlying,
             share: s.$2.underlying,
           ),
         ).toList(),
         groupPk: info.group.publicKey.data,
         publicShares: info.publicShares.list.map(
-          (s) => rust.IdentifierAndPublicShare(
+          (s) => rust.IdentifierAndPublicShare.fromRef(
             identifier: s.$1.underlying,
             publicShare: s.$2.data,
           ),

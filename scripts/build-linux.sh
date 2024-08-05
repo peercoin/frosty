@@ -1,28 +1,14 @@
 #!/bin/bash
 
 THISDIR=$(dirname "$(realpath "$0")")
-OUTPUTDIR=$THISDIR/../platform-build
+. $THISDIR/build-common.sh
+
 LOCALBUILDDIR=$THISDIR/../frosty/build
 LIBNAME=libfrosty_rust.so
 
-# Prefer podman
-if type podman > /dev/null; then
-    PROGCMD=podman
-    echo "Will attempt to use podman"
-else
-    PROGCMD=docker
-    echo "Podman not available, attempting to use docker"
-fi
-
-# Create build and output directory
-mkdir $OUTPUTDIR
-
 # Build container image with the build context being the parent directory
-TAG=frosty_rust_build
+TAG=frosty_rust_linux_build
 $PROGCMD build -f $THISDIR/build_linux.Dockerfile -t $TAG $THISDIR/.. || exit 1
-
-# Build into output directory
-cd $OUTPUTDIR
 
 build () {
     echo "Building for $1"

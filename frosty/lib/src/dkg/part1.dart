@@ -5,7 +5,7 @@ import 'public_commitment.dart';
 
 /// The secret from part 1 of the DKG that is to be kept for part 2. After part
 /// 2 this can be disposed with [dispose()].
-class DkgRound1Secret extends RustObjectWrapper<rust.DkgRound1SecretPackage> {
+class DkgRound1Secret extends RustObjectWrapper<rust.DkgRound1SecretOpaque> {
   DkgRound1Secret.fromUnderlying(super._underlying);
 }
 

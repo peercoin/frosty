@@ -33,7 +33,7 @@ class SigningCommitmentSet with Writable {
   );
 
   List<rust.IdentifierAndSigningCommitment> get nativeList => list.map(
-    (v) => rust.IdentifierAndSigningCommitment(
+    (v) => rust.IdentifierAndSigningCommitment.fromRefs(
       identifier: v.$1.underlying,
       commitment: v.$2.underlying,
     ),
