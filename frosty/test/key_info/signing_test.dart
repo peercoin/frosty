@@ -23,7 +23,7 @@ void main() {
       validHex: validHex,
       tweakedHex: tweakedHex,
       invalidTweakHex: invalidShareTweak,
-      fromReader: (reader) => SigningKeyInfo.fromReader(reader),
+      fromHex: (hex) => SigningKeyInfo.fromHex(hex),
       // Test getting from ParticipantKeyInfo
       getValidObj: () => getParticipantInfo(0).signing,
     );

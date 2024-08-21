@@ -26,7 +26,7 @@ void main() {
       zeroTweakedHex: zeroTweakedHex,
       tweakedHex: tweakedHex,
       invalidTweakHex: invalidGroupTweak,
-      fromReader: (reader) => HDSigningKeyInfo.fromReader(reader),
+      fromHex: (hex) => HDSigningKeyInfo.fromHex(hex),
       getValidObj: () => hdSigningInfo,
     );
 

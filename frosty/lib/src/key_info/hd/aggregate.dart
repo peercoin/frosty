@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
 import 'package:frosty/src/key_info/aggregate.dart';
 import 'derivable.dart';
@@ -16,6 +17,13 @@ class HDAggregateKeyInfo extends AggregateKeyInfo implements HDDerivableInfo {
 
   HDAggregateKeyInfo.fromReader(super.reader)
     : hdInfo = HDKeyInfo.fromReader(reader), super.fromReader();
+
+  /// Convenience constructor to construct from serialised [bytes].
+  HDAggregateKeyInfo.fromBytes(Uint8List bytes)
+    : this.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  HDAggregateKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
 
   HDAggregateKeyInfo.master({
     required super.group,

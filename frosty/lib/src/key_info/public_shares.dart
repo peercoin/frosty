@@ -45,6 +45,13 @@ class PublicSharesKeyInfo extends KeyInfo {
     ),
   );
 
+  /// Convenience constructor to construct from serialised [bytes].
+  PublicSharesKeyInfo.fromBytes(Uint8List bytes)
+    : this.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  PublicSharesKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+
   @override
   void write(Writer writer) {
     writer.writeUInt16(list.length);

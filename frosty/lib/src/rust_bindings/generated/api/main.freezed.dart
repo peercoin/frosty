@@ -75,6 +75,9 @@ class _$DkgRound2ErrorCopyWithImpl<$Res, $Val extends DkgRound2Error>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of DkgRound2Error
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -96,6 +99,8 @@ class __$$DkgRound2Error_GeneralImplCopyWithImpl<$Res>
       $Res Function(_$DkgRound2Error_GeneralImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DkgRound2Error
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -134,7 +139,9 @@ class _$DkgRound2Error_GeneralImpl extends DkgRound2Error_General {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DkgRound2Error
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DkgRound2Error_GeneralImplCopyWith<_$DkgRound2Error_GeneralImpl>
@@ -213,7 +220,10 @@ abstract class DkgRound2Error_General extends DkgRound2Error {
   const DkgRound2Error_General._() : super._();
 
   String get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DkgRound2Error
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DkgRound2Error_GeneralImplCopyWith<_$DkgRound2Error_GeneralImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -238,6 +248,8 @@ class __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<$Res>
       $Res Function(_$DkgRound2Error_InvalidProofOfKnowledgeImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DkgRound2Error
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -278,7 +290,9 @@ class _$DkgRound2Error_InvalidProofOfKnowledgeImpl
   @override
   int get hashCode => Object.hash(runtimeType, culprit);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DkgRound2Error
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<
@@ -360,7 +374,10 @@ abstract class DkgRound2Error_InvalidProofOfKnowledge extends DkgRound2Error {
   const DkgRound2Error_InvalidProofOfKnowledge._() : super._();
 
   IdentifierOpaque get culprit;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DkgRound2Error
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<
           _$DkgRound2Error_InvalidProofOfKnowledgeImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -428,6 +445,9 @@ class _$SignAggregationErrorCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of SignAggregationError
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -450,6 +470,8 @@ class __$$SignAggregationError_GeneralImplCopyWithImpl<$Res>
       $Res Function(_$SignAggregationError_GeneralImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignAggregationError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -488,7 +510,9 @@ class _$SignAggregationError_GeneralImpl extends SignAggregationError_General {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignAggregationError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SignAggregationError_GeneralImplCopyWith<
@@ -568,7 +592,10 @@ abstract class SignAggregationError_General extends SignAggregationError {
   const SignAggregationError_General._() : super._();
 
   String get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SignAggregationError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SignAggregationError_GeneralImplCopyWith<
           _$SignAggregationError_GeneralImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -594,6 +621,8 @@ class __$$SignAggregationError_InvalidSignShareImplCopyWithImpl<$Res>
       $Res Function(_$SignAggregationError_InvalidSignShareImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignAggregationError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -634,7 +663,9 @@ class _$SignAggregationError_InvalidSignShareImpl
   @override
   int get hashCode => Object.hash(runtimeType, culprit);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignAggregationError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SignAggregationError_InvalidSignShareImplCopyWith<
@@ -716,7 +747,10 @@ abstract class SignAggregationError_InvalidSignShare
   const SignAggregationError_InvalidSignShare._() : super._();
 
   IdentifierOpaque get culprit;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SignAggregationError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SignAggregationError_InvalidSignShareImplCopyWith<
           _$SignAggregationError_InvalidSignShareImpl>
       get copyWith => throw _privateConstructorUsedError;

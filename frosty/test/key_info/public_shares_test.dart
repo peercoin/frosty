@@ -29,7 +29,7 @@ void main() {
       validHex: validHex,
       tweakedHex: tweakedHex,
       invalidTweakHex: invalidShareTweak,
-      fromReader: (reader) => PublicSharesKeyInfo.fromReader(reader),
+      fromHex: (hex) => PublicSharesKeyInfo.fromHex(hex),
       getValidObj: () => publicSharesInfo,
     );
 

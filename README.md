@@ -7,11 +7,11 @@ secp256k1.
 
 ## Installation and Usage
 
-Currently the library has options available to build for Linux and Android. A
-library binary much be built for the native Rust code.
+Currently the library has options available to build for Linux and Android.
+Library binaries must be built for the native Rust code.
 
-Podman or Docker can be used to build the library binaries. Using these helps to
-provide a consistent and reliable build across machines.
+Podman or Docker should be used to build the binaries. This helps to provide a
+consistent and reliable build across machines.
 
 [Melos](https://melos.invertase.dev/getting-started) or bash can be used to run
 the installation scripts.
@@ -23,8 +23,8 @@ If using Melos, `melos build:linux` can be run, otherwise the
 will be produced in `platform-build` and a copy will be placed in `frosty/build`
 so that the tests can be run using `melos test`.
 
-When using frosty, the shared library is expected within the `$PWD/build/`
-directory or within the library paths.
+The shared library is expected within the `$PWD/build/` directory or within the
+library paths.
 
 ### Android Builds
 

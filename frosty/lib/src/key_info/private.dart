@@ -25,6 +25,13 @@ class PrivateKeyInfo extends KeyInfo {
     share: ECPrivateKey(reader.readSlice(32)),
   );
 
+  /// Convenience constructor to construct from serialised [bytes].
+  PrivateKeyInfo.fromBytes(Uint8List bytes)
+    : this.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  PrivateKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+
   @override
   void write(Writer writer) {
     writer.writeSlice(identifier.toBytes());

@@ -31,7 +31,7 @@ void main() {
       validHex: validHex,
       tweakedHex: tweakedHex,
       invalidTweakHex: invalidGroupTweak,
-      fromReader: (reader) => AggregateKeyInfo.fromReader(reader),
+      fromHex: (hex) => AggregateKeyInfo.fromHex(hex),
       // Test getting from ParticipantKeyInfo
       getValidObj: () => getParticipantInfo(0).aggregate,
     );

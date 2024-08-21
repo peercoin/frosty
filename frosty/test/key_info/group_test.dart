@@ -16,7 +16,7 @@ void main() {
       validHex: validHex,
       tweakedHex: tweakedHex,
       invalidTweakHex: invalidGroupTweak,
-      fromReader: (reader) => GroupKeyInfo.fromReader(reader),
+      fromHex: (hex) => GroupKeyInfo.fromHex(hex),
       getValidObj: () => groupInfo,
     );
 

@@ -34,6 +34,13 @@ class GroupKeyInfo extends KeyInfo {
     threshold: reader.readUInt16(),
   );
 
+  /// Convenience constructor to construct from serialised [bytes].
+  GroupKeyInfo.fromBytes(Uint8List bytes)
+    : this.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  GroupKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+
   @override
   void write(Writer writer) {
     writer.writeSlice(publicKey.data);

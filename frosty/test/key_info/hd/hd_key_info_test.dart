@@ -14,7 +14,7 @@ void main() {
     late HDKeyInfo hdInfo;
     setUpAll(() async {
       await loadFrosty();
-      hdInfo = HDKeyInfo.fromReader(BytesReader(hexToBytes(validHex)));
+      hdInfo = HDKeyInfo.fromHex(validHex);
     });
 
     test("invalid parameters", () {
@@ -54,9 +54,7 @@ void main() {
 
     test("invalid bytes", () {
       expect(
-        () => HDKeyInfo.fromReader(
-          BytesReader(hexToBytes("${chainCodeHex}000000008000000000")),
-        ),
+        () => HDKeyInfo.fromHex("${chainCodeHex}000000008000000000"),
         throwsArgumentError,
       );
     });

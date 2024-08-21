@@ -26,7 +26,7 @@ void main() {
       zeroTweakedHex: zeroTweakedHex,
       tweakedHex: tweakedHex,
       invalidTweakHex: invalidGroupTweak,
-      fromReader: (reader) => HDAggregateKeyInfo.fromReader(reader),
+      fromHex: (hex) => HDAggregateKeyInfo.fromHex(hex),
       getValidObj: () => hdAggregateInfo,
     );
 

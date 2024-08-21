@@ -22,6 +22,13 @@ class SigningKeyInfo extends KeyInfo {
     private: PrivateKeyInfo.fromReader(reader),
   );
 
+  /// Convenience constructor to construct from serialised [bytes].
+  SigningKeyInfo.fromBytes(Uint8List bytes)
+    : this.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  SigningKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+
   @override
   void write(Writer writer) {
     group.write(writer);

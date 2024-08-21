@@ -49,6 +49,13 @@ class HDKeyInfo with Writable {
     parentFingerprint: reader.readUInt32(),
   );
 
+  /// Convenience constructor to construct from serialised [bytes].
+  HDKeyInfo.fromBytes(Uint8List bytes)
+    : this.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  HDKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+
   @override
   void write(Writer writer) {
     writer.writeSlice(chaincode);

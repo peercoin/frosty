@@ -35,7 +35,7 @@ void main() {
       validHex: validHex,
       tweakedHex: tweakedHex,
       invalidTweakHex: invalidGroupTweak,
-      fromReader: (reader) => ParticipantKeyInfo.fromReader(reader),
+      fromHex: (hex) => ParticipantKeyInfo.fromHex(hex),
       getValidObj: () => getParticipantInfo(0),
     );
 

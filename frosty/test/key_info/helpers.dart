@@ -12,16 +12,13 @@ void basicInfoTests<T extends KeyInfo>({
   String? zeroTweakedHex,
   required String tweakedHex,
   required String invalidTweakHex,
-  required T Function(BytesReader reader) fromReader,
+  required T Function(String reader) fromHex,
   required T Function() getValidObj,
 }) {
 
     test("valid info", () {
       expect(getValidObj().toHex(), validHex);
-      expect(
-        fromReader(BytesReader(hexToBytes(validHex))).toHex(),
-        validHex,
-      );
+      expect(fromHex(validHex).toHex(), validHex);
     });
 
     test("tweaks as expected", () {
@@ -35,7 +32,7 @@ void basicInfoTests<T extends KeyInfo>({
     );
 
     test("invalid info bytes", () => expect(
-        () => fromReader(BytesReader(Uint8List(0))),
+        () => fromHex(""),
         throwsA(isA<OutOfData>()),
     ),);
 

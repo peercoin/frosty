@@ -34,6 +34,13 @@ class AggregateKeyInfo extends KeyInfo {
     publicShares: PublicSharesKeyInfo.fromReader(reader),
   );
 
+  /// Convenience constructor to construct from serialised [bytes].
+  AggregateKeyInfo.fromBytes(Uint8List bytes)
+    : this.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  AggregateKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+
   @override
   void write(Writer writer) {
     group.write(writer);

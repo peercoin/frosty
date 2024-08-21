@@ -29,6 +29,13 @@ class ParticipantKeyInfo extends KeyInfo {
     private: PrivateKeyInfo.fromReader(reader),
   );
 
+  /// Convenience constructor to construct from serialised [bytes].
+  ParticipantKeyInfo.fromBytes(Uint8List bytes)
+    : this.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  ParticipantKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+
   @override
   void write(Writer writer) {
     group.write(writer);

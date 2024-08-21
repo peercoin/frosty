@@ -21,7 +21,7 @@ void main() {
       validHex: validHex,
       tweakedHex: tweakedHex,
       invalidTweakHex: invalidShareTweak,
-      fromReader: (reader) => PrivateKeyInfo.fromReader(reader),
+      fromHex: (hex) => PrivateKeyInfo.fromHex(hex),
       getValidObj: () => getParticipantInfo(0).private,
     );
 
