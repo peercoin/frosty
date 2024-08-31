@@ -57,7 +57,7 @@ class DkgPart3 {
       participantInfo = ParticipantKeyInfo(
 
         group: GroupKeyInfo(
-          publicKey: ECPublicKey(record.groupPk),
+          publicKey: ECCompressedPublicKey(record.groupPk),
           threshold: record.threshold,
         ),
 
@@ -65,7 +65,7 @@ class DkgPart3 {
           publicShares: [
             for (final share in record.publicKeyShares) (
               Identifier.fromUnderlying(share.identifier),
-              ECPublicKey(share.publicShare),
+              ECCompressedPublicKey(share.publicShare),
             ),
           ],
         ),

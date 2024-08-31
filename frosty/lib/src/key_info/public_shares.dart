@@ -4,7 +4,7 @@ import 'package:frosty/src/identifier.dart';
 import 'key_info.dart';
 import 'invalid_info.dart';
 
-typedef PublicShareList = List<(Identifier, ECPublicKey)>;
+typedef PublicShareList = List<(Identifier, ECCompressedPublicKey)>;
 
 /// Contains the public shares for a FROST shared key
 class PublicSharesKeyInfo extends KeyInfo {
@@ -20,12 +20,6 @@ class PublicSharesKeyInfo extends KeyInfo {
       (a, b) => a.$1.compareTo(b.$1),
   ) {
 
-    if (publicShares.any((pk) => !pk.$2.compressed)) {
-      throw InvalidKeyInfo(
-        "PublicSharesKeyInfo cannot accept uncompressed keys",
-      );
-    }
-
     if (
       publicShares.map((share) => share.$1).toSet().length
       != publicShares.length
@@ -40,7 +34,7 @@ class PublicSharesKeyInfo extends KeyInfo {
       reader.readUInt16(),
       (i) => (
         Identifier.fromBytes(reader.readSlice(32)),
-        ECPublicKey(reader.readSlice(33)),
+        ECCompressedPublicKey(reader.readSlice(33)),
       ),
     ),
   );

@@ -66,7 +66,10 @@ class HDKeyInfo with Writable {
 
   /// Given the group public key and index to derive a child key, a tuple is
   /// returned that contains the required tweak and new [HDKeyInfo].
-  (Uint8List, HDKeyInfo) deriveTweakAndInfo(ECPublicKey groupKey, int index) {
+  (Uint8List, HDKeyInfo) deriveTweakAndInfo(
+    ECCompressedPublicKey groupKey,
+    int index,
+  ) {
 
     _checkIndex(index);
 

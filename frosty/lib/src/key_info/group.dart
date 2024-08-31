@@ -8,7 +8,7 @@ import 'key_info.dart';
 class GroupKeyInfo extends KeyInfo {
 
   /// The public key of the overall FROST key
-  final ECPublicKey publicKey;
+  final ECCompressedPublicKey publicKey;
   /// The number of signers required for a signature
   final int threshold;
 
@@ -18,19 +18,11 @@ class GroupKeyInfo extends KeyInfo {
     required this.publicKey,
     required this.threshold,
   }) {
-
     if (threshold < 2) throw InvalidKeyInfo("threshold should at least 2");
-
-    if (!publicKey.compressed) {
-      throw InvalidKeyInfo(
-        "GroupKeyInfo cannot accept an uncompressed group key",
-      );
-    }
-
   }
 
   GroupKeyInfo.fromReader(BytesReader reader) : this(
-    publicKey: ECPublicKey(reader.readSlice(33)),
+    publicKey: ECCompressedPublicKey(reader.readSlice(33)),
     threshold: reader.readUInt16(),
   );
 

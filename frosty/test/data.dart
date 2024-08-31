@@ -4,17 +4,13 @@ import 'package:frosty/frosty.dart';
 
 final groupPublicKeyHex
   = "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b2";
-final groupPublicKey = ECPublicKey.fromHex(groupPublicKeyHex);
+final groupPublicKey = ECCompressedPublicKey.fromHex(groupPublicKeyHex);
 
 final chainCodeHex = bytesToHex(HDKeyInfo.fixedChaincode);
 
 final tweakedGroupKeyHex
   = "025cb7dcabf7173e27de4dae2944e2b9ba1153ef2af326a12ed1c71f11d8b53cc8";
-final tweakedGroupKey = ECPublicKey.fromHex(tweakedGroupKeyHex);
-
-final uncompressedPk = ECPublicKey.fromHex(
-  "0479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8",
-);
+final tweakedGroupKey = ECCompressedPublicKey.fromHex(tweakedGroupKeyHex);
 
 final privateSharesHex = [
   "bafe4fab41fee3ca118cce1af9c2432189030d0e0249365787b8e71da37fdbb3",
@@ -48,7 +44,7 @@ final publicShares = List.generate(
   3,
   (i) => (
     Identifier.fromUint16(i+1),
-    ECPublicKey.fromHex(publicShareKeyHex[i]),
+    ECCompressedPublicKey.fromHex(publicShareKeyHex[i]),
   ),
 );
 

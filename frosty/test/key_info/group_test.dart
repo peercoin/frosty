@@ -21,7 +21,6 @@ void main() {
     );
 
     test("invalid group info arguments", () {
-
       // Invalid threshold
       expect(
         () => GroupKeyInfo(
@@ -29,15 +28,6 @@ void main() {
           threshold: 1,
         ), throwsA(isA<InvalidKeyInfo>()),
       );
-
-      // Uncompressed public key
-      expect(
-        () => GroupKeyInfo(
-          publicKey: uncompressedPk,
-          threshold: 2,
-        ), throwsA(isA<InvalidKeyInfo>()),
-      );
-
     });
 
   });

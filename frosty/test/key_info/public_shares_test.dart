@@ -34,18 +34,6 @@ void main() {
     );
 
     test("invalid public shares info arguments", () {
-
-      // Uncompressed public key
-      expect(
-        () => PublicSharesKeyInfo(
-          publicShares: [
-            publicShares[0],
-            publicShares[1],
-            (publicShares[2].$1, uncompressedPk),
-          ],
-        ), throwsA(isA<InvalidKeyInfo>()),
-      );
-
       // Duplicate Identifier
       expect(
         () => PublicSharesKeyInfo(
@@ -56,7 +44,6 @@ void main() {
           ],
         ), throwsA(isA<InvalidKeyInfo>()),
       );
-
     });
 
   });

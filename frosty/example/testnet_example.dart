@@ -16,7 +16,7 @@ void main() async {
 
   // Key share information
 
-  final groupKey = ECPublicKey.fromHex(
+  final groupKey = ECCompressedPublicKey.fromHex(
     "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b2",
   );
 
@@ -30,7 +30,7 @@ void main() async {
     "030251582b6921a9aba190a761740a8b07f2d1e11aa66ce2f2b039d387f802ba8b",
     "03fa55e35e8390e0b636b766d1db0b89f436b65889cd04dd039052655ed810c9a3",
     "0355a1a070b2d0d2c47e37854e969e8817151597e0d37d0b7ebb21026fb09c90bc",
-  ].map((hex) => ECPublicKey.fromHex(hex)).toList();
+  ].map((hex) => ECCompressedPublicKey.fromHex(hex)).toList();
 
   final publicShares = List.generate(
     3,
