@@ -45,7 +45,7 @@ void main() {
       expect(
         () => ParticipantKeyInfo(
           group: GroupKeyInfo(
-            publicKey: groupPublicKey,
+            groupKey: groupPublicKey,
             threshold: 4,
           ),
           publicShares: publicSharesInfo,

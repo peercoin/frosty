@@ -1,28 +1,29 @@
 import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
+import 'key_info_with_group_key.dart';
 import 'invalid_info.dart';
-import 'key_info.dart';
 
 /// Contains information of a FROST key required for all participants and the
 /// coordinator. This includes the group public key and the threshold number.
-class GroupKeyInfo extends KeyInfo {
+class GroupKeyInfo extends KeyInfoWithGroupKey {
 
   /// The public key of the overall FROST key
-  final ECCompressedPublicKey publicKey;
+  @override
+  final ECCompressedPublicKey groupKey;
   /// The number of signers required for a signature
   final int threshold;
 
   /// Takes the FROST key information. If this information is invalid
   /// [InvalidKeyInfo] may be thrown.
   GroupKeyInfo({
-    required this.publicKey,
+    required this.groupKey,
     required this.threshold,
   }) {
     if (threshold < 2) throw InvalidKeyInfo("threshold should at least 2");
   }
 
   GroupKeyInfo.fromReader(BytesReader reader) : this(
-    publicKey: ECCompressedPublicKey(reader.readSlice(33)),
+    groupKey: ECCompressedPublicKey(reader.readSlice(33)),
     threshold: reader.readUInt16(),
   );
 
@@ -35,7 +36,7 @@ class GroupKeyInfo extends KeyInfo {
 
   @override
   void write(Writer writer) {
-    writer.writeSlice(publicKey.data);
+    writer.writeSlice(groupKey.data);
     writer.writeUInt16(threshold);
   }
 
@@ -43,9 +44,9 @@ class GroupKeyInfo extends KeyInfo {
   /// Tweaks the group key by a scalar. null may be returned if the scalar was
   /// crafted to lead to an invalid public key.
   GroupKeyInfo? tweak(Uint8List scalar) {
-    final newPk = publicKey.tweak(scalar);
+    final newPk = groupKey.tweak(scalar);
     return newPk == null ? null : GroupKeyInfo(
-      publicKey: newPk,
+      groupKey: newPk,
       threshold: threshold,
     );
   }

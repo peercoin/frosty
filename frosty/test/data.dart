@@ -58,7 +58,7 @@ final invalidShareTweak
   = "4501b054be011c35ee7331e5063dbcdd31abcfd8acff69e43819776f2cb6658e";
 
 final groupInfo = GroupKeyInfo(
-  publicKey: groupPublicKey,
+  groupKey: groupPublicKey,
   threshold: 2,
 );
 

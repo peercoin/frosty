@@ -38,7 +38,7 @@ class HDAggregateKeyInfo extends AggregateKeyInfo implements HDDerivableInfo {
 
   @override
   HDAggregateKeyInfo derive(int index) {
-    final (tweak, newHdInfo) = hdInfo.deriveTweakAndInfo(group.publicKey, index);
+    final (tweak, newHdInfo) = hdInfo.deriveTweakAndInfo(groupKey, index);
     return HDAggregateKeyInfo(
       group: group.tweak(tweak)!,
       publicShares: publicShares.tweak(tweak)!,

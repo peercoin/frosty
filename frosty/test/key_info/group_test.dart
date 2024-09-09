@@ -24,7 +24,7 @@ void main() {
       // Invalid threshold
       expect(
         () => GroupKeyInfo(
-          publicKey: groupPublicKey,
+          groupKey: groupPublicKey,
           threshold: 1,
         ), throwsA(isA<InvalidKeyInfo>()),
       );

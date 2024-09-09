@@ -62,7 +62,7 @@ void main() {
           isIn(pkShares.map((e) => e.$2)),
         );
         expect(info.group.threshold, 2);
-        expect(info.group.publicKey.compressed, true);
+        expect(info.groupKey.compressed, true);
         expect(pkShares.map((e) => e.$2.compressed), everyElement(true));
 
       }

@@ -53,8 +53,9 @@ class Identifier
   );
 
   @override
-  bool operator ==(Object other)
-    => (other is Identifier) && bytesEqual(toBytes(), other.toBytes());
+  bool operator ==(Object other) => identical(this, other) || (
+    other is Identifier && bytesEqual(toBytes(), other.toBytes())
+  );
 
   @override
   int get hashCode

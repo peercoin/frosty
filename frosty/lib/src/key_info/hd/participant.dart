@@ -56,7 +56,7 @@ class HDParticipantKeyInfo extends ParticipantKeyInfo implements HDDerivableInfo
 
   @override
   HDParticipantKeyInfo derive(int index) {
-    final (tweak, newHdInfo) = hdInfo.deriveTweakAndInfo(group.publicKey, index);
+    final (tweak, newHdInfo) = hdInfo.deriveTweakAndInfo(groupKey, index);
     return HDParticipantKeyInfo(
       group: group.tweak(tweak)!,
       publicShares: publicShares.tweak(tweak)!,

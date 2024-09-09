@@ -49,7 +49,7 @@ class SignatureAggregation {
             share: s.$2.underlying,
           ),
         ).toList(),
-        groupPk: info.group.publicKey.data,
+        groupPk: info.groupKey.data,
         publicShares: info.publicShares.list.map(
           (s) => rust.IdentifierAndPublicShare.fromRef(
             identifier: s.$1.underlying,

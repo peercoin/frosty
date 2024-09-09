@@ -96,7 +96,7 @@ void main() {
       expect(
         sig.verify(
           Taproot(
-            internalKey: derivedParticipantInfos.first.group.publicKey,
+            internalKey: derivedParticipantInfos.first.groupKey,
           ).tweakedKey,
           signMsgHash,
         ),

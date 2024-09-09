@@ -39,7 +39,7 @@ class SignPart2 {
           signingNonce: ourNonce.underlying,
           identifier: identifier.underlying,
           privateShare: info.private.share.data,
-          groupPk: info.group.publicKey.data,
+          groupPk: info.groupKey.data,
           threshold: info.group.threshold,
         ),
       );

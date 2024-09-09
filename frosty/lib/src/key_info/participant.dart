@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
-import 'key_info.dart';
+import 'key_info_with_group_key.dart';
 import 'aggregate.dart';
 import 'signing.dart';
 import 'group.dart';
@@ -9,7 +9,7 @@ import 'private.dart';
 
 /// Contains all details for a given participant, including the group key,
 /// threshold, public shares and private share.
-class ParticipantKeyInfo extends KeyInfo {
+class ParticipantKeyInfo extends KeyInfoWithGroupKey {
 
   final GroupKeyInfo group;
   final PublicSharesKeyInfo publicShares;
@@ -70,5 +70,8 @@ class ParticipantKeyInfo extends KeyInfo {
         private: newPrivate,
       );
   }
+
+  @override
+  ECCompressedPublicKey get groupKey => group.groupKey;
 
 }

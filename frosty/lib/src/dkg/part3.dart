@@ -57,7 +57,7 @@ class DkgPart3 {
       participantInfo = ParticipantKeyInfo(
 
         group: GroupKeyInfo(
-          publicKey: ECCompressedPublicKey(record.groupPk),
+          groupKey: ECCompressedPublicKey(record.groupPk),
           threshold: record.threshold,
         ),
 

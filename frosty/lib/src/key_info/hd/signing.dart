@@ -38,7 +38,7 @@ class HDSigningKeyInfo extends SigningKeyInfo implements HDDerivableInfo {
 
   @override
   HDSigningKeyInfo derive(int index) {
-    final (tweak, newHdInfo) = hdInfo.deriveTweakAndInfo(group.publicKey, index);
+    final (tweak, newHdInfo) = hdInfo.deriveTweakAndInfo(groupKey, index);
     return HDSigningKeyInfo(
       group: group.tweak(tweak)!,
       private: private.tweak(tweak)!,

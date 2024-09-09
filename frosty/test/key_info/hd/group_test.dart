@@ -6,7 +6,7 @@ import '../helpers.dart';
 final validHex = "${chainCodeHex}000000000000000000${groupPublicKeyHex}0200";
 
 final hdGroupInfo = HDGroupKeyInfo.master(
-  publicKey: groupPublicKey,
+  groupKey: groupPublicKey,
   threshold: 2,
 );
 

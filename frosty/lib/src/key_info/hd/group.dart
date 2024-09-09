@@ -10,13 +10,13 @@ class HDGroupKeyInfo extends GroupKeyInfo implements HDDerivableInfo {
   final HDKeyInfo hdInfo;
 
   HDGroupKeyInfo({
-    required super.publicKey,
+    required super.groupKey,
     required super.threshold,
     required this.hdInfo,
   });
 
   HDGroupKeyInfo.master({
-    required super.publicKey,
+    required super.groupKey,
     required super.threshold,
   }) : hdInfo = HDKeyInfo.master;
 
@@ -30,7 +30,6 @@ class HDGroupKeyInfo extends GroupKeyInfo implements HDDerivableInfo {
   /// Convenience constructor to construct from encoded [hex].
   HDGroupKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
 
-
   @override
   void write(Writer writer) {
     hdInfo.write(writer);
@@ -39,9 +38,9 @@ class HDGroupKeyInfo extends GroupKeyInfo implements HDDerivableInfo {
 
   @override
   HDGroupKeyInfo derive(int index) {
-    final (tweak, newHdInfo) = hdInfo.deriveTweakAndInfo(publicKey, index);
+    final (tweak, newHdInfo) = hdInfo.deriveTweakAndInfo(groupKey, index);
     return HDGroupKeyInfo(
-      publicKey: publicKey.tweak(tweak)!,
+      groupKey: groupKey.tweak(tweak)!,
       threshold: threshold,
       hdInfo: newHdInfo,
     );

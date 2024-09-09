@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
-import 'key_info.dart';
+import 'key_info_with_group_key.dart';
 import 'group.dart';
 import 'private.dart';
 
 /// Contains details required specifically for providing a signature share. This
 /// contains the [GroupKeyInfo] and [PrivateKeyInfo] but excludes the
 /// public shares which aren't needed.
-class SigningKeyInfo extends KeyInfo {
+class SigningKeyInfo extends KeyInfoWithGroupKey {
 
   final GroupKeyInfo group;
   final PrivateKeyInfo private;
@@ -45,5 +45,8 @@ class SigningKeyInfo extends KeyInfo {
       ? null
       : SigningKeyInfo(group: newGroup, private: newPrivate);
   }
+
+  @override
+  ECCompressedPublicKey get groupKey => group.groupKey;
 
 }

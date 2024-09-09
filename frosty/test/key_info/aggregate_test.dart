@@ -42,11 +42,25 @@ void main() {
       expect(
         () => AggregateKeyInfo(
           group: GroupKeyInfo(
-            publicKey: groupPublicKey,
+            groupKey: groupPublicKey,
             threshold: 4,
           ),
           publicShares: publicSharesInfo,
         ), throwsA(isA<InvalidKeyInfo>()),
+      );
+
+    });
+
+    test("can add unique group keys into set", () {
+
+      final s = {
+        for (final hex in [validHex, tweakedHex, validHex, tweakedHex])
+          AggregateKeyInfo.fromHex(hex),
+      };
+
+      expect(
+        s.map((s) => s.toHex()).toList(),
+        unorderedEquals([validHex, tweakedHex]),
       );
 
     });

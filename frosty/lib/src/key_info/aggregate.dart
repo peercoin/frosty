@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart';
+import 'key_info_with_group_key.dart';
 import 'invalid_info.dart';
-import 'key_info.dart';
 import 'group.dart';
 import 'public_shares.dart';
 
 /// Contains the group details and public shares used to aggregate a signature
 /// from shares.
-class AggregateKeyInfo extends KeyInfo {
+class AggregateKeyInfo extends KeyInfoWithGroupKey {
 
   final GroupKeyInfo group;
   final PublicSharesKeyInfo publicShares;
@@ -57,5 +57,8 @@ class AggregateKeyInfo extends KeyInfo {
       ? null
       : AggregateKeyInfo(group: newGroup, publicShares: newShares);
   }
+
+  @override
+  ECCompressedPublicKey get groupKey => group.groupKey;
 
 }

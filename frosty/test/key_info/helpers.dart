@@ -40,7 +40,7 @@ void basicInfoTests<T extends KeyInfo>({
 
 void expectDerivedGroup(GroupKeyInfo group) {
   expect(
-    group.publicKey.hex,
+    group.groupKey.hex,
     "0376c43ce6ecba9bbf792bde40877b47a0c7cbd8acce9af05efc3e3d8b6725f98e",
   );
   expect(group.threshold, 2);
