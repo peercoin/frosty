@@ -48,9 +48,14 @@ void main() {
         expect(obj.mastHash, mast);
       }
 
-      expectDetails([...il32, 0], null);
-      expectDetails([...il32, 1], Uint8List(0));
-      expectDetails([...il32, 2, ...il32], Uint8List(32));
+      final v1 = [...il32, 0];
+      expectDetails(v1, null);
+      final v2 = [...il32, 1];
+      expectDetails(v2, Uint8List(0));
+      final v3 = [...il32, 2, ...il32];
+      expectDetails(v3, Uint8List(32));
+
+      expect({ v1, v2, v3, v1, v2, v3 }, hasLength(3));
 
     });
 

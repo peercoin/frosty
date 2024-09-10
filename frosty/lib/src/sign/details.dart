@@ -83,4 +83,24 @@ class SignDetails with Writable {
 
   }
 
+  @override
+  bool operator ==(Object other) => identical(this, other) || (
+    other is SignDetails
+    && bytesEqual(message, other.message)
+    && (
+      mastHash == other.mastHash
+      || (
+        mastHash != null
+        && other.mastHash != null
+        && bytesEqual(mastHash!, other.mastHash!)
+      )
+    )
+  );
+
+  @override
+  int get hashCode => Object.hash(
+    Object.hashAll(message),
+    mastHash == null ? 0 : Object.hashAll(mastHash!),
+  );
+
 }
