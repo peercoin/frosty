@@ -12,7 +12,7 @@ void main() {
       "84ee1adfe96d4670fc6fcf5def51bbfa886389f5bdb2e9b3ccf91824324e613c",
     );
 
-    writableObjTests<SignatureShare, InvalidSignatureShare>(
+    writableRustObjTests<SignatureShare, InvalidSignatureShare>(
       validBytes,
       (b) => SignatureShare.fromBytes(b),
     );

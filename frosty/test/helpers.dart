@@ -23,7 +23,7 @@ import 'package:test/test.dart';
 
 }
 
-void writableObjTests<
+void writableRustObjTests<
   T extends WritableRustObjectWrapper,
   E extends MessageException
 >(

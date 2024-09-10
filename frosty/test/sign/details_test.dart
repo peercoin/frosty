@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+import '../helpers.dart';
 
 void main() {
   group("SignDetails", () {
@@ -35,6 +36,34 @@ void main() {
       expectFail(Uint8List(33), null);
       expectFail(Uint8List(32), Uint8List(31));
       expectFail(Uint8List(32), Uint8List(33));
+    });
+
+    final il32 = Uint8List(32);
+
+    test("fromBytes valid", () {
+
+      void expectDetails(List<int> bytes, Uint8List? mast) {
+        final uintList = Uint8List.fromList(bytes);
+        final obj = SignDetails.fromBytes(uintList);
+        expect(obj.toBytes(), uintList);
+        expect(obj.mastHash, mast);
+      }
+
+      expectDetails([...il32, 0], null);
+      expectDetails([...il32, 1], Uint8List(0));
+      expectDetails([...il32, 2, ...il32], Uint8List(32));
+
+    });
+
+    test("fromBytes invalid", () {
+      for (final bytes in [
+        [0], [...il32], [...il32, 2], [...il32, 3, ...il32],
+      ]) {
+        expect(
+          () => SignDetails.fromBytes(Uint8List.fromList(bytes)),
+          throwsException,
+        );
+      }
     });
 
   });

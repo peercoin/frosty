@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:coinlib/coinlib.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 
 /// Thrown when the message or MAST hash details are invalid
@@ -6,7 +7,7 @@ class InvalidSignDetails extends MessageException {
   InvalidSignDetails(super.message);
 }
 
-class SignDetails {
+class SignDetails with Writable {
 
   /// The message to sign
   final Uint8List message;
@@ -36,6 +37,26 @@ class SignDetails {
 
   }
 
+  factory SignDetails.fromReader(BytesReader reader) {
+    final msg = reader.readSlice(32);
+    final mastType = reader.readUInt8();
+    if (mastType > 2) throw InvalidSignDetails("Invalid MAST specifier byte");
+    return SignDetails(
+      message: msg,
+      mastHash: mastType == 0
+        ? null
+        : (mastType == 1 ? Uint8List(0) : reader.readSlice(32)),
+    );
+  }
+
+  /// Convenience constructor to construct from serialised [bytes].
+  factory SignDetails.fromBytes(Uint8List bytes)
+    => SignDetails.fromReader(BytesReader(bytes));
+
+  /// Convenience constructor to construct from encoded [hex].
+  factory SignDetails.fromHex(String hex)
+    => SignDetails.fromBytes(hexToBytes(hex));
+
   /// Used for key-spend signatures. This will always tweak the internal key. If
   /// there is no MAST root hash provided, the tweak will be done without a
   /// MAST hash for Taproot programs that only have a key-path.
@@ -48,5 +69,18 @@ class SignDetails {
   /// direct signing with a key specified in a Tapscript.
   SignDetails.scriptSpend({ required Uint8List message })
     : this(message: message, mastHash: null);
+
+  @override
+  void write(Writer writer) {
+
+    final mastType = mastHash == null
+      ? 0
+      : (mastHash!.isEmpty ? 1 : 2);
+
+    writer.writeSlice(message);
+    writer.writeUInt8(mastType);
+    if (mastType == 2) writer.writeSlice(mastHash!);
+
+  }
 
 }

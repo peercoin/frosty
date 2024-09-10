@@ -12,7 +12,7 @@ void main() {
 
     setUpAll(loadFrosty);
 
-    writableObjTests<Identifier, InvalidIdentifier>(
+    writableRustObjTests<Identifier, InvalidIdentifier>(
       hexToBytes(testIdHex),
       (b) => Identifier.fromBytes(b),
       [
