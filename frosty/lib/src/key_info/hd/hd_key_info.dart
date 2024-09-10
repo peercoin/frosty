@@ -24,7 +24,7 @@ class HDKeyInfo with Writable {
   final int index;
   final int parentFingerprint;
 
-  static void _checkIndex(int index) {
+  static void checkIndex(int index) {
     RangeError.checkValueInInterval(index, 0, 0x7fffffff, "index");
   }
 
@@ -36,7 +36,7 @@ class HDKeyInfo with Writable {
   }) : chaincode = Uint8List.fromList(chaincode) {
     checkBytes(chaincode, 32, name: "Chaincode");
     RangeError.checkValueInInterval(depth, 0, 0xff, "depth");
-    _checkIndex(index);
+    checkIndex(index);
     RangeError.checkValueInInterval(
       parentFingerprint, 0, 0xffffffff, "parentFingerprint",
     );
@@ -71,7 +71,7 @@ class HDKeyInfo with Writable {
     int index,
   ) {
 
-    _checkIndex(index);
+    checkIndex(index);
 
     Uint8List data = Uint8List(37);
     data.setRange(0, 33, groupKey.data);
