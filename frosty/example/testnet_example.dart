@@ -37,13 +37,8 @@ void main() async {
     (i) => (Identifier.fromUint16(i+1), publicShareKeys[i]),
   );
 
-  final groupInfo = GroupKeyInfo(
-    publicKey: groupKey,
-    threshold: 2,
-  );
-
+  final groupInfo = GroupKeyInfo(groupKey: groupKey, threshold: 2);
   final publicSharesInfo = PublicSharesKeyInfo(publicShares: publicShares);
-
   final participantInfos = List.generate(
     3,
     (i) => ParticipantKeyInfo(
