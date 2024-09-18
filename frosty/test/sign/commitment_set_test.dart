@@ -21,22 +21,20 @@ void main() {
 
     final validBytes = commitmentSetBytes(commitBytes);
 
-    late List<SigningCommitmentPair> pairs;
+    late SigningCommitmentMap map;
     setUpAll(() async {
       await loadFrosty();
-      pairs = List.generate(
-        3,
-        (i) => (
-          Identifier.fromUint16(i+1),
+      map = {
+        for (int i = 0; i < 3; i++)
+          Identifier.fromUint16(i+1):
           SigningCommitment.fromBytes(commitBytes[i]),
-        ),
-      );
+      };
     });
 
     test("valid bytes", () {
       final commitments = SigningCommitmentSet.fromReader(BytesReader(validBytes));
       expect(commitments.toHex(), bytesToHex(validBytes));
-      final fromPairs = SigningCommitmentSet(pairs);
+      final fromPairs = SigningCommitmentSet(map);
       expect(fromPairs.toHex(), bytesToHex(validBytes));
     });
 

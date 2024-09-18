@@ -42,9 +42,9 @@ void main() {
 
       // Too few commitments
       expectInvalid(() => getShare(
-        part1s, 0, commitmentList: [
-          (Identifier.fromUint16(1), part1s.first.commitment),
-        ],
+        part1s, 0, commitmentMap: {
+          Identifier.fromUint16(1): part1s.first.commitment,
+        },
       ),);
 
     });

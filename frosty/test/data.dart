@@ -88,17 +88,16 @@ final signMsgHash = hexToBytes(
 
 SigningCommitmentSet getSignatureCommitments(
   List<SignPart1> part1s,
-) => SigningCommitmentSet(
-  List.generate(
-    2, (i) => (Identifier.fromUint16(i+1), part1s[i].commitment),
-  ),
-);
+) => SigningCommitmentSet({
+  for (int i = 0; i < 2; i++)
+    Identifier.fromUint16(i+1): part1s[i].commitment,
+});
 
 SignatureShare getShare(
   List<SignPart1> part1s, int i, {
     Identifier? identifier,
     SignNonce? ourNonce,
-    SigningCommitmentList? commitmentList,
+    SigningCommitmentMap? commitmentMap,
     SigningKeyInfo? info,
     Uint8List? mastHash,
   }
@@ -106,8 +105,8 @@ SignatureShare getShare(
   identifier: identifier ?? Identifier.fromUint16(i+1),
   details: SignDetails.keySpend(message: signMsgHash, mastHash: mastHash),
   ourNonce: ourNonce ?? part1s[i].nonce,
-  commitments: commitmentList != null
-    ? SigningCommitmentSet(commitmentList)
+  commitments: commitmentMap != null
+    ? SigningCommitmentSet(commitmentMap)
     : getSignatureCommitments(part1s),
   info: info ?? getParticipantInfo(i).signing,
 ).share;

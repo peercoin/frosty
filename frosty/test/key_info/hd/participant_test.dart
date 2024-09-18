@@ -50,17 +50,12 @@ void main() {
         ),
       );
 
-      final nonces = derivedParticipantInfos.map(
+      final part1s = derivedParticipantInfos.map(
         (info) => SignPart1(privateShare: info.private.share),
       ).toList();
 
       // Collect commitments
-      final commitments = SigningCommitmentSet(
-        List.generate(
-          2,
-          (i) => (Identifier.fromUint16(i+1), nonces[i].commitment),
-        ),
-      );
+      final commitments = getSignatureCommitments(part1s);
 
       final signMsgHash = hexToBytes(
         "2514a6272f85cfa0f45eb907fcb0d121b808ed37c6ea160a5a9046ed5526d555",
@@ -77,7 +72,7 @@ void main() {
             SignPart2(
               identifier: id,
               details: details,
-              ourNonce: nonces[i].nonce,
+              ourNonce: part1s[i].nonce,
               commitments: commitments,
               info: derivedParticipantInfos[i].signing,
             ).share

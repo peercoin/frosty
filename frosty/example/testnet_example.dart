@@ -116,12 +116,10 @@ void main() async {
     ).toList();
 
     // Collect commitments
-    final commitments = SigningCommitmentSet(
-      List.generate(
-        2,
-        (i) => (Identifier.fromUint16(i+1), nonces[i].commitment),
-      ),
-    );
+    final commitments = SigningCommitmentSet({
+      for (int i = 0; i < 2; i++)
+        Identifier.fromUint16(i+1): nonces[i].commitment,
+    });
 
     // Generate signature shares
     final shares = List.generate(

@@ -80,9 +80,9 @@ void main() {
       // Incorrect number of commitments
       expect(
         () => SignatureAggregation(
-          commitments: SigningCommitmentSet([
-            (Identifier.fromUint16(1), part1s[0].commitment),
-          ]),
+          commitments: SigningCommitmentSet({
+            Identifier.fromUint16(1): part1s[0].commitment,
+          }),
           details: SignDetails.keySpend(message: signMsgHash),
           shares: getShares(null),
           info: aggregateInfo,
@@ -104,10 +104,10 @@ void main() {
       // Shares from wrong identifiers
       expect(
         () => SignatureAggregation(
-          commitments: SigningCommitmentSet([
-            (Identifier.fromUint16(2), part1s[1].commitment),
-            (Identifier.fromUint16(3), part1s[2].commitment),
-          ]),
+          commitments: SigningCommitmentSet({
+            Identifier.fromUint16(2): part1s[1].commitment,
+            Identifier.fromUint16(3): part1s[2].commitment,
+          }),
           details: SignDetails.keySpend(message: signMsgHash),
           shares: getShares(null),
           info: aggregateInfo,
