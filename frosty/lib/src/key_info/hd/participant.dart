@@ -24,6 +24,13 @@ class HDParticipantKeyInfo extends ParticipantKeyInfo implements HDDerivableInfo
     required super.private,
   }) : hdInfo = HDKeyInfo.master;
 
+  HDParticipantKeyInfo.masterFromInfo(ParticipantKeyInfo info)
+    : this.master(
+      group: info.group,
+      publicShares: info.publicShares,
+      private: info.private,
+    );
+
   HDParticipantKeyInfo.fromReader(super.reader)
     : hdInfo = HDKeyInfo.fromReader(reader), super.fromReader();
 

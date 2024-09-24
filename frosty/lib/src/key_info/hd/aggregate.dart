@@ -15,6 +15,14 @@ class HDAggregateKeyInfo extends AggregateKeyInfo implements HDDerivableInfo {
     required this.hdInfo,
   });
 
+  HDAggregateKeyInfo.master({
+    required super.group,
+    required super.publicShares,
+  }) : hdInfo = HDKeyInfo.master;
+
+  HDAggregateKeyInfo.masterFromInfo(AggregateKeyInfo info)
+    : this.master(group: info.group, publicShares: info.publicShares);
+
   HDAggregateKeyInfo.fromReader(super.reader)
     : hdInfo = HDKeyInfo.fromReader(reader), super.fromReader();
 
@@ -24,11 +32,6 @@ class HDAggregateKeyInfo extends AggregateKeyInfo implements HDDerivableInfo {
 
   /// Convenience constructor to construct from encoded [hex].
   HDAggregateKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
-
-  HDAggregateKeyInfo.master({
-    required super.group,
-    required super.publicShares,
-  }) : hdInfo = HDKeyInfo.master;
 
   @override
   void write(Writer writer) {
