@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.3.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1657266875;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 996469473;
 
 // Section: executor
 
@@ -553,7 +553,7 @@ fn wire__crate__api__main__aggregate_signature_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_nonce_commitments =
+            let api_nonces_commitments =
                 <Vec<crate::api::main::IdentifierAndSigningCommitment>>::sse_decode(
                     &mut deserializer,
                 );
@@ -567,7 +567,7 @@ fn wire__crate__api__main__aggregate_signature_impl(
             deserializer.end();
             transform_result_sse::<_, crate::api::main::SignAggregationError>((move || {
                 let output_ok = crate::api::main::aggregate_signature(
-                    api_nonce_commitments,
+                    api_nonces_commitments,
                     api_message,
                     api_merkle_root,
                     api_shares,
@@ -1415,13 +1415,13 @@ fn wire__crate__api__main__sign_part_2_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_nonce_commitments =
+            let api_nonces_commitments =
                 <Vec<crate::api::main::IdentifierAndSigningCommitment>>::sse_decode(
                     &mut deserializer,
                 );
             let api_message = <Vec<u8>>::sse_decode(&mut deserializer);
             let api_merkle_root = <Option<Vec<u8>>>::sse_decode(&mut deserializer);
-            let api_signing_nonce =
+            let api_signing_nonces =
                 <RustOpaqueMoi<frost::round1::SigningNonces>>::sse_decode(&mut deserializer);
             let api_identifier = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IdentifierOpaque>,
@@ -1452,10 +1452,10 @@ fn wire__crate__api__main__sign_part_2_impl(
                     }
                     let api_identifier_guard = api_identifier_guard.unwrap();
                     let output_ok = crate::api::main::sign_part_2(
-                        api_nonce_commitments,
+                        api_nonces_commitments,
                         api_message,
                         api_merkle_root,
-                        &api_signing_nonce,
+                        &api_signing_nonces,
                         &*api_identifier_guard,
                         api_private_share,
                         api_group_pk,
@@ -1606,6 +1606,71 @@ fn wire__crate__api__main__signing_commitment_to_bytes_impl(
             transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                 (move || {
                     let output_ok = crate::api::main::signing_commitment_to_bytes(&api_commitment)?;
+                    Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__main__signing_nonces_from_bytes_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "signing_nonces_from_bytes",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_bytes = <Vec<u8>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::main::signing_nonces_from_bytes(api_bytes)?;
+                    Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__main__signing_nonces_to_bytes_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "signing_nonces_to_bytes",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_nonces =
+                <RustOpaqueMoi<frost::round1::SigningNonces>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::main::signing_nonces_to_bytes(&api_nonces)?;
                     Ok(output_ok)
                 })(),
             )
@@ -2217,6 +2282,8 @@ fn pde_ffi_dispatcher_sync_impl(
             wire__crate__api__main__signing_commitment_from_bytes_impl(ptr, rust_vec_len, data_len)
         }
         33 => wire__crate__api__main__signing_commitment_to_bytes_impl(ptr, rust_vec_len, data_len),
+        34 => wire__crate__api__main__signing_nonces_from_bytes_impl(ptr, rust_vec_len, data_len),
+        35 => wire__crate__api__main__signing_nonces_to_bytes_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }

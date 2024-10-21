@@ -72,7 +72,7 @@ void main() {
             SignPart2(
               identifier: id,
               details: details,
-              ourNonce: part1s[i].nonce,
+              ourNonces: part1s[i].nonces,
               commitments: commitments,
               info: derivedParticipantInfos[i].signing,
             ).share

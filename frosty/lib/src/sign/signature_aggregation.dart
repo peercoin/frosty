@@ -40,7 +40,7 @@ class SignatureAggregation {
     try {
 
       final bytes = rust.aggregateSignature(
-        nonceCommitments: commitments.nativeList,
+        noncesCommitments: commitments.nativeList,
         message: details.message,
         merkleRoot: details.mastHash,
         shares: shares.map(

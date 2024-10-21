@@ -347,9 +347,9 @@ pub fn dkg_part_3(
 
 // Sign Part 1: Nonce generation
 
-type SigningNonceOpaque = RustOpaque<frost::round1::SigningNonces>;
+type SigningNoncesOpaque = RustOpaque<frost::round1::SigningNonces>;
 type SigningCommitmentOpaque = RustOpaque<frost::round1::SigningCommitments>;
-type SignPart1Result = Result<(SigningNonceOpaque, SigningCommitmentOpaque)>;
+type SignPart1Result = Result<(SigningNoncesOpaque, SigningCommitmentOpaque)>;
 
 #[frb(sync)]
 pub fn sign_part_1(
@@ -358,13 +358,34 @@ pub fn sign_part_1(
 
     let mut rng = thread_rng();
 
-    let (nonce, commitment) = frost::round1::commit(
+    let (nonces, commitment) = frost::round1::commit(
         &vector_to_signing_share(private_share)?,
         &mut rng,
     );
 
-    Ok((RustOpaque::new(nonce), RustOpaque::new(commitment)))
+    Ok((RustOpaque::new(nonces), RustOpaque::new(commitment)))
 
+}
+
+#[frb(sync)]
+pub fn signing_nonces_from_bytes(
+    bytes: Vec<u8>
+) -> Result<SigningNoncesOpaque> {
+    Ok(RustOpaque::new(
+        from_bytes(
+            bytes,
+            |b| frost::round1::SigningNonces::deserialize(&b),
+            |obj| obj.serialize(),
+            "Signing nonces"
+        )?
+    ))
+}
+
+#[frb(sync)]
+pub fn signing_nonces_to_bytes(
+    nonces: &SigningNoncesOpaque
+) -> Result<Vec<u8>> {
+    Ok(nonces.serialize()?)
 }
 
 #[frb(sync)]
@@ -414,10 +435,10 @@ type SignPart2Result = Result<SignatureShareOpaque>;
 
 #[frb(sync)]
 pub fn sign_part_2(
-    nonce_commitments: Vec<IdentifierAndSigningCommitment>,
+    nonces_commitments: Vec<IdentifierAndSigningCommitment>,
     message: Vec<u8>,
     merkle_root: Option<Vec<u8>>,
-    signing_nonce: &SigningNonceOpaque,
+    signing_nonces: &SigningNoncesOpaque,
     identifier: &IdentifierOpaque,
     private_share: Vec<u8>,
     group_pk: Vec<u8>,
@@ -425,7 +446,7 @@ pub fn sign_part_2(
 ) -> SignPart2Result {
 
     let signing_package = construct_signing_package(
-        nonce_commitments, message, merkle_root,
+        nonces_commitments, message, merkle_root,
     );
     let signing_share = vector_to_signing_share(private_share)?;
     let group_verifying_key = vector_to_group_key(group_pk)?;
@@ -441,7 +462,7 @@ pub fn sign_part_2(
     Ok(SignatureShareOpaque(
         frost::round2::sign(
             &signing_package,
-            &signing_nonce,
+            &signing_nonces,
             &key_package,
         )?
     ))
@@ -489,7 +510,7 @@ pub enum SignAggregationError {
 
 #[frb(sync)]
 pub fn aggregate_signature(
-    nonce_commitments: Vec<IdentifierAndSigningCommitment>,
+    nonces_commitments: Vec<IdentifierAndSigningCommitment>,
     message: Vec<u8>,
     merkle_root: Option<Vec<u8>>,
     shares: Vec<IdentifierAndSignatureShare>,
@@ -498,7 +519,7 @@ pub fn aggregate_signature(
 ) -> Result<Vec<u8>, SignAggregationError> {
 
     let signing_package = construct_signing_package(
-        nonce_commitments, message, merkle_root,
+        nonces_commitments, message, merkle_root,
     );
     let group_verifying_key = vector_to_group_key(group_pk)
         .map_err(|e| SignAggregationError::General { message: e.to_string() })?;

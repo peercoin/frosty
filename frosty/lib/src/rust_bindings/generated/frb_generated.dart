@@ -66,7 +66,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.3.0';
 
   @override
-  int get rustContentHash => -1657266875;
+  int get rustContentHash => 996469473;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -110,7 +110,7 @@ abstract class RustLibApi extends BaseApi {
       {required DkgRound3Data that, required int threshold});
 
   Uint8List crateApiMainAggregateSignature(
-      {required List<IdentifierAndSigningCommitment> nonceCommitments,
+      {required List<IdentifierAndSigningCommitment> noncesCommitments,
       required List<int> message,
       Uint8List? merkleRoot,
       required List<IdentifierAndSignatureShare> shares,
@@ -177,10 +177,10 @@ abstract class RustLibApi extends BaseApi {
       {required List<int> privateShare});
 
   SignatureShareOpaque crateApiMainSignPart2(
-      {required List<IdentifierAndSigningCommitment> nonceCommitments,
+      {required List<IdentifierAndSigningCommitment> noncesCommitments,
       required List<int> message,
       Uint8List? merkleRoot,
-      required SigningNonces signingNonce,
+      required SigningNonces signingNonces,
       required IdentifierOpaque identifier,
       required List<int> privateShare,
       required List<int> groupPk,
@@ -197,6 +197,10 @@ abstract class RustLibApi extends BaseApi {
 
   Uint8List crateApiMainSigningCommitmentToBytes(
       {required SigningCommitments commitment});
+
+  SigningNonces crateApiMainSigningNoncesFromBytes({required List<int> bytes});
+
+  Uint8List crateApiMainSigningNoncesToBytes({required SigningNonces nonces});
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_DkgPublicCommitmentOpaque;
@@ -570,7 +574,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Uint8List crateApiMainAggregateSignature(
-      {required List<IdentifierAndSigningCommitment> nonceCommitments,
+      {required List<IdentifierAndSigningCommitment> noncesCommitments,
       required List<int> message,
       Uint8List? merkleRoot,
       required List<IdentifierAndSignatureShare> shares,
@@ -580,7 +584,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_identifier_and_signing_commitment(
-            nonceCommitments, serializer);
+            noncesCommitments, serializer);
         sse_encode_list_prim_u_8_loose(message, serializer);
         sse_encode_opt_list_prim_u_8_strict(merkleRoot, serializer);
         sse_encode_list_identifier_and_signature_share(shares, serializer);
@@ -594,7 +598,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       ),
       constMeta: kCrateApiMainAggregateSignatureConstMeta,
       argValues: [
-        nonceCommitments,
+        noncesCommitments,
         message,
         merkleRoot,
         shares,
@@ -609,7 +613,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(
         debugName: "aggregate_signature",
         argNames: [
-          "nonceCommitments",
+          "noncesCommitments",
           "message",
           "merkleRoot",
           "shares",
@@ -1087,10 +1091,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   SignatureShareOpaque crateApiMainSignPart2(
-      {required List<IdentifierAndSigningCommitment> nonceCommitments,
+      {required List<IdentifierAndSigningCommitment> noncesCommitments,
       required List<int> message,
       Uint8List? merkleRoot,
-      required SigningNonces signingNonce,
+      required SigningNonces signingNonces,
       required IdentifierOpaque identifier,
       required List<int> privateShare,
       required List<int> groupPk,
@@ -1099,11 +1103,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_identifier_and_signing_commitment(
-            nonceCommitments, serializer);
+            noncesCommitments, serializer);
         sse_encode_list_prim_u_8_loose(message, serializer);
         sse_encode_opt_list_prim_u_8_strict(merkleRoot, serializer);
         sse_encode_RustOpaque_frostround1SigningNonces(
-            signingNonce, serializer);
+            signingNonces, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             identifier, serializer);
         sse_encode_list_prim_u_8_loose(privateShare, serializer);
@@ -1118,10 +1122,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       ),
       constMeta: kCrateApiMainSignPart2ConstMeta,
       argValues: [
-        nonceCommitments,
+        noncesCommitments,
         message,
         merkleRoot,
-        signingNonce,
+        signingNonces,
         identifier,
         privateShare,
         groupPk,
@@ -1134,10 +1138,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiMainSignPart2ConstMeta => const TaskConstMeta(
         debugName: "sign_part_2",
         argNames: [
-          "nonceCommitments",
+          "noncesCommitments",
           "message",
           "merkleRoot",
-          "signingNonce",
+          "signingNonces",
           "identifier",
           "privateShare",
           "groupPk",
@@ -1246,6 +1250,54 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(
         debugName: "signing_commitment_to_bytes",
         argNames: ["commitment"],
+      );
+
+  @override
+  SigningNonces crateApiMainSigningNoncesFromBytes({required List<int> bytes}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_list_prim_u_8_loose(bytes, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 34)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_RustOpaque_frostround1SigningNonces,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiMainSigningNoncesFromBytesConstMeta,
+      argValues: [bytes],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiMainSigningNoncesFromBytesConstMeta =>
+      const TaskConstMeta(
+        debugName: "signing_nonces_from_bytes",
+        argNames: ["bytes"],
+      );
+
+  @override
+  Uint8List crateApiMainSigningNoncesToBytes({required SigningNonces nonces}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_RustOpaque_frostround1SigningNonces(nonces, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 35)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_prim_u_8_strict,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiMainSigningNoncesToBytesConstMeta,
+      argValues: [nonces],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiMainSigningNoncesToBytesConstMeta =>
+      const TaskConstMeta(
+        debugName: "signing_nonces_to_bytes",
+        argNames: ["nonces"],
       );
 
   RustArcIncrementStrongCountFnType

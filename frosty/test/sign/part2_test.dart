@@ -37,8 +37,8 @@ void main() {
       // Participant not part of commitments
       expectInvalid(() => getShare(part1s, 2));
 
-      // Wrong nonce
-      expectInvalid(() => getShare(part1s, 0, ourNonce: part1s[1].nonce));
+      // Wrong nonces
+      expectInvalid(() => getShare(part1s, 0, ourNonce: part1s[1].nonces));
 
       // Too few commitments
       expectInvalid(() => getShare(

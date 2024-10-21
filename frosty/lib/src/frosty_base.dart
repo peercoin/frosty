@@ -7,6 +7,7 @@ export "dkg/share_to_give.dart";
 export "sign/commitment.dart";
 export "sign/commitment_set.dart";
 export "sign/details.dart";
+export "sign/nonces.dart";
 export "sign/part1.dart";
 export "sign/part2.dart";
 export "sign/signature_aggregation.dart";
@@ -25,6 +26,8 @@ export "key_info/participant.dart";
 export "key_info/private.dart";
 export "key_info/public_shares.dart";
 export "key_info/signing.dart";
-export "rust_bindings/rust_api.dart";
 export "rust_bindings/rust_object_wrapper.dart";
 export "identifier.dart";
+
+import "rust_bindings/rust_api.dart" as api;
+Future<void> loadFrosty() => api.loadFrosty();

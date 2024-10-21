@@ -96,7 +96,7 @@ SigningCommitmentSet getSignatureCommitments(
 SignatureShare getShare(
   List<SignPart1> part1s, int i, {
     Identifier? identifier,
-    SignNonce? ourNonce,
+    SigningNonces? ourNonce,
     SigningCommitmentMap? commitmentMap,
     SigningKeyInfo? info,
     Uint8List? mastHash,
@@ -104,7 +104,7 @@ SignatureShare getShare(
 ) => SignPart2(
   identifier: identifier ?? Identifier.fromUint16(i+1),
   details: SignDetails.keySpend(message: signMsgHash, mastHash: mastHash),
-  ourNonce: ourNonce ?? part1s[i].nonce,
+  ourNonces: ourNonce ?? part1s[i].nonces,
   commitments: commitmentMap != null
     ? SigningCommitmentSet(commitmentMap)
     : getSignatureCommitments(part1s),

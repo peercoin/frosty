@@ -63,6 +63,12 @@ DkgRound3Data dkgPart3(
         {required List<int> privateShare}) =>
     RustLib.instance.api.crateApiMainSignPart1(privateShare: privateShare);
 
+SigningNonces signingNoncesFromBytes({required List<int> bytes}) =>
+    RustLib.instance.api.crateApiMainSigningNoncesFromBytes(bytes: bytes);
+
+Uint8List signingNoncesToBytes({required SigningNonces nonces}) =>
+    RustLib.instance.api.crateApiMainSigningNoncesToBytes(nonces: nonces);
+
 SigningCommitments signingCommitmentFromBytes({required List<int> bytes}) =>
     RustLib.instance.api.crateApiMainSigningCommitmentFromBytes(bytes: bytes);
 
@@ -71,19 +77,19 @@ Uint8List signingCommitmentToBytes({required SigningCommitments commitment}) =>
         .crateApiMainSigningCommitmentToBytes(commitment: commitment);
 
 SignatureShareOpaque signPart2(
-        {required List<IdentifierAndSigningCommitment> nonceCommitments,
+        {required List<IdentifierAndSigningCommitment> noncesCommitments,
         required List<int> message,
         Uint8List? merkleRoot,
-        required SigningNonces signingNonce,
+        required SigningNonces signingNonces,
         required IdentifierOpaque identifier,
         required List<int> privateShare,
         required List<int> groupPk,
         required int threshold}) =>
     RustLib.instance.api.crateApiMainSignPart2(
-        nonceCommitments: nonceCommitments,
+        noncesCommitments: noncesCommitments,
         message: message,
         merkleRoot: merkleRoot,
-        signingNonce: signingNonce,
+        signingNonces: signingNonces,
         identifier: identifier,
         privateShare: privateShare,
         groupPk: groupPk,
@@ -96,14 +102,14 @@ Uint8List signatureShareToBytes({required SignatureShareOpaque share}) =>
     RustLib.instance.api.crateApiMainSignatureShareToBytes(share: share);
 
 Uint8List aggregateSignature(
-        {required List<IdentifierAndSigningCommitment> nonceCommitments,
+        {required List<IdentifierAndSigningCommitment> noncesCommitments,
         required List<int> message,
         Uint8List? merkleRoot,
         required List<IdentifierAndSignatureShare> shares,
         required List<int> groupPk,
         required List<IdentifierAndPublicShare> publicShares}) =>
     RustLib.instance.api.crateApiMainAggregateSignature(
-        nonceCommitments: nonceCommitments,
+        noncesCommitments: noncesCommitments,
         message: message,
         merkleRoot: merkleRoot,
         shares: shares,

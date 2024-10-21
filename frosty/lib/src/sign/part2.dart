@@ -4,8 +4,8 @@ import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/key_info/signing.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'details.dart';
+import 'nonces.dart';
 import 'commitment_set.dart';
-import 'part1.dart';
 import 'signature_share.dart';
 
 /// Thrown when data provided into part 2 of the sign process is not valid
@@ -19,12 +19,12 @@ class SignPart2 {
 
   late SignatureShare share;
 
-  /// After the signature share is generated, the [ourNonce] should be disposed.
-  /// The [commitments] are also no longer needed.
+  /// After the signature share is generated, the [ourNonces] should be
+  /// disposed. The [commitments] are also no longer needed.
   SignPart2({
     required Identifier identifier,
     required SignDetails details,
-    required SignNonce ourNonce,
+    required SigningNonces ourNonces,
     required SigningCommitmentSet commitments,
     required SigningKeyInfo info,
   }) {
@@ -33,10 +33,10 @@ class SignPart2 {
 
       share = SignatureShare.fromUnderlying(
         rust.signPart2(
-          nonceCommitments: commitments.nativeList,
+          noncesCommitments: commitments.nativeList,
           message: details.message,
           merkleRoot: details.mastHash,
-          signingNonce: ourNonce.underlying,
+          signingNonces: ourNonces.underlying,
           identifier: identifier.underlying,
           privateShare: info.private.share.data,
           groupPk: info.groupKey.data,
