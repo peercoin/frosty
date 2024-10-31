@@ -68,7 +68,7 @@ void main() async {
         SignPart2(
           identifier: id,
           details: details,
-          ourNonce: nonces[i].nonce,
+          ourNonces: nonces[i].nonces,
           commitments: commitments,
           info: participantInfos[i].signing,
         ).share
@@ -118,7 +118,7 @@ void main() async {
           SignPart2(
             identifier: id,
             details: details,
-            ourNonce: nonces[i].nonce,
+            ourNonces: nonces[i].nonces,
             commitments: commitments,
             info: tweakedInfos[i].signing,
           ).share
