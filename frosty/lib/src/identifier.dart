@@ -46,6 +46,8 @@ class Identifier
     data,
   );
 
+  Identifier.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+
   /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
   @override
   Uint8List serializeImpl() => rust.identifierToBytes(
