@@ -44,36 +44,29 @@ fn vec_to_array<const N: usize, T>(
 fn vector_to_signing_share(
     vec: Vec<u8>
 ) -> Result<frost::keys::SigningShare> {
-    let array = vec_to_array::<32, u8>(vec, "Private share")?;
-    frost::keys::SigningShare::deserialize(array)
+    frost::keys::SigningShare::deserialize(vec.as_slice())
         .map_err(|_| anyhow!("Could not deserialize private share"))
 }
 
 fn construct_signing_package(
     nonce_commitments: Vec<IdentifierAndSigningCommitment>,
     message: Vec<u8>,
-    merkle_root: Option<Vec<u8>>,
 ) -> frost::SigningPackage {
     frost::SigningPackage::new(
         nonce_commitments.into_iter().map(
             |v| (v.identifier.0.clone(), (*v.commitment).clone())
         ).collect(),
-        frost::SigningTarget::new(
-            &message,
-            frost::SigningParameters { tapscript_merkle_root: merkle_root },
-        )
+        &message,
     )
 }
 
 fn vector_to_group_key(vec: Vec<u8>) -> Result<frost::VerifyingKey> {
-    let array = vec_to_array::<33, u8>(vec, "Group key")?;
-    frost::VerifyingKey::deserialize(array)
+    frost::VerifyingKey::deserialize(vec.as_slice())
         .map_err(|_| anyhow!("Could not deserialize group key"))
 }
 
 fn vector_to_verifying_share(vec: Vec<u8>) -> Result<frost::keys::VerifyingShare> {
-    let array = vec_to_array::<33, u8>(vec, "Verifying share")?;
-    frost::keys::VerifyingShare::deserialize(array)
+    frost::keys::VerifyingShare::deserialize(vec.as_slice())
         .map_err(|_| anyhow!("Could not deserialize verifying share"))
 }
 
@@ -96,8 +89,14 @@ pub fn identifier_from_u16(i: u16) -> IdentifierResult {
 
 #[frb(sync)]
 pub fn identifier_from_bytes(bytes: Vec<u8>) -> IdentifierResult {
+
+    if bytes.iter().all(|&x| x == 0) {
+        return Err(anyhow!("Identifier cannot be a zero scalar"));
+    }
+
     let array = vec_to_array::<32, u8>(bytes, "Identifier")?;
     Ok(IdentifierOpaque(frost::Identifier::deserialize(&array)?))
+
 }
 
 #[frb(sync)]
@@ -329,16 +328,20 @@ pub fn dkg_part_3(
         DkgRound3Data {
             identifier: IdentifierOpaque(*result.0.identifier()),
             // Get private share as scalar
-            private_share: result.0.signing_share().serialize().to_vec(),
+            private_share: result.0.signing_share().serialize(),
             // Get the group public key
-            group_pk: result.1.verifying_key().serialize().to_vec(),
+            group_pk: result.1.verifying_key().serialize()?,
             // Collect all the identifier public key shares into a vector
             public_key_shares: result.1.verifying_shares().into_iter().map(
-                |v| IdentifierAndPublicShare {
-                    identifier: IdentifierOpaque(*v.0),
-                    public_share: v.1.serialize().to_vec(),
+                |v| -> Result<IdentifierAndPublicShare> {
+                    Ok(
+                        IdentifierAndPublicShare {
+                            identifier: IdentifierOpaque(*v.0),
+                            public_share: v.1.serialize()?
+                        }
+                    )
                 }
-            ).collect(),
+            ).collect::<Result<Vec<_>>>()?,
             threshold: *result.0.min_signers(),
         }
     )
@@ -445,9 +448,7 @@ pub fn sign_part_2(
     threshold: u16,
 ) -> SignPart2Result {
 
-    let signing_package = construct_signing_package(
-        nonces_commitments, message, merkle_root,
-    );
+    let signing_package = construct_signing_package(nonces_commitments, message);
     let signing_share = vector_to_signing_share(private_share)?;
     let group_verifying_key = vector_to_group_key(group_pk)?;
 
@@ -460,10 +461,11 @@ pub fn sign_part_2(
     );
 
     Ok(SignatureShareOpaque(
-        frost::round2::sign(
+        frost::round2::sign_with_tweak(
             &signing_package,
             &signing_nonces,
             &key_package,
+            merkle_root.as_ref().map(Vec::as_slice),
         )?
     ))
 
@@ -473,8 +475,11 @@ pub fn sign_part_2(
 pub fn signature_share_from_bytes(
     bytes: Vec<u8>
 ) -> Result<SignatureShareOpaque> {
-    let array = vec_to_array::<32, u8>(bytes, "Signature share")?;
-    Ok(SignatureShareOpaque(frost::round2::SignatureShare::deserialize(array)?))
+    Ok(
+        SignatureShareOpaque(
+            frost::round2::SignatureShare::deserialize(bytes.as_slice())?
+        )
+    )
 }
 
 #[frb(sync)]
@@ -518,9 +523,7 @@ pub fn aggregate_signature(
     public_shares: Vec<IdentifierAndPublicShare>,
 ) -> Result<Vec<u8>, SignAggregationError> {
 
-    let signing_package = construct_signing_package(
-        nonces_commitments, message, merkle_root,
-    );
+    let signing_package = construct_signing_package(nonces_commitments, message);
     let group_verifying_key = vector_to_group_key(group_pk)
         .map_err(|e| SignAggregationError::General { message: e.to_string() })?;
 
@@ -539,12 +542,13 @@ pub fn aggregate_signature(
         group_verifying_key,
     );
 
-    let signature = frost::aggregate(
+    let signature = frost::aggregate_with_tweak(
         &signing_package,
         &shares.into_iter().map(
             |v| (v.identifier.0, v.share.0.clone())
         ).collect(),
         &pubkey_package,
+        merkle_root.as_ref().map(Vec::as_slice),
     ).map_err(
         |e| match e {
             frost::Error::InvalidSignatureShare {
@@ -558,10 +562,9 @@ pub fn aggregate_signature(
         }
     )?;
 
-    // Serialise, removing the first byte of the point as Schnorr signatures in
-    // Peercoin expect no odd/even bit.
-    let bytes = signature.serialize()[1..].to_vec();
+    let bytes = signature.serialize()
+        .map_err(|e| SignAggregationError::General { message: e.to_string() })?;
 
-    Ok(bytes)
+    Ok(bytes.to_vec())
 
 }

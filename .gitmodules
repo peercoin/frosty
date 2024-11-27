@@ -1,3 +1,6 @@
 [submodule "frost-secp256k1-tr"]
 	path = native/frost-secp256k1-tr
        url = https://github.com/zebra-lucky/frost
+[submodule "native/frost"]
+	path = native/frost
+	url = https://github.com/ZcashFoundation/frost
