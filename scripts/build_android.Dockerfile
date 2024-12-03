@@ -16,6 +16,12 @@ RUN apt-get install -y unzip
 RUN sha1sum $NDK_NAME.zip | grep $NDK_SHA1 \
   && unzip -q $NDK_NAME.zip && mv $NDK_SHORT_NAME $ANDROID_NDK_HOME
 
+# Ensure Rust/Cargo is up-to-date
+# Update RUST_VER if a higher version is required and the cache must be
+# invalidated
+ARG RUST_VER=1.83.0
+RUN rustup update stable
+
 # Set up cargo-ndk
 RUN cargo install cargo-ndk
 
