@@ -4,72 +4,124 @@ import 'package:test/test.dart';
 import "../data.dart";
 
 void main() {
-  group("SignatureAggregation", () {
+  group("SignatureAggregation + verifySignatureShare", () {
 
-    late List<SignPart1> part1s;
+    late final List<SignPart1> part1s;
+    late final SigningCommitmentSet commitments;
+    late final SignDetails basicDetails;
+    late final SignatureShare badShare;
 
     setUpAll(() async {
       await loadFrosty();
       part1s = getPart1s();
+      commitments = getSignatureCommitments(part1s);
+      basicDetails = SignDetails.keySpend(message: signMsgHash);
+      badShare = SignatureShare.fromBytes(
+        hexToBytes(
+          "84ee1adfe96d4670fc6fcf5def51bbfa886389f5bdb2e9b3ccf91824324e613c",
+        ),
+      );
     });
 
-    ShareList getShares(TapNode? mast) => List.generate(
+    ShareList getShares(SignDetails? details) => List.generate(
       2, (i) => (
-        Identifier.fromUint16(i+1),
-        getShare(part1s, i, mastHash: mast?.hash),
+        ids[i],
+        getShare(part1s, i, details: details),
       ),
     );
 
-    void expectValid(TapNode? mast) {
+    void expectValid(SignDetails details, ECPublicKey pubkey) {
 
-      final taproot = Taproot(internalKey: groupPublicKey, mast: mast);
+      final shares = getShares(details);
 
       final signature = SignatureAggregation(
-        commitments: getSignatureCommitments(part1s),
-        details: SignDetails.keySpend(message: signMsgHash, mastHash: mast?.hash),
-        shares: getShares(mast),
+        commitments: commitments,
+        details: details,
+        shares: shares,
         info: aggregateInfo,
       ).signature;
 
-      expect(signature.verify(taproot.tweakedKey, signMsgHash), true);
+      expect(signature.verify(pubkey, signMsgHash), true);
 
+      // Verify each share
+      for (final share in shares) {
+        expect(
+          verifySignatureShare(
+            commitments: commitments,
+            details: details,
+            id: share.$1,
+            share: share.$2,
+            publicShare: aggregateInfo.publicShares.list.firstWhere(
+              (t) => t.$1 == share.$1,
+            ).$2,
+            groupKey: aggregateInfo.groupKey,
+          ),
+          true,
+        );
+      }
+
+    }
+
+    void expectValidKeySpend(TapNode? mast) {
+      final taproot = Taproot(internalKey: groupPublicKey, mast: mast);
+      final details = SignDetails.keySpend(
+        message: signMsgHash,
+        mastHash: mast?.hash,
+      );
+      expectValid(details, taproot.tweakedKey);
     }
 
     test(
       "produces a valid signature for the group key",
-      () => expectValid(null),
+      () => expectValidKeySpend(null),
     );
 
     test(
       "produces a valid signature with MAST",
-      () => expectValid(TapLeaf(Script.fromAsm("OP_RETURN"))),
+      () => expectValidKeySpend(TapLeaf(Script.fromAsm("OP_RETURN"))),
+    );
+
+    test(
+      "produces valid signature for script spends",
+      () => expectValid(
+        SignDetails.scriptSpend(message: signMsgHash),
+        groupPublicKey,
+      ),
+    );
+
+    test(
+      "bad share is not verified",
+      () => expect(
+        verifySignatureShare(
+          commitments: commitments,
+          details: basicDetails,
+          id: ids[1],
+          share: badShare,
+          publicShare: aggregateInfo.publicShares.list[1].$2,
+          groupKey: aggregateInfo.groupKey,
+        ),
+        false,
+      ),
     );
 
     test("identifiable invalid share", () {
 
       // Use incorrect share for participant 2
       final sharesWithInvalid = [
-        (Identifier.fromUint16(1), getShare(part1s, 0)),
-        (
-          Identifier.fromUint16(2),
-          SignatureShare.fromBytes(
-            hexToBytes(
-              "84ee1adfe96d4670fc6fcf5def51bbfa886389f5bdb2e9b3ccf91824324e613c",
-            ),
-          ),
-        ),
+        (ids[0], getShare(part1s, 0)),
+        (ids[1], badShare),
       ];
 
       expect(
         () => SignatureAggregation(
-          commitments: getSignatureCommitments(part1s),
-          details: SignDetails.keySpend(message: signMsgHash),
+          commitments: commitments,
+          details: basicDetails,
           shares: sharesWithInvalid,
           info: aggregateInfo,
         ),
         throwsA(
           isA<InvalidAggregationShare>()
-          .having((err) => err.culprit, "culprit", Identifier.fromUint16(2)),
+          .having((err) => err.culprit, "culprit", ids[1]),
         ),
       );
 
@@ -81,9 +133,9 @@ void main() {
       expect(
         () => SignatureAggregation(
           commitments: SigningCommitmentSet({
-            Identifier.fromUint16(1): part1s[0].commitment,
+            ids.first: part1s[0].commitment,
           }),
-          details: SignDetails.keySpend(message: signMsgHash),
+          details: basicDetails,
           shares: getShares(null),
           info: aggregateInfo,
         ),
@@ -93,8 +145,8 @@ void main() {
       // Incorrect number of shares
       expect(
         () => SignatureAggregation(
-          commitments: getSignatureCommitments(part1s),
-          details: SignDetails.keySpend(message: signMsgHash),
+          commitments: commitments,
+          details: basicDetails,
           shares: getShares(null).take(1).toList(),
           info: aggregateInfo,
         ),
@@ -105,10 +157,10 @@ void main() {
       expect(
         () => SignatureAggregation(
           commitments: SigningCommitmentSet({
-            Identifier.fromUint16(2): part1s[1].commitment,
-            Identifier.fromUint16(3): part1s[2].commitment,
+            ids[1]: part1s[1].commitment,
+            ids[2]: part1s[2].commitment,
           }),
-          details: SignDetails.keySpend(message: signMsgHash),
+          details: basicDetails,
           shares: getShares(null),
           info: aggregateInfo,
         ),

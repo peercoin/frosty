@@ -40,12 +40,11 @@ final tweakedPublicShareKeyHex = [
   "03eb98b2b9dfa0310af3bf100c61be10cebd1ba3ef50e303476f8d9e36f70aa3c4",
 ];
 
+final ids = List.generate(3, (i) => Identifier.fromUint16(i+1));
+
 final publicShares = List.generate(
   3,
-  (i) => (
-    Identifier.fromUint16(i+1),
-    ECCompressedPublicKey.fromHex(publicShareKeyHex[i]),
-  ),
+  (i) => (ids[i], ECCompressedPublicKey.fromHex(publicShareKeyHex[i])),
 );
 
 // Determined as an invalid tweak for the underlying private key obtained via
@@ -99,11 +98,11 @@ SignatureShare getShare(
     SigningNonces? ourNonce,
     SigningCommitmentMap? commitmentMap,
     SigningKeyInfo? info,
-    Uint8List? mastHash,
+    SignDetails? details,
   }
 ) => SignPart2(
   identifier: identifier ?? Identifier.fromUint16(i+1),
-  details: SignDetails.keySpend(message: signMsgHash, mastHash: mastHash),
+  details: details ?? SignDetails.keySpend(message: signMsgHash),
   ourNonces: ourNonce ?? part1s[i].nonces,
   commitments: commitmentMap != null
     ? SigningCommitmentSet(commitmentMap)

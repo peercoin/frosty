@@ -1,4 +1,6 @@
+use frost_secp256k1_tr::keys::Tweak;
 pub use frost_secp256k1_tr as frost;
+pub use frost_core;
 pub use frost_secp256k1_tr::keys::dkg as dkg;
 use rand::thread_rng;
 use anyhow::{anyhow, Result};
@@ -487,6 +489,52 @@ pub fn signature_share_to_bytes(
     share: &SignatureShareOpaque
 ) -> Vec<u8> {
     share.0.serialize().to_vec()
+}
+
+// Signature share verification
+
+#[frb(sync)]
+pub fn verify_signature_share(
+    nonces_commitments: Vec<IdentifierAndSigningCommitment>,
+    message: Vec<u8>,
+    merkle_root: Option<Vec<u8>>,
+    identifier: &IdentifierOpaque,
+    share: &SignatureShareOpaque,
+    public_share: Vec<u8>,
+    group_pk: Vec<u8>,
+) -> Result<()> {
+
+    let signing_package = construct_signing_package(nonces_commitments, message);
+
+    // Mutable for if a tweak is required
+    let mut verifying_share = vector_to_verifying_share(public_share)?;
+    let mut group_verifying_key = vector_to_group_key(group_pk)?;
+
+    // Introduce tweak here as library doesn't have verify_signature_share_with_tweak
+    // Tweak by using a PublicKeyPackage with only the wanted key
+    if merkle_root.is_some() {
+
+        let pubkey_package = frost::keys::PublicKeyPackage::new(
+            BTreeMap::from([(identifier.0.clone(), verifying_share.clone())]),
+            group_verifying_key,
+        );
+
+        let tweaked_keys = pubkey_package.tweak(merkle_root);
+
+        verifying_share = tweaked_keys.verifying_shares().first_key_value()
+            .ok_or(anyhow!("Lost verifying key"))?.1.clone();
+        group_verifying_key = tweaked_keys.verifying_key().clone();
+
+    }
+
+    frost_core::verify_signature_share(
+        identifier.0.clone(),
+        &verifying_share,
+        &share.0,
+        &signing_package,
+        &group_verifying_key,
+    ).map_err(|e| anyhow!(e.to_string()))
+
 }
 
 // Final aggregation

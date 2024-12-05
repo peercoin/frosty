@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.6.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 996469473;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 783013200;
 
 // Section: executor
 
@@ -1677,6 +1677,84 @@ fn wire__crate__api__main__signing_nonces_to_bytes_impl(
         },
     )
 }
+fn wire__crate__api__main__verify_signature_share_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "verify_signature_share",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_nonces_commitments =
+                <Vec<crate::api::main::IdentifierAndSigningCommitment>>::sse_decode(
+                    &mut deserializer,
+                );
+            let api_message = <Vec<u8>>::sse_decode(&mut deserializer);
+            let api_merkle_root = <Option<Vec<u8>>>::sse_decode(&mut deserializer);
+            let api_identifier = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IdentifierOpaque>,
+            >>::sse_decode(&mut deserializer);
+            let api_share = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<SignatureShareOpaque>,
+            >>::sse_decode(&mut deserializer);
+            let api_public_share = <Vec<u8>>::sse_decode(&mut deserializer);
+            let api_group_pk = <Vec<u8>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let mut api_identifier_guard = None;
+                    let mut api_share_guard = None;
+                    let decode_indices_ =
+                        flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_identifier,
+                                0,
+                                false,
+                            ),
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_share, 1, false,
+                            ),
+                        ]);
+                    for i in decode_indices_ {
+                        match i {
+                            0 => {
+                                api_identifier_guard =
+                                    Some(api_identifier.lockable_decode_sync_ref())
+                            }
+                            1 => api_share_guard = Some(api_share.lockable_decode_sync_ref()),
+                            _ => unreachable!(),
+                        }
+                    }
+                    let api_identifier_guard = api_identifier_guard.unwrap();
+                    let api_share_guard = api_share_guard.unwrap();
+                    let output_ok = crate::api::main::verify_signature_share(
+                        api_nonces_commitments,
+                        api_message,
+                        api_merkle_root,
+                        &*api_identifier_guard,
+                        &*api_share_guard,
+                        api_public_share,
+                        api_group_pk,
+                    )?;
+                    Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
 
 // Section: related_funcs
 
@@ -2284,6 +2362,7 @@ fn pde_ffi_dispatcher_sync_impl(
         33 => wire__crate__api__main__signing_commitment_to_bytes_impl(ptr, rust_vec_len, data_len),
         34 => wire__crate__api__main__signing_nonces_from_bytes_impl(ptr, rust_vec_len, data_len),
         35 => wire__crate__api__main__signing_nonces_to_bytes_impl(ptr, rust_vec_len, data_len),
+        36 => wire__crate__api__main__verify_signature_share_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }

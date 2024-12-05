@@ -12,6 +12,7 @@ export "sign/part1.dart";
 export "sign/part2.dart";
 export "sign/signature_aggregation.dart";
 export "sign/signature_share.dart";
+export "sign/verify_share.dart";
 export "key_info/hd/aggregate.dart";
 export "key_info/hd/derivable.dart";
 export "key_info/hd/group.dart";

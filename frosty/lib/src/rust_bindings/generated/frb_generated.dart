@@ -66,7 +66,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.6.0';
 
   @override
-  int get rustContentHash => 996469473;
+  int get rustContentHash => 783013200;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -201,6 +201,15 @@ abstract class RustLibApi extends BaseApi {
   SigningNonces crateApiMainSigningNoncesFromBytes({required List<int> bytes});
 
   Uint8List crateApiMainSigningNoncesToBytes({required SigningNonces nonces});
+
+  void crateApiMainVerifySignatureShare(
+      {required List<IdentifierAndSigningCommitment> noncesCommitments,
+      required List<int> message,
+      Uint8List? merkleRoot,
+      required IdentifierOpaque identifier,
+      required SignatureShareOpaque share,
+      required List<int> publicShare,
+      required List<int> groupPk});
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_DkgPublicCommitmentOpaque;
@@ -1298,6 +1307,62 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(
         debugName: "signing_nonces_to_bytes",
         argNames: ["nonces"],
+      );
+
+  @override
+  void crateApiMainVerifySignatureShare(
+      {required List<IdentifierAndSigningCommitment> noncesCommitments,
+      required List<int> message,
+      Uint8List? merkleRoot,
+      required IdentifierOpaque identifier,
+      required SignatureShareOpaque share,
+      required List<int> publicShare,
+      required List<int> groupPk}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_list_identifier_and_signing_commitment(
+            noncesCommitments, serializer);
+        sse_encode_list_prim_u_8_loose(message, serializer);
+        sse_encode_opt_list_prim_u_8_strict(merkleRoot, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+            identifier, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+            share, serializer);
+        sse_encode_list_prim_u_8_loose(publicShare, serializer);
+        sse_encode_list_prim_u_8_loose(groupPk, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 36)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiMainVerifySignatureShareConstMeta,
+      argValues: [
+        noncesCommitments,
+        message,
+        merkleRoot,
+        identifier,
+        share,
+        publicShare,
+        groupPk
+      ],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiMainVerifySignatureShareConstMeta =>
+      const TaskConstMeta(
+        debugName: "verify_signature_share",
+        argNames: [
+          "noncesCommitments",
+          "message",
+          "merkleRoot",
+          "identifier",
+          "share",
+          "publicShare",
+          "groupPk"
+        ],
       );
 
   RustArcIncrementStrongCountFnType

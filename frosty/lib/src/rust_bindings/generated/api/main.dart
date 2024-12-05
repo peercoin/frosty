@@ -101,6 +101,23 @@ SignatureShareOpaque signatureShareFromBytes({required List<int> bytes}) =>
 Uint8List signatureShareToBytes({required SignatureShareOpaque share}) =>
     RustLib.instance.api.crateApiMainSignatureShareToBytes(share: share);
 
+void verifySignatureShare(
+        {required List<IdentifierAndSigningCommitment> noncesCommitments,
+        required List<int> message,
+        Uint8List? merkleRoot,
+        required IdentifierOpaque identifier,
+        required SignatureShareOpaque share,
+        required List<int> publicShare,
+        required List<int> groupPk}) =>
+    RustLib.instance.api.crateApiMainVerifySignatureShare(
+        noncesCommitments: noncesCommitments,
+        message: message,
+        merkleRoot: merkleRoot,
+        identifier: identifier,
+        share: share,
+        publicShare: publicShare,
+        groupPk: groupPk);
+
 Uint8List aggregateSignature(
         {required List<IdentifierAndSigningCommitment> noncesCommitments,
         required List<int> message,
