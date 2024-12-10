@@ -91,14 +91,8 @@ pub fn identifier_from_u16(i: u16) -> IdentifierResult {
 
 #[frb(sync)]
 pub fn identifier_from_bytes(bytes: Vec<u8>) -> IdentifierResult {
-
-    if bytes.iter().all(|&x| x == 0) {
-        return Err(anyhow!("Identifier cannot be a zero scalar"));
-    }
-
     let array = vec_to_array::<32, u8>(bytes, "Identifier")?;
     Ok(IdentifierOpaque(frost::Identifier::deserialize(&array)?))
-
 }
 
 #[frb(sync)]
