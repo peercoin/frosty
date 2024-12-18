@@ -13,7 +13,6 @@ class SignPart1 {
   late SigningNonces nonces;
 
   /// The commitment to the nonces to be shared with the signature aggregator.
-  /// It must be authenticated as belonging to the participant.
   late SigningCommitment commitment;
 
   /// Generate the nonces using the [privateShare] for additional entropy.
