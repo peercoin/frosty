@@ -8,11 +8,11 @@ crate-type = ["staticlib", "cdylib"]
 
 [build-dependencies]
 anyhow = "1.0.75"
-flutter_rust_bridge_codegen = "2.6.0"
+flutter_rust_bridge_codegen = "2.7.0"
 
 [dependencies]
 rand = "0.8.4"
 anyhow = "1.0.75"
-flutter_rust_bridge = "=2.6.0"
+flutter_rust_bridge = "=2.7.0"
 frost-secp256k1-tr = { version = "2.0.0", path = "./frost/frost-secp256k1-tr" }
 frost-core = { version = "2.0.0", path = "./frost/frost-core" }
