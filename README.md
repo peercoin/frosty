@@ -36,6 +36,8 @@ for the armeabi-v7a and arm64-v8a architectures will be produced in
 
 ## Development
 
+Git submodules have to be activated after cloning: `git submodule update --init --recursive`
+
 Rust and Cargo are required to generate Rust bindings using
 [flutter_rust_bridge](https://github.com/fzyzcjy/flutter_rust_bridge).
 `melos build:dev` or `bash scripts/build-dev.sh` can be used to generate
