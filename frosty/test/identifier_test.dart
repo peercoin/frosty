@@ -42,11 +42,11 @@ void main() {
 
     test("fromString valid", () {
       expect(
-        bytesToHex(Identifier.fromString("test").toBytes()),
+        bytesToHex(Identifier.fromSeed("test").toBytes()),
         testIdHex,
       );
       expect(
-        bytesToHex(Identifier.fromString("TEST").toBytes()),
+        bytesToHex(Identifier.fromSeed("TEST").toBytes()),
         "5d7a4e95f0c8bfc95cd7d834354cca30a94106a33701b621ad37f68636a7e654",
       );
     });

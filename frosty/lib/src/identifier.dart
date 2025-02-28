@@ -18,7 +18,7 @@ rust.IdentifierOpaque _handleGetIdentifier(
 ///
 /// The FROST spec specifies that identifiers should be in the range 1 to n, but
 /// any set of unique non-zero secp256k1 scalars can be accepted and may be
-/// generated from strings using [fromString()].
+/// generated from strings using [fromSeed()].
 ///
 /// Identifiers can be compared for equality with `==`.
 class Identifier
@@ -33,7 +33,7 @@ class Identifier
   ),);
 
   /// Creates an identifier from an arbitrary string
-  Identifier.fromString(String s) : super(_handleGetIdentifier(
+  Identifier.fromSeed(String s) : super(_handleGetIdentifier(
     () => rust.identifierFromString(s: s),
   ),);
 
