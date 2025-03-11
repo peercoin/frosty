@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/identifier.dart';
 import 'key_info.dart';
 
@@ -10,7 +10,7 @@ class PrivateKeyInfo extends KeyInfo {
   /// The identifier of the participant who owns the [share].
   final Identifier identifier;
   /// The key share owned by the participant which must remain confidential.
-  final ECPrivateKey share;
+  final cl.ECPrivateKey share;
 
   /// Provides the private key share and participant identifier. The identifier
   /// and private share are assumed to belong to a public share in the FROST
@@ -20,20 +20,20 @@ class PrivateKeyInfo extends KeyInfo {
     required this.share,
   });
 
-  PrivateKeyInfo.fromReader(BytesReader reader) : this(
+  PrivateKeyInfo.fromReader(cl.BytesReader reader) : this(
     identifier: Identifier.fromBytes(reader.readSlice(32)),
-    share: ECPrivateKey(reader.readSlice(32)),
+    share: cl.ECPrivateKey(reader.readSlice(32)),
   );
 
   /// Convenience constructor to construct from serialised [bytes].
   PrivateKeyInfo.fromBytes(Uint8List bytes)
-    : this.fromReader(BytesReader(bytes));
+    : this.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
-  PrivateKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+  PrivateKeyInfo.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     writer.writeSlice(identifier.toBytes());
     writer.writeSlice(share.data);
   }

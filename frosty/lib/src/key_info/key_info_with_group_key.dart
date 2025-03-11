@@ -1,11 +1,11 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'key_info.dart';
 
 abstract class KeyInfoWithGroupKey
   extends KeyInfo
   implements Comparable<KeyInfoWithGroupKey> {
 
-  ECCompressedPublicKey get groupKey;
+  cl.ECCompressedPublicKey get groupKey;
 
   @override
   bool operator ==(Object other) => identical(this, other) || (
@@ -16,7 +16,7 @@ abstract class KeyInfoWithGroupKey
   int get hashCode => groupKey.hashCode;
 
   @override
-  int compareTo(KeyInfoWithGroupKey other) => compareBytes(
+  int compareTo(KeyInfoWithGroupKey other) => cl.compareBytes(
     groupKey.data, other.groupKey.data,
   );
 

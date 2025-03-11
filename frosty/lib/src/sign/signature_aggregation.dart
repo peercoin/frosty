@@ -1,4 +1,4 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/key_info/aggregate.dart';
@@ -28,7 +28,7 @@ class InvalidAggregationShare implements Exception {
 class SignatureAggregation {
 
   /// The final generated signature
-  late SchnorrSignature signature;
+  late cl.SchnorrSignature signature;
 
   SignatureAggregation({
     required SigningCommitmentSet commitments,
@@ -58,7 +58,7 @@ class SignatureAggregation {
         ).toList(),
       );
 
-      signature = SchnorrSignature(bytes);
+      signature = cl.SchnorrSignature(bytes);
 
     } on rust.SignAggregationError_General catch(e) {
       throw InvalidAggregation(e.message);

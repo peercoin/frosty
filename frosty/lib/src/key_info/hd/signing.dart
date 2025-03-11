@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/key_info/signing.dart';
 import 'derivable.dart';
 import 'hd_key_info.dart';
@@ -25,13 +25,13 @@ class HDSigningKeyInfo extends SigningKeyInfo implements HDDerivableInfo {
 
   /// Convenience constructor to construct from serialised [bytes].
   HDSigningKeyInfo.fromBytes(Uint8List bytes)
-    : this.fromReader(BytesReader(bytes));
+    : this.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
-  HDSigningKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+  HDSigningKeyInfo.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     hdInfo.write(writer);
     super.write(writer);
   }

@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'public_commitment.dart';
 import 'package:frosty/src/identifier.dart';
@@ -11,7 +11,7 @@ typedef DkgCommitmentList = List<DkgCommitmentPair>;
 /// must be the same across all participants. Each participant should verify
 /// that all other participants have the same set by receiving a signed [hash]
 /// of commitments from each participant and verifying that they are the same.
-class DkgCommitmentSet with Writable {
+class DkgCommitmentSet with cl.Writable {
 
   final DkgCommitmentList list;
 
@@ -23,7 +23,7 @@ class DkgCommitmentSet with Writable {
       (a, b) => a.$1.compareTo(b.$1),
     );
 
-  DkgCommitmentSet.fromReader(BytesReader reader) : this(
+  DkgCommitmentSet.fromReader(cl.BytesReader reader) : this(
     List.generate(
       reader.readUInt16(),
       (i) => (
@@ -33,7 +33,7 @@ class DkgCommitmentSet with Writable {
     ),
   );
 
-  static final _hasher = getTaggedHasher("DkgCommitmentSet");
+  static final _hasher = cl.getTaggedHasher("DkgCommitmentSet");
 
   Uint8List? _hashCache;
   Uint8List get hash => _hashCache ??= _hasher(
@@ -56,7 +56,7 @@ class DkgCommitmentSet with Writable {
     ).toList();
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     writer.writeUInt16(list.length);
     for (final pair in list) {
       writer.writeSlice(pair.$1.toBytes());

@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 import 'helpers.dart';
@@ -13,7 +13,7 @@ void main() {
     setUpAll(loadFrosty);
 
     writableRustObjTests<Identifier, InvalidIdentifier>(
-      hexToBytes(testIdHex),
+      cl.hexToBytes(testIdHex),
       (b) => Identifier.fromBytes(b),
       [
         // Zero
@@ -24,7 +24,7 @@ void main() {
         "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e",
         // Too large
         "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20",
-      ].map((hex) => hexToBytes(hex)).toList(),
+      ].map((hex) => cl.hexToBytes(hex)).toList(),
     );
 
     test("fromUint16 valid", () {
@@ -42,11 +42,11 @@ void main() {
 
     test("fromString valid", () {
       expect(
-        bytesToHex(Identifier.fromSeed("test").toBytes()),
+        cl.bytesToHex(Identifier.fromSeed("test").toBytes()),
         testIdHex,
       );
       expect(
-        bytesToHex(Identifier.fromSeed("TEST").toBytes()),
+        cl.bytesToHex(Identifier.fromSeed("TEST").toBytes()),
         "5d7a4e95f0c8bfc95cd7d834354cca30a94106a33701b621ad37f68636a7e654",
       );
     });

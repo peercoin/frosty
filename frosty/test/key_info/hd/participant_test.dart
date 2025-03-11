@@ -1,4 +1,4 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 import '../../data.dart';
@@ -57,7 +57,7 @@ void main() {
       // Collect commitments
       final commitments = getSignatureCommitments(part1s);
 
-      final signMsgHash = hexToBytes(
+      final signMsgHash = cl.hexToBytes(
         "2514a6272f85cfa0f45eb907fcb0d121b808ed37c6ea160a5a9046ed5526d555",
       );
       final details = SignDetails.keySpend(message: signMsgHash);
@@ -90,7 +90,7 @@ void main() {
 
       expect(
         sig.verify(
-          Taproot(
+          cl.Taproot(
             internalKey: derivedParticipantInfos.first.groupKey,
           ).tweakedKey,
           signMsgHash,

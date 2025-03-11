@@ -1,10 +1,10 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/identifier.dart';
 import 'key_info.dart';
 import 'invalid_info.dart';
 
-typedef PublicShareList = List<(Identifier, ECCompressedPublicKey)>;
+typedef PublicShareList = List<(Identifier, cl.ECCompressedPublicKey)>;
 
 /// Contains the public shares for a FROST shared key
 class PublicSharesKeyInfo extends KeyInfo {
@@ -29,25 +29,25 @@ class PublicSharesKeyInfo extends KeyInfo {
 
   }
 
-  PublicSharesKeyInfo.fromReader(BytesReader reader) : this(
+  PublicSharesKeyInfo.fromReader(cl.BytesReader reader) : this(
     publicShares: List.generate(
       reader.readUInt16(),
       (i) => (
         Identifier.fromBytes(reader.readSlice(32)),
-        ECCompressedPublicKey(reader.readSlice(33)),
+        cl.ECCompressedPublicKey(reader.readSlice(33)),
       ),
     ),
   );
 
   /// Convenience constructor to construct from serialised [bytes].
   PublicSharesKeyInfo.fromBytes(Uint8List bytes)
-    : this.fromReader(BytesReader(bytes));
+    : this.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
-  PublicSharesKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+  PublicSharesKeyInfo.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     writer.writeUInt16(list.length);
     for (final share in list) {
       writer.writeSlice(share.$1.toBytes());

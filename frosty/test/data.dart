@@ -1,15 +1,15 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 
 final groupPublicKeyHex
   = "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b2";
-final groupPublicKey = ECCompressedPublicKey.fromHex(groupPublicKeyHex);
+final groupPublicKey = cl.ECCompressedPublicKey.fromHex(groupPublicKeyHex);
 
-final chainCodeHex = bytesToHex(HDKeyInfo.fixedChaincode);
+final chainCodeHex = cl.bytesToHex(HDKeyInfo.fixedChaincode);
 
 final tweakedGroupKeyHex
   = "025cb7dcabf7173e27de4dae2944e2b9ba1153ef2af326a12ed1c71f11d8b53cc8";
-final tweakedGroupKey = ECCompressedPublicKey.fromHex(tweakedGroupKeyHex);
+final tweakedGroupKey = cl.ECCompressedPublicKey.fromHex(tweakedGroupKeyHex);
 
 final privateSharesHex = [
   "bafe4fab41fee3ca118cce1af9c2432189030d0e0249365787b8e71da37fdbb3",
@@ -24,7 +24,7 @@ final tweakedPrivateShareHex = [
 ];
 
 final privateShares = privateSharesHex.map(
-  (hex) => ECPrivateKey.fromHex(hex),
+  (hex) => cl.ECPrivateKey.fromHex(hex),
 ).toList();
 
 final publicShareKeyHex = [
@@ -43,7 +43,7 @@ final ids = List.generate(3, (i) => Identifier.fromUint16(i+1));
 
 final publicShares = List.generate(
   3,
-  (i) => (ids[i], ECCompressedPublicKey.fromHex(publicShareKeyHex[i])),
+  (i) => (ids[i], cl.ECCompressedPublicKey.fromHex(publicShareKeyHex[i])),
 );
 
 // Determined as an invalid tweak for the underlying private key obtained via
@@ -80,7 +80,7 @@ List<SignPart1> getPart1s() => List.generate(
   (i) => SignPart1(privateShare: privateShares[i]),
 );
 
-final signMsgHash = hexToBytes(
+final signMsgHash = cl.hexToBytes(
   "2514a6272f85cfa0f45eb907fcb0d121b808ed37c6ea160a5a9046ed5526d555",
 );
 

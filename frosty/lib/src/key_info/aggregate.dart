@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'key_info_with_group_key.dart';
 import 'invalid_info.dart';
 import 'group.dart';
@@ -29,20 +29,20 @@ class AggregateKeyInfo extends KeyInfoWithGroupKey {
     validateGroupWithPublicShares(group, publicShares);
   }
 
-  AggregateKeyInfo.fromReader(BytesReader reader) : this(
+  AggregateKeyInfo.fromReader(cl.BytesReader reader) : this(
     group: GroupKeyInfo.fromReader(reader),
     publicShares: PublicSharesKeyInfo.fromReader(reader),
   );
 
   /// Convenience constructor to construct from serialised [bytes].
   AggregateKeyInfo.fromBytes(Uint8List bytes)
-    : this.fromReader(BytesReader(bytes));
+    : this.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
-  AggregateKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+  AggregateKeyInfo.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     group.write(writer);
     publicShares.write(writer);
   }
@@ -59,6 +59,6 @@ class AggregateKeyInfo extends KeyInfoWithGroupKey {
   }
 
   @override
-  ECCompressedPublicKey get groupKey => group.groupKey;
+  cl.ECCompressedPublicKey get groupKey => group.groupKey;
 
 }

@@ -1,13 +1,13 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 
 /// Information in addition to the FROST key required for BIP32 derivation
-class HDKeyInfo with Writable {
+class HDKeyInfo with cl.Writable {
 
   /// This chaincode is the SHA256 hash of the string "FrostTaprootBIP32".
   /// This can be public without allowing people to derive any information
   /// without also knowing the master public key.
-  static Uint8List fixedChaincode = hexToBytes(
+  static Uint8List fixedChaincode = cl.hexToBytes(
     "483436cd3215432748a55b1942f2667e858b473e85accc16238b517d0bee6614",
   );
 
@@ -34,7 +34,7 @@ class HDKeyInfo with Writable {
     required this.index,
     required this.parentFingerprint,
   }) : chaincode = Uint8List.fromList(chaincode) {
-    checkBytes(chaincode, 32, name: "Chaincode");
+    cl.checkBytes(chaincode, 32, name: "Chaincode");
     RangeError.checkValueInInterval(depth, 0, 0xff, "depth");
     checkIndex(index);
     RangeError.checkValueInInterval(
@@ -42,7 +42,7 @@ class HDKeyInfo with Writable {
     );
   }
 
-  HDKeyInfo.fromReader(BytesReader reader) : this(
+  HDKeyInfo.fromReader(cl.BytesReader reader) : this(
     chaincode: reader.readSlice(32),
     depth: reader.readUInt8(),
     index: reader.readUInt32(),
@@ -51,13 +51,13 @@ class HDKeyInfo with Writable {
 
   /// Convenience constructor to construct from serialised [bytes].
   HDKeyInfo.fromBytes(Uint8List bytes)
-    : this.fromReader(BytesReader(bytes));
+    : this.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
-  HDKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+  HDKeyInfo.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     writer.writeSlice(chaincode);
     writer.writeUInt8(depth);
     writer.writeUInt32(index);
@@ -67,7 +67,7 @@ class HDKeyInfo with Writable {
   /// Given the group public key and index to derive a child key, a tuple is
   /// returned that contains the required tweak and new [HDKeyInfo].
   (Uint8List, HDKeyInfo) deriveTweakAndInfo(
-    ECCompressedPublicKey groupKey,
+    cl.ECCompressedPublicKey groupKey,
     int index,
   ) {
 
@@ -77,11 +77,11 @@ class HDKeyInfo with Writable {
     data.setRange(0, 33, groupKey.data);
     data.buffer.asByteData().setUint32(33, index);
 
-    final i = hmacSha512(chaincode, data);
+    final i = cl.hmacSha512(chaincode, data);
     final tweak = i.sublist(0, 32);
     final newChainCode = i.sublist(32);
 
-    final id = hash160(groupKey.data);
+    final id = cl.hash160(groupKey.data);
     final fingerprint = id.buffer.asByteData().getUint32(0);
 
     return (

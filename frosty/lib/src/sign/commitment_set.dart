@@ -1,4 +1,4 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/identifier.dart';
 import 'commitment.dart';
@@ -12,7 +12,7 @@ typedef SigningCommitmentMap = Map<Identifier, SigningCommitment>;
 /// The protocol also requires that the message is sent to all participants, but
 /// the message can be sent seperately and agreed upon before starting the
 /// signing process.
-class SigningCommitmentSet with Writable {
+class SigningCommitmentSet with cl.Writable {
 
   final SigningCommitmentMap map;
 
@@ -21,7 +21,7 @@ class SigningCommitmentSet with Writable {
   SigningCommitmentSet(SigningCommitmentMap commitments)
     : map = Map.unmodifiable(commitments);
 
-  SigningCommitmentSet.fromReader(BytesReader reader) : this(
+  SigningCommitmentSet.fromReader(cl.BytesReader reader) : this(
     {
       for (int i = reader.readUInt16(); i > 0; i--)
         Identifier.fromBytes(reader.readSlice(32)):
@@ -37,7 +37,7 @@ class SigningCommitmentSet with Writable {
   ).toList();
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     writer.writeUInt16(map.length);
     for (final entry in map.entries) {
       writer.writeSlice(entry.key.toBytes());

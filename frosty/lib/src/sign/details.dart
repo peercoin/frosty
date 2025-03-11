@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/helpers/message_exception.dart';
 
 /// Thrown when the message or MAST hash details are invalid
@@ -7,7 +7,7 @@ class InvalidSignDetails extends MessageException {
   InvalidSignDetails(super.message);
 }
 
-class SignDetails with Writable {
+class SignDetails with cl.Writable {
 
   /// The message to sign
   final Uint8List message;
@@ -37,7 +37,7 @@ class SignDetails with Writable {
 
   }
 
-  factory SignDetails.fromReader(BytesReader reader) {
+  factory SignDetails.fromReader(cl.BytesReader reader) {
     final msg = reader.readSlice(32);
     final mastType = reader.readUInt8();
     if (mastType > 2) throw InvalidSignDetails("Invalid MAST specifier byte");
@@ -51,11 +51,11 @@ class SignDetails with Writable {
 
   /// Convenience constructor to construct from serialised [bytes].
   factory SignDetails.fromBytes(Uint8List bytes)
-    => SignDetails.fromReader(BytesReader(bytes));
+    => SignDetails.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
   factory SignDetails.fromHex(String hex)
-    => SignDetails.fromBytes(hexToBytes(hex));
+    => SignDetails.fromBytes(cl.hexToBytes(hex));
 
   /// Used for key-spend signatures. This will always tweak the internal key. If
   /// there is no MAST root hash provided, the tweak will be done without a
@@ -71,7 +71,7 @@ class SignDetails with Writable {
     : this(message: message, mastHash: null);
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
 
     final mastType = mastHash == null
       ? 0
@@ -86,13 +86,13 @@ class SignDetails with Writable {
   @override
   bool operator ==(Object other) => identical(this, other) || (
     other is SignDetails
-    && bytesEqual(message, other.message)
+    && cl.bytesEqual(message, other.message)
     && (
       mastHash == other.mastHash
       || (
         mastHash != null
         && other.mastHash != null
-        && bytesEqual(mastHash!, other.mastHash!)
+        && cl.bytesEqual(mastHash!, other.mastHash!)
       )
     )
   );

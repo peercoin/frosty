@@ -1,4 +1,4 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 import '../helpers.dart';
@@ -69,7 +69,7 @@ void main() {
 
       // Expect private shares to be unique
       expect(
-        infos.map((i) => bytesToHex(i.private.share.data)).toSet().length,
+        infos.map((i) => cl.bytesToHex(i.private.share.data)).toSet().length,
         3,
       );
 

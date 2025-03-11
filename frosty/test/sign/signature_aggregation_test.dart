@@ -1,4 +1,4 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 import "../data.dart";
@@ -17,7 +17,7 @@ void main() {
       commitments = getSignatureCommitments(part1s);
       basicDetails = SignDetails.keySpend(message: signMsgHash);
       badShare = SignatureShare.fromBytes(
-        hexToBytes(
+        cl.hexToBytes(
           "84ee1adfe96d4670fc6fcf5def51bbfa886389f5bdb2e9b3ccf91824324e613c",
         ),
       );
@@ -30,7 +30,7 @@ void main() {
       ),
     );
 
-    void expectValid(SignDetails details, ECPublicKey pubkey) {
+    void expectValid(SignDetails details, cl.ECPublicKey pubkey) {
 
       final shares = getShares(details);
 
@@ -62,8 +62,8 @@ void main() {
 
     }
 
-    void expectValidKeySpend(TapNode? mast) {
-      final taproot = Taproot(internalKey: groupPublicKey, mast: mast);
+    void expectValidKeySpend(cl.TapNode? mast) {
+      final taproot = cl.Taproot(internalKey: groupPublicKey, mast: mast);
       final details = SignDetails.keySpend(
         message: signMsgHash,
         mastHash: mast?.hash,
@@ -78,7 +78,7 @@ void main() {
 
     test(
       "produces a valid signature with MAST",
-      () => expectValidKeySpend(TapLeaf(Script.fromAsm("OP_RETURN"))),
+      () => expectValidKeySpend(cl.TapLeaf(cl.Script.fromAsm("OP_RETURN"))),
     );
 
     test(

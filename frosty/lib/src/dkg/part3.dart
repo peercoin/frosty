@@ -1,4 +1,4 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
@@ -57,7 +57,7 @@ class DkgPart3 {
       participantInfo = ParticipantKeyInfo(
 
         group: GroupKeyInfo(
-          groupKey: ECCompressedPublicKey(record.groupPk),
+          groupKey: cl.ECCompressedPublicKey(record.groupPk),
           threshold: record.threshold,
         ),
 
@@ -65,14 +65,14 @@ class DkgPart3 {
           publicShares: [
             for (final share in record.publicKeyShares) (
               Identifier.fromUnderlying(share.identifier),
-              ECCompressedPublicKey(share.publicShare),
+              cl.ECCompressedPublicKey(share.publicShare),
             ),
           ],
         ),
 
         private: PrivateKeyInfo(
            identifier: Identifier.fromUnderlying(record.identifier),
-           share: ECPrivateKey(record.privateShare),
+           share: cl.ECPrivateKey(record.privateShare),
         ),
 
       );

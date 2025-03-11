@@ -1,4 +1,4 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 import "../data.dart";
@@ -18,7 +18,7 @@ void main() {
       // Only do two participants as that is the threshold
       for (int i = 0; i < 2; i++) {
         final participantShares = List.generate(
-          2, (_) => bytesToHex(getShare(part1s, i).toBytes()),
+          2, (_) => cl.bytesToHex(getShare(part1s, i).toBytes()),
         );
         expect(participantShares.first, participantShares.last);
         shares.addAll(participantShares);

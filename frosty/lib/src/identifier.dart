@@ -1,5 +1,5 @@
 import "dart:typed_data";
-import "package:coinlib/coinlib.dart";
+import "package:coinlib/coinlib.dart" as cl;
 import "package:frosty/src/helpers/message_exception.dart";
 import "package:frosty/src/rust_bindings/invalid_object.dart";
 import "package:frosty/src/rust_bindings/rust_object_wrapper.dart";
@@ -46,7 +46,7 @@ class Identifier
     data,
   );
 
-  Identifier.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+  Identifier.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
 
   /// Obtains the serialised scalar bytes as a big-endian secp256k1 scalar
   @override
@@ -56,7 +56,7 @@ class Identifier
 
   @override
   bool operator ==(Object other) => identical(this, other) || (
-    other is Identifier && bytesEqual(toBytes(), other.toBytes())
+    other is Identifier && cl.bytesEqual(toBytes(), other.toBytes())
   );
 
   @override
@@ -67,9 +67,9 @@ class Identifier
     | toBytes()[4] << 24;
 
   @override
-  int compareTo(Identifier other) => compareBytes(toBytes(), other.toBytes());
+  int compareTo(Identifier other) => cl.compareBytes(toBytes(), other.toBytes());
 
   @override
-  String toString() => bytesToHex(toBytes());
+  String toString() => cl.bytesToHex(toBytes());
 
 }

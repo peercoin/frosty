@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'key_info_with_group_key.dart';
 import 'group.dart';
 import 'private.dart';
@@ -17,20 +17,20 @@ class SigningKeyInfo extends KeyInfoWithGroupKey {
     required this.private,
   });
 
-  SigningKeyInfo.fromReader(BytesReader reader) : this(
+  SigningKeyInfo.fromReader(cl.BytesReader reader) : this(
     group: GroupKeyInfo.fromReader(reader),
     private: PrivateKeyInfo.fromReader(reader),
   );
 
   /// Convenience constructor to construct from serialised [bytes].
   SigningKeyInfo.fromBytes(Uint8List bytes)
-    : this.fromReader(BytesReader(bytes));
+    : this.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
-  SigningKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+  SigningKeyInfo.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     group.write(writer);
     private.write(writer);
   }
@@ -47,6 +47,6 @@ class SigningKeyInfo extends KeyInfoWithGroupKey {
   }
 
   @override
-  ECCompressedPublicKey get groupKey => group.groupKey;
+  cl.ECCompressedPublicKey get groupKey => group.groupKey;
 
 }

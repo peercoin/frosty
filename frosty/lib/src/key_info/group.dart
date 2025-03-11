@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'key_info_with_group_key.dart';
 import 'invalid_info.dart';
 
@@ -9,7 +9,7 @@ class GroupKeyInfo extends KeyInfoWithGroupKey {
 
   /// The public key of the overall FROST key
   @override
-  final ECCompressedPublicKey groupKey;
+  final cl.ECCompressedPublicKey groupKey;
   /// The number of signers required for a signature
   final int threshold;
 
@@ -22,20 +22,20 @@ class GroupKeyInfo extends KeyInfoWithGroupKey {
     if (threshold < 2) throw InvalidKeyInfo("threshold should at least 2");
   }
 
-  GroupKeyInfo.fromReader(BytesReader reader) : this(
-    groupKey: ECCompressedPublicKey(reader.readSlice(33)),
+  GroupKeyInfo.fromReader(cl.BytesReader reader) : this(
+    groupKey: cl.ECCompressedPublicKey(reader.readSlice(33)),
     threshold: reader.readUInt16(),
   );
 
   /// Convenience constructor to construct from serialised [bytes].
   GroupKeyInfo.fromBytes(Uint8List bytes)
-    : this.fromReader(BytesReader(bytes));
+    : this.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
-  GroupKeyInfo.fromHex(String hex) : this.fromBytes(hexToBytes(hex));
+  GroupKeyInfo.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
 
   @override
-  void write(Writer writer) {
+  void write(cl.Writer writer) {
     writer.writeSlice(groupKey.data);
     writer.writeUInt16(threshold);
   }

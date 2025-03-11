@@ -1,4 +1,4 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
@@ -11,8 +11,8 @@ bool verifySignatureShare({
   required SignDetails details,
   required Identifier id,
   required SignatureShare share,
-  required ECCompressedPublicKey publicShare,
-  required ECCompressedPublicKey groupKey,
+  required cl.ECCompressedPublicKey publicShare,
+  required cl.ECCompressedPublicKey groupKey,
 }) {
 
   try {

@@ -1,9 +1,9 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 
-final tweak = hexToBytes(
+final tweak = cl.hexToBytes(
   "2bfe58ab6d9fd575bdc3a624e4825dd2b375d64ac033fbc46ea79dbab4f69a3e",
 );
 
@@ -28,12 +28,12 @@ void basicInfoTests<T extends KeyInfo>({
 
     test(
       "invalid tweak",
-      () => expect(getValidObj().tweak(hexToBytes(invalidTweakHex)), null),
+      () => expect(getValidObj().tweak(cl.hexToBytes(invalidTweakHex)), null),
     );
 
     test("invalid info bytes", () => expect(
         () => fromHex(""),
-        throwsA(isA<OutOfData>()),
+        throwsA(isA<cl.OutOfData>()),
     ),);
 
 }
@@ -56,6 +56,6 @@ void expectDerivedPublicShares(PublicSharesKeyInfo public) => expect(
 );
 
 void expectDerivedPrivate(PrivateKeyInfo private) => expect(
-  bytesToHex(private.share.data),
+  cl.bytesToHex(private.share.data),
   "3ea033c6902135150ff71e0fdf47e525186a0aa5c15717474709016a35b3f10d",
 );
