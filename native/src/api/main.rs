@@ -7,6 +7,10 @@ use anyhow::{anyhow, Result};
 use crate::frb_generated::RustOpaque;
 use std::collections::BTreeMap;
 use flutter_rust_bridge::frb;
+use aes_gcm::{
+    aead::{Aead, AeadCore, KeyInit, OsRng},
+    Aes256Gcm, Key,
+};
 
 // Common
 
@@ -608,5 +612,50 @@ pub fn aggregate_signature(
         .map_err(|e| SignAggregationError::General { message: e.to_string() })?;
 
     Ok(bytes.to_vec())
+
+}
+
+// AES-GCM
+
+#[frb(non_opaque)]
+pub struct AesGcmCiphertext {
+    pub data: Vec<u8>,
+    pub nonce: Vec<u8>,
+}
+
+fn get_cipher(key: Vec<u8>) -> Result<Aes256Gcm> {
+    let key: &Key<Aes256Gcm> = key.as_slice().try_into()?;
+    Ok(Aes256Gcm::new(&key))
+}
+
+#[frb(sync)]
+pub fn aes_gcm_encrypt(
+    key: Vec<u8>,
+    plaintext: Vec<u8>,
+) -> Result<AesGcmCiphertext> { // Result<AesGcmCiphertext> {
+
+    let cipher = get_cipher(key)?;
+    let nonce = Aes256Gcm::generate_nonce(&mut OsRng);
+    let data = cipher.encrypt(&nonce, plaintext.as_slice())
+        .map_err(|_| anyhow!("could not encrypt data"))?;
+
+    Ok(AesGcmCiphertext { data, nonce: nonce.as_slice().into() })
+
+}
+
+#[frb(sync)]
+pub fn aes_gcm_decrypt(
+    key: Vec<u8>,
+    ciphertext: AesGcmCiphertext,
+) -> Result<Vec<u8>> {
+
+    let cipher = get_cipher(key)?;
+    Ok(
+        cipher.decrypt(
+            ciphertext.nonce.as_slice().try_into()?,
+            ciphertext.data.as_slice(),
+        )
+        .map_err(|_| anyhow!("Could not decrypt data"))?
+    )
 
 }
