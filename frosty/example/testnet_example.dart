@@ -1,22 +1,22 @@
 import 'dart:typed_data';
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 
 // Example construction of testnet transaction
 // The signature is unique each time but this example was used to construct the
 // testnet transaction:
-//    40dff55d60fe60319d1ccae0ea473ede7cb45b55396b0c020c439b94d4732ee0
+//    d5df5c240e8ef3bf90dbea78a3fd8832798659abd5e7bc8c61aace741b622eec
 //
 // Spends a 2 tPPC output using key-path and a 1 tPPC output using script-path
 // from the tx:
-//    e45500a001a35b3da0c5bdf4a67a254fac1265cf22ec8dd5c75201bf512ebf7a
+//    004223970df85726b9d14312dc374b0c2899b1b67aeb0bf7501844eccf6fd505
 void main() async {
 
   await loadFrosty();
 
   // Key share information
 
-  final groupKey = ECCompressedPublicKey.fromHex(
+  final groupKey = cl.ECCompressedPublicKey.fromHex(
     "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b2",
   );
 
@@ -24,13 +24,13 @@ void main() async {
     "bafe4fab41fee3ca118cce1af9c2432189030d0e0249365787b8e71da37fdbb3",
     "57de65ea899d944895f9cb8c2790e17bcd7e6bdeb81e3b199d6c4bea015607f9",
     "f4be7c29d13c44c71a66c8fd555f7fd4cca8a7961d3be01772f20f432f627580",
-  ].map((hex) => ECPrivateKey.fromHex(hex)).toList();
+  ].map((hex) => cl.ECPrivateKey.fromHex(hex)).toList();
 
   final publicShareKeys = [
     "030251582b6921a9aba190a761740a8b07f2d1e11aa66ce2f2b039d387f802ba8b",
     "03fa55e35e8390e0b636b766d1db0b89f436b65889cd04dd039052655ed810c9a3",
     "0355a1a070b2d0d2c47e37854e969e8817151597e0d37d0b7ebb21026fb09c90bc",
-  ].map((hex) => ECCompressedPublicKey.fromHex(hex)).toList();
+  ].map((hex) => cl.ECCompressedPublicKey.fromHex(hex)).toList();
 
   final publicShares = List.generate(
     3,
@@ -53,26 +53,26 @@ void main() async {
 
   // Construct Taproot information
 
-  final taproot = Taproot(internalKey: groupKey);
+  final taproot = cl.Taproot(internalKey: groupKey);
 
-  final spendLeaf = TapLeaf(
-    Script([
-      ScriptPushData(groupKey.x),
-      ScriptOpCode.fromName("CHECKSIG"),
+  final spendLeaf = cl.TapLeaf(
+    cl.Script([
+      cl.ScriptPushData(groupKey.x),
+      cl.ScriptOpCode.fromName("CHECKSIG"),
     ]),
   );
 
-  final taprootWithMast = Taproot(
-    internalKey: NUMSPublicKey.fromRTweak(Uint8List(32)..last = 1),
+  final taprootWithMast = cl.Taproot(
+    internalKey: cl.NUMSPublicKey.fromRTweak(Uint8List(32)..last = 1),
     mast: spendLeaf,
   );
 
-  final keyOnlyAddress = P2TRAddress.fromTaproot(
-    taproot, hrp: Network.testnet.bech32Hrp,
+  final keyOnlyAddress = cl.P2TRAddress.fromTaproot(
+    taproot, hrp: cl.Network.testnet.bech32Hrp,
   );
 
-  final scriptOnlyAddress = P2TRAddress.fromTaproot(
-    taprootWithMast, hrp: Network.testnet.bech32Hrp,
+  final scriptOnlyAddress = cl.P2TRAddress.fromTaproot(
+    taprootWithMast, hrp: cl.Network.testnet.bech32Hrp,
   );
 
   print("Key-path Taproot Address: $keyOnlyAddress");
@@ -81,26 +81,26 @@ void main() async {
   // Construct spending transaction and get signature hash
 
   final prevTxHex
-    = "e45500a001a35b3da0c5bdf4a67a254fac1265cf22ec8dd5c75201bf512ebf7a";
+    = "004223970df85726b9d14312dc374b0c2899b1b67aeb0bf7501844eccf6fd505";
 
-  final keyInput = TaprootKeyInput(
-    prevOut: OutPoint.fromHex(prevTxHex, 1),
+  final keyInput = cl.TaprootKeyInput(
+    prevOut: cl.OutPoint.fromHex(prevTxHex, 0),
   );
 
-  final scriptInput = TaprootScriptInput.fromTaprootLeaf(
-    prevOut: OutPoint.fromHex(prevTxHex, 2),
+  final scriptInput = cl.TaprootScriptInput.fromTaprootLeaf(
+    prevOut: cl.OutPoint.fromHex(prevTxHex, 2),
     taproot: taprootWithMast,
     leaf: spendLeaf,
   );
 
-  final unsignedTx = Transaction(
+  final unsignedTx = cl.Transaction(
     inputs: [keyInput, scriptInput],
     outputs: [
-      Output.fromAddress(
-        CoinUnit.coin.toSats("2.9"),
-        Address.fromString(
+      cl.Output.fromAddress(
+        cl.CoinUnit.coin.toSats("2.9"),
+        cl.Address.fromString(
           "mnhRNbngwdxrS1MpRYGPYuHAY26weRNkXS",
-          Network.testnet,
+          cl.Network.testnet,
         ),
       ),
     ],
@@ -108,7 +108,7 @@ void main() async {
 
   // This is how the sigantures are constructed from each participants's shares
   // given the SignDetails
-  SchnorrSignature makeSignature(SignDetails details) {
+  cl.SchnorrSignature makeSignature(SignDetails details) {
 
     // Generate nonces for first two participants
     final nonces = privateShares.take(2).map(
@@ -152,33 +152,35 @@ void main() async {
   // Create signatures given the appropriate spending details
 
   final prevOuts = [
-    Output.fromProgram(
-      CoinUnit.coin.toSats("2"),
-      P2TR.fromTaproot(taproot),
+    cl.Output.fromProgram(
+      cl.CoinUnit.coin.toSats("2"),
+      cl.P2TR.fromTaproot(taproot),
     ),
-    Output.fromProgram(
-      CoinUnit.coin.toSats("1"),
-      P2TR.fromTaproot(taprootWithMast),
+    cl.Output.fromProgram(
+      cl.CoinUnit.coin.toSats("1"),
+      cl.P2TR.fromTaproot(taprootWithMast),
     ),
   ];
 
-  final keyHash = TaprootSignatureHasher(
-    tx: unsignedTx,
-    inputN: 0,
-    prevOuts: prevOuts,
-    hashType: SigHashType.all(),
+  final keyHash = cl.TaprootSignatureHasher(
+    cl.TaprootKeySignDetails(
+      tx: unsignedTx,
+      inputN: 0,
+      prevOuts: prevOuts,
+    ),
   ).hash;
 
   final keySignature = makeSignature(
     SignDetails.keySpend(message: keyHash),
   );
 
-  final scriptHash = TaprootSignatureHasher(
-    tx: unsignedTx,
-    inputN: 1,
-    prevOuts: prevOuts,
-    hashType: SigHashType.all(),
-    leafHash: spendLeaf.hash,
+  final scriptHash = cl.TaprootSignatureHasher(
+    cl.TaprootScriptSignDetails(
+      tx: unsignedTx,
+      inputN: 1,
+      prevOuts: prevOuts,
+      leafHash: spendLeaf.hash,
+    ),
   ).hash;
 
   final scriptSignature = makeSignature(
@@ -188,11 +190,11 @@ void main() async {
   // Final transaction
   final completeTx = unsignedTx
     .replaceInput(
-      keyInput.addSignature(SchnorrInputSignature(keySignature)),
+      keyInput.addSignature(cl.SchnorrInputSignature(keySignature)),
       0,
     )
     .replaceInput(
-      scriptInput.updateStack([SchnorrInputSignature(scriptSignature).bytes]),
+      scriptInput.updateStack([cl.SchnorrInputSignature(scriptSignature).bytes]),
       1,
     );
 

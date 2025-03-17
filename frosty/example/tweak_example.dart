@@ -1,11 +1,11 @@
-import 'package:coinlib/coinlib.dart';
+import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 
 void main() async {
 
   await loadFrosty();
 
-  final groupKey = ECCompressedPublicKey.fromHex(
+  final groupKey = cl.ECCompressedPublicKey.fromHex(
     "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b2",
   );
 
@@ -13,13 +13,13 @@ void main() async {
     "bafe4fab41fee3ca118cce1af9c2432189030d0e0249365787b8e71da37fdbb3",
     "57de65ea899d944895f9cb8c2790e17bcd7e6bdeb81e3b199d6c4bea015607f9",
     "f4be7c29d13c44c71a66c8fd555f7fd4cca8a7961d3be01772f20f432f627580",
-  ].map((hex) => ECPrivateKey.fromHex(hex)).toList();
+  ].map((hex) => cl.ECPrivateKey.fromHex(hex)).toList();
 
   final publicShareKeys = [
     "030251582b6921a9aba190a761740a8b07f2d1e11aa66ce2f2b039d387f802ba8b",
     "03fa55e35e8390e0b636b766d1db0b89f436b65889cd04dd039052655ed810c9a3",
     "0355a1a070b2d0d2c47e37854e969e8817151597e0d37d0b7ebb21026fb09c90bc",
-  ].map((hex) => ECCompressedPublicKey.fromHex(hex)).toList();
+  ].map((hex) => cl.ECCompressedPublicKey.fromHex(hex)).toList();
 
   final publicShares = List.generate(
     3,
@@ -52,7 +52,7 @@ void main() async {
       Identifier.fromUint16(i+1): nonces[i].commitment,
   });
 
-  final signMsgHash = hexToBytes(
+  final signMsgHash = cl.hexToBytes(
     "2514a6272f85cfa0f45eb907fcb0d121b808ed37c6ea160a5a9046ed5526d555",
   );
 
@@ -84,11 +84,11 @@ void main() async {
     info: participantInfos.first.aggregate,
   ).signature;
 
-  print(sig.verify(Taproot(internalKey: groupKey).tweakedKey, signMsgHash));
+  print(sig.verify(cl.Taproot(internalKey: groupKey).tweakedKey, signMsgHash));
 
   // Try derivation and check
 
-  final tweak = hexToBytes(
+  final tweak = cl.hexToBytes(
     "55a1a070b2d0d2c47e37854e969e8817151597e0d37d0b7ebb21026fb09c90bc",
   );
 
@@ -136,7 +136,7 @@ void main() async {
 
     print(
       sig.verify(
-        Taproot(internalKey: tweakedInfos.first.groupKey).tweakedKey,
+        cl.Taproot(internalKey: tweakedInfos.first.groupKey).tweakedKey,
         signMsgHash,
       ),
     );
