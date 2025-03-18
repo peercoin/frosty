@@ -461,12 +461,19 @@ pub fn sign_part_2(
     );
 
     Ok(SignatureShareOpaque(
-        frost::round2::sign_with_tweak(
-            &signing_package,
-            &signing_nonces,
-            &key_package,
-            merkle_root.as_ref().map(Vec::as_slice),
-        )?
+        match merkle_root {
+            None => frost::round2::sign(
+                &signing_package,
+                &signing_nonces,
+                &key_package,
+            ),
+            Some(root) => frost::round2::sign_with_tweak(
+                &signing_package,
+                &signing_nonces,
+                &key_package,
+                Some(root.as_slice()),
+            )
+        }?
     ))
 
 }
@@ -588,14 +595,23 @@ pub fn aggregate_signature(
         group_verifying_key,
     );
 
-    let signature = frost::aggregate_with_tweak(
-        &signing_package,
-        &shares.into_iter().map(
-            |v| (v.identifier.0, v.share.0.clone())
-        ).collect(),
-        &pubkey_package,
-        merkle_root.as_ref().map(Vec::as_slice),
-    ).map_err(
+    let mapped_shares = shares.into_iter().map(
+        |v| (v.identifier.0, v.share.0.clone())
+    ).collect();
+
+    let signature = match merkle_root {
+        None => frost::aggregate(
+            &signing_package,
+            &mapped_shares,
+            &pubkey_package,
+        ),
+        Some(root) => frost::aggregate_with_tweak(
+            &signing_package,
+            &mapped_shares,
+            &pubkey_package,
+            Some(root.as_slice()),
+        ),
+    }.map_err(
         |e| match e {
             frost::Error::InvalidSignatureShare {
                 culprit : identifier
