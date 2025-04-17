@@ -22,7 +22,7 @@ build () {
     echo "Copying to frosty/build for local use"
     cp $2/$LIBNAME $LOCALBUILDDIR/$LIBNAME
     echo "Archiving $1"
-    tar -czvf $2.tar.gz -C $2 .
+    tar -czvf frosty-$VERSION-$2.tar.gz -C $2 .
     rm -r $2
 }
 

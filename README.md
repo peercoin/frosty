@@ -10,7 +10,9 @@ Please see below for build instructions.
 ## Building and Installation
 
 Currently the library has options available to build for Linux and Android.
-Library binaries must be built for the native Rust code.
+Library binaries must be built for the native Rust code. Pre-built binaries are
+available in the releases section of the GitHub repository which must be
+included in the relevant locations for each platform.
 
 Podman or Docker should be used to build the binaries. This helps to provide a
 consistent and reliable build across machines.

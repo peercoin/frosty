@@ -1,6 +1,7 @@
 #!/bin/bash
 
 OUTPUTDIR=$THISDIR/../platform-build
+VERSION=1.1.0
 
 # Prefer podman
 if type podman > /dev/null; then
