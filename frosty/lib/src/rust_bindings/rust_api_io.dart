@@ -5,17 +5,18 @@ import 'generated/frb_generated.dart';
 
 const _name = "frosty_rust";
 
-String _libraryPath() {
-  // Only linux is available currently
+// Returns null if the path is to be handled by FRB instead
+String? _libraryPath() {
 
-  final String localLib, flutterLib;
+  final String? localLib, flutterLib;
 
   if (Platform.isLinux || Platform.isAndroid) {
     flutterLib = localLib = "lib$_name.so";
   } else if (Platform.isMacOS || Platform.isIOS) {
-    // Dylib if built in build directory, or framework if using flutter
+    // Dylib if built in build directory, or null to use default loader if using
+    // flutter
     localLib = "lib$_name.dylib";
-    flutterLib = "$_name.framework/$_name";
+    flutterLib = null;
   } else if (Platform.isWindows) {
     flutterLib = localLib = "$_name.dll";
   } else {
@@ -31,6 +32,9 @@ String _libraryPath() {
 
 }
 
-Future<void> loadFrostyImpl() => RustLib.init(
-  externalLibrary: ExternalLibrary.open(_libraryPath()),
-);
+Future<void> loadFrostyImpl() {
+  final libPath = _libraryPath();
+  return RustLib.init(
+    externalLibrary: libPath == null ? null : ExternalLibrary.open(libPath),
+  );
+}
