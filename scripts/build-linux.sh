@@ -1,9 +1,8 @@
 #!/bin/bash
 
 THISDIR=$(dirname "$(realpath "$0")")
-. $THISDIR/build-common.sh
+. $THISDIR/build-common-container.sh
 
-LOCALBUILDDIR=$THISDIR/../frosty/build
 LIBNAME=libfrosty_rust.so
 
 # Build container image with the build context being the parent directory

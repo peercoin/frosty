@@ -3,4 +3,4 @@ pubspec.lock
 platform-build/
 target/
 Cargo.lock
-
+.DS_Store

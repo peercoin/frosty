@@ -1,7 +1,7 @@
 #!/bin/bash
 
 THISDIR=$(dirname "$(realpath "$0")")
-. $THISDIR/build-common.sh
+. $THISDIR/build-common-container.sh
 
 # Build container image with the build context being the parent directory
 TAG=frosty_rust_android_build
