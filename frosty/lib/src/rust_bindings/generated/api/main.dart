@@ -9,6 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'main.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `construct_signing_package`, `from_bytes`, `get_cipher`, `vec_to_array`, `vector_to_group_key`, `vector_to_signing_share`, `vector_to_verifying_share`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`
 
 IdentifierOpaque identifierFromString({required String s}) =>
     RustLib.instance.api.crateApiMainIdentifierFromString(s: s);
@@ -152,29 +153,6 @@ abstract class DkgRound1SecretOpaque implements RustOpaqueInterface {}
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgRound2SecretOpaque>>
 abstract class DkgRound2SecretOpaque implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgRound3Data>>
-abstract class DkgRound3Data implements RustOpaqueInterface {
-  Uint8List get groupPk;
-
-  IdentifierOpaque get identifier;
-
-  Uint8List get privateShare;
-
-  List<IdentifierAndPublicShare> get publicKeyShares;
-
-  int get threshold;
-
-  set groupPk(Uint8List groupPk);
-
-  set identifier(IdentifierOpaque identifier);
-
-  set privateShare(Uint8List privateShare);
-
-  set publicKeyShares(List<IdentifierAndPublicShare> publicKeyShares);
-
-  set threshold(int threshold);
-}
-
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgShareToGiveOpaque>>
 abstract class DkgShareToGiveOpaque implements RustOpaqueInterface {}
 
@@ -275,6 +253,41 @@ class DkgRound2IdentifierAndShare {
           runtimeType == other.runtimeType &&
           identifier == other.identifier &&
           secret == other.secret;
+}
+
+class DkgRound3Data {
+  final IdentifierOpaque identifier;
+  final Uint8List privateShare;
+  final Uint8List groupPk;
+  final List<IdentifierAndPublicShare> publicKeyShares;
+  final int threshold;
+
+  const DkgRound3Data({
+    required this.identifier,
+    required this.privateShare,
+    required this.groupPk,
+    required this.publicKeyShares,
+    required this.threshold,
+  });
+
+  @override
+  int get hashCode =>
+      identifier.hashCode ^
+      privateShare.hashCode ^
+      groupPk.hashCode ^
+      publicKeyShares.hashCode ^
+      threshold.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DkgRound3Data &&
+          runtimeType == other.runtimeType &&
+          identifier == other.identifier &&
+          privateShare == other.privateShare &&
+          groupPk == other.groupPk &&
+          publicKeyShares == other.publicKeyShares &&
+          threshold == other.threshold;
 }
 
 class IdentifierAndPublicShare {

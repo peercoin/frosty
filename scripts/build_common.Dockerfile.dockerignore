@@ -1,5 +1,2 @@
-# Do not run build script so that only the library is built and the bindings are
-# not generated
-**/build.rs
 **/.git
 **/target

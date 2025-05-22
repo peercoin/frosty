@@ -16,6 +16,4 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Build library for targets in container
 WORKDIR /build
-# The dockerignore file doesn't copy the build.rs file so bindings are not
-# generated
-COPY native /build
+COPY frosty_flutter/rust /build

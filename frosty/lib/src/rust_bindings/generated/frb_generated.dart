@@ -66,49 +66,17 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.9.0';
 
   @override
-  int get rustContentHash => -1640352728;
+  int get rustContentHash => -1077681309;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
     stem: 'frosty_rust',
-    ioDirectory: '../native/target/release/',
+    ioDirectory: '../frosty_flutter/rust/target/release/',
     webPrefix: 'pkg/',
   );
 }
 
 abstract class RustLibApi extends BaseApi {
-  Uint8List crateApiMainDkgRound3DataAutoAccessorGetGroupPk(
-      {required DkgRound3Data that});
-
-  IdentifierOpaque crateApiMainDkgRound3DataAutoAccessorGetIdentifier(
-      {required DkgRound3Data that});
-
-  Uint8List crateApiMainDkgRound3DataAutoAccessorGetPrivateShare(
-      {required DkgRound3Data that});
-
-  List<IdentifierAndPublicShare>
-      crateApiMainDkgRound3DataAutoAccessorGetPublicKeyShares(
-          {required DkgRound3Data that});
-
-  int crateApiMainDkgRound3DataAutoAccessorGetThreshold(
-      {required DkgRound3Data that});
-
-  void crateApiMainDkgRound3DataAutoAccessorSetGroupPk(
-      {required DkgRound3Data that, required Uint8List groupPk});
-
-  void crateApiMainDkgRound3DataAutoAccessorSetIdentifier(
-      {required DkgRound3Data that, required IdentifierOpaque identifier});
-
-  void crateApiMainDkgRound3DataAutoAccessorSetPrivateShare(
-      {required DkgRound3Data that, required Uint8List privateShare});
-
-  void crateApiMainDkgRound3DataAutoAccessorSetPublicKeyShares(
-      {required DkgRound3Data that,
-      required List<IdentifierAndPublicShare> publicKeyShares});
-
-  void crateApiMainDkgRound3DataAutoAccessorSetThreshold(
-      {required DkgRound3Data that, required int threshold});
-
   Uint8List crateApiMainAesGcmDecrypt(
       {required List<int> key, required AesGcmCiphertext ciphertext});
 
@@ -245,15 +213,6 @@ abstract class RustLibApi extends BaseApi {
       get rust_arc_decrement_strong_count_DkgRound2SecretOpaquePtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_DkgRound3Data;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_DkgRound3Data;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_DkgRound3DataPtr;
-
-  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_DkgShareToGiveOpaque;
 
   RustArcDecrementStrongCountFnType
@@ -308,286 +267,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Uint8List crateApiMainDkgRound3DataAutoAccessorGetGroupPk(
-      {required DkgRound3Data that}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiMainDkgRound3DataAutoAccessorGetGroupPkConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiMainDkgRound3DataAutoAccessorGetGroupPkConstMeta =>
-      const TaskConstMeta(
-        debugName: "DkgRound3Data_auto_accessor_get_group_pk",
-        argNames: ["that"],
-      );
-
-  @override
-  IdentifierOpaque crateApiMainDkgRound3DataAutoAccessorGetIdentifier(
-      {required DkgRound3Data that}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiMainDkgRound3DataAutoAccessorGetIdentifierConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiMainDkgRound3DataAutoAccessorGetIdentifierConstMeta =>
-          const TaskConstMeta(
-            debugName: "DkgRound3Data_auto_accessor_get_identifier",
-            argNames: ["that"],
-          );
-
-  @override
-  Uint8List crateApiMainDkgRound3DataAutoAccessorGetPrivateShare(
-      {required DkgRound3Data that}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiMainDkgRound3DataAutoAccessorGetPrivateShareConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiMainDkgRound3DataAutoAccessorGetPrivateShareConstMeta =>
-          const TaskConstMeta(
-            debugName: "DkgRound3Data_auto_accessor_get_private_share",
-            argNames: ["that"],
-          );
-
-  @override
-  List<IdentifierAndPublicShare>
-      crateApiMainDkgRound3DataAutoAccessorGetPublicKeyShares(
-          {required DkgRound3Data that}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_identifier_and_public_share,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiMainDkgRound3DataAutoAccessorGetPublicKeySharesConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiMainDkgRound3DataAutoAccessorGetPublicKeySharesConstMeta =>
-          const TaskConstMeta(
-            debugName: "DkgRound3Data_auto_accessor_get_public_key_shares",
-            argNames: ["that"],
-          );
-
-  @override
-  int crateApiMainDkgRound3DataAutoAccessorGetThreshold(
-      {required DkgRound3Data that}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_u_16,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiMainDkgRound3DataAutoAccessorGetThresholdConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiMainDkgRound3DataAutoAccessorGetThresholdConstMeta =>
-          const TaskConstMeta(
-            debugName: "DkgRound3Data_auto_accessor_get_threshold",
-            argNames: ["that"],
-          );
-
-  @override
-  void crateApiMainDkgRound3DataAutoAccessorSetGroupPk(
-      {required DkgRound3Data that, required Uint8List groupPk}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        sse_encode_list_prim_u_8_strict(groupPk, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiMainDkgRound3DataAutoAccessorSetGroupPkConstMeta,
-      argValues: [that, groupPk],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiMainDkgRound3DataAutoAccessorSetGroupPkConstMeta =>
-      const TaskConstMeta(
-        debugName: "DkgRound3Data_auto_accessor_set_group_pk",
-        argNames: ["that", "groupPk"],
-      );
-
-  @override
-  void crateApiMainDkgRound3DataAutoAccessorSetIdentifier(
-      {required DkgRound3Data that, required IdentifierOpaque identifier}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
-            identifier, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiMainDkgRound3DataAutoAccessorSetIdentifierConstMeta,
-      argValues: [that, identifier],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiMainDkgRound3DataAutoAccessorSetIdentifierConstMeta =>
-          const TaskConstMeta(
-            debugName: "DkgRound3Data_auto_accessor_set_identifier",
-            argNames: ["that", "identifier"],
-          );
-
-  @override
-  void crateApiMainDkgRound3DataAutoAccessorSetPrivateShare(
-      {required DkgRound3Data that, required Uint8List privateShare}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        sse_encode_list_prim_u_8_strict(privateShare, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiMainDkgRound3DataAutoAccessorSetPrivateShareConstMeta,
-      argValues: [that, privateShare],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiMainDkgRound3DataAutoAccessorSetPrivateShareConstMeta =>
-          const TaskConstMeta(
-            debugName: "DkgRound3Data_auto_accessor_set_private_share",
-            argNames: ["that", "privateShare"],
-          );
-
-  @override
-  void crateApiMainDkgRound3DataAutoAccessorSetPublicKeyShares(
-      {required DkgRound3Data that,
-      required List<IdentifierAndPublicShare> publicKeyShares}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        sse_encode_list_identifier_and_public_share(
-            publicKeyShares, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiMainDkgRound3DataAutoAccessorSetPublicKeySharesConstMeta,
-      argValues: [that, publicKeyShares],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiMainDkgRound3DataAutoAccessorSetPublicKeySharesConstMeta =>
-          const TaskConstMeta(
-            debugName: "DkgRound3Data_auto_accessor_set_public_key_shares",
-            argNames: ["that", "publicKeyShares"],
-          );
-
-  @override
-  void crateApiMainDkgRound3DataAutoAccessorSetThreshold(
-      {required DkgRound3Data that, required int threshold}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-            that, serializer);
-        sse_encode_u_16(threshold, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiMainDkgRound3DataAutoAccessorSetThresholdConstMeta,
-      argValues: [that, threshold],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiMainDkgRound3DataAutoAccessorSetThresholdConstMeta =>
-          const TaskConstMeta(
-            debugName: "DkgRound3Data_auto_accessor_set_threshold",
-            argNames: ["that", "threshold"],
-          );
-
-  @override
   Uint8List crateApiMainAesGcmDecrypt(
       {required List<int> key, required AesGcmCiphertext ciphertext}) {
     return handler.executeSync(SyncTask(
@@ -595,7 +274,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(key, serializer);
         sse_encode_box_autoadd_aes_gcm_ciphertext(ciphertext, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -620,7 +299,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(key, serializer);
         sse_encode_list_prim_u_8_loose(plaintext, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 12)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_aes_gcm_ciphertext,
@@ -655,7 +334,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_list_identifier_and_signature_share(shares, serializer);
         sse_encode_list_prim_u_8_loose(groupPk, serializer);
         sse_encode_list_identifier_and_public_share(publicShares, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 3)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -698,7 +377,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             identifier, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
             commitment, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_dkg_commitment_for_identifier,
@@ -728,7 +407,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             identifier, serializer);
         sse_encode_u_16(maxSigners, serializer);
         sse_encode_u_16(minSigners, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 15)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -758,7 +437,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             round1Secret, serializer);
         sse_encode_list_dkg_commitment_for_identifier(
             round1Commitments, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 16)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -790,11 +469,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             round1Commitments, serializer);
         sse_encode_list_dkg_round_2_identifier_and_share(
             round2Shares, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7)!;
       },
       codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data,
+        decodeSuccessData: sse_decode_dkg_round_3_data,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiMainDkgPart3ConstMeta,
@@ -819,7 +497,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             identifier, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
             secret, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_dkg_round_2_identifier_and_share,
@@ -846,7 +524,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             identifier, serializer);
         sse_encode_list_prim_u_8_loose(publicShare, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_identifier_and_public_share,
@@ -875,7 +553,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             identifier, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
             share, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_identifier_and_signature_share,
@@ -905,7 +583,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             identifier, serializer);
         sse_encode_RustOpaque_frostround1SigningCommitments(
             commitment, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 21)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_identifier_and_signing_commitment,
@@ -930,7 +608,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bytes, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 22)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 12)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -955,7 +633,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(s, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 23)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -980,7 +658,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_u_16(i, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1007,7 +685,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             identifier, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 25)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 15)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -1032,7 +710,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bytes, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 26)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 16)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1059,7 +737,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
             commitment, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 27)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -1084,7 +762,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bytes, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 28)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1111,7 +789,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
             share, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 29)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -1136,7 +814,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(privateShare, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 30)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1178,7 +856,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_list_prim_u_8_loose(privateShare, serializer);
         sse_encode_list_prim_u_8_loose(groupPk, serializer);
         sse_encode_u_16(threshold, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 31)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 21)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1221,7 +899,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bytes, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 32)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 22)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1248,7 +926,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
             share, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 33)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 23)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -1273,7 +951,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bytes, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 34)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_RustOpaque_frostround1SigningCommitments,
@@ -1299,7 +977,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_RustOpaque_frostround1SigningCommitments(
             commitment, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 35)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 25)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -1323,7 +1001,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bytes, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 36)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 26)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_RustOpaque_frostround1SigningNonces,
@@ -1347,7 +1025,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_RustOpaque_frostround1SigningNonces(nonces, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 37)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 27)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -1387,7 +1065,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             share, serializer);
         sse_encode_list_prim_u_8_loose(publicShare, serializer);
         sse_encode_list_prim_u_8_loose(groupPk, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 38)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 28)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -1446,14 +1124,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_DkgRound3Data => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_DkgRound3Data => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data;
-
-  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_DkgShareToGiveOpaque => wire
           .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque;
 
@@ -1501,6 +1171,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   DkgPublicCommitmentOpaque
+      dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+        raw);
+  }
+
+  @protected
+  DkgShareToGiveOpaque
+      dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+        raw);
+  }
+
+  @protected
+  IdentifierOpaque
+      dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        raw);
+  }
+
+  @protected
+  SignatureShareOpaque
+      dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+        raw);
+  }
+
+  @protected
+  DkgPublicCommitmentOpaque
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -1522,14 +1228,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return DkgRound2SecretOpaqueImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  DkgRound3Data
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return DkgRound3DataImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -1557,14 +1255,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  DkgRound3Data
-      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return DkgRound3DataImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
   DkgPublicCommitmentOpaque
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           dynamic raw) {
@@ -1587,14 +1277,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return DkgRound2SecretOpaqueImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  DkgRound3Data
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return DkgRound3DataImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -1644,14 +1326,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return DkgRound2SecretOpaqueImpl.frbInternalDcoDecode(raw as List<dynamic>);
-  }
-
-  @protected
-  DkgRound3Data
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return DkgRound3DataImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -1724,10 +1398,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return DkgCommitmentForIdentifier(
       identifier:
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
               arr[0]),
       commitment:
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
               arr[1]),
     );
   }
@@ -1743,7 +1417,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 1:
         return DkgRound2Error_InvalidProofOfKnowledge(
           culprit:
-              dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+              dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
                   raw[1]),
         );
       default:
@@ -1760,11 +1434,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return DkgRound2IdentifierAndShare(
       identifier:
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
               arr[0]),
       secret:
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
               arr[1]),
+    );
+  }
+
+  @protected
+  DkgRound3Data dco_decode_dkg_round_3_data(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    return DkgRound3Data(
+      identifier:
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+              arr[0]),
+      privateShare: dco_decode_list_prim_u_8_strict(arr[1]),
+      groupPk: dco_decode_list_prim_u_8_strict(arr[2]),
+      publicKeyShares: dco_decode_list_identifier_and_public_share(arr[3]),
+      threshold: dco_decode_u_16(arr[4]),
     );
   }
 
@@ -1776,7 +1467,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return IdentifierAndPublicShare(
       identifier:
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
               arr[0]),
       publicShare: dco_decode_list_prim_u_8_strict(arr[1]),
     );
@@ -1791,10 +1482,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return IdentifierAndSignatureShare(
       identifier:
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
               arr[0]),
       share:
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
               arr[1]),
     );
   }
@@ -1808,7 +1499,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return IdentifierAndSigningCommitment(
       identifier:
-          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
               arr[0]),
       commitment: dco_decode_RustOpaque_frostround1SigningCommitments(arr[1]),
     );
@@ -1942,7 +1633,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 1:
         return SignAggregationError_InvalidSignShare(
           culprit:
-              dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+              dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
                   raw[1]),
         );
       default:
@@ -1983,6 +1674,50 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   DkgPublicCommitmentOpaque
+      sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner =
+        sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+            deserializer);
+    return inner;
+  }
+
+  @protected
+  DkgShareToGiveOpaque
+      sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner =
+        sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+            deserializer);
+    return inner;
+  }
+
+  @protected
+  IdentifierOpaque
+      sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner =
+        sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+            deserializer);
+    return inner;
+  }
+
+  @protected
+  SignatureShareOpaque
+      sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner =
+        sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+            deserializer);
+    return inner;
+  }
+
+  @protected
+  DkgPublicCommitmentOpaque
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2005,15 +1740,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return DkgRound2SecretOpaqueImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  DkgRound3Data
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return DkgRound3DataImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -2045,15 +1771,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  DkgRound3Data
-      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return DkgRound3DataImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
   DkgPublicCommitmentOpaque
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           SseDeserializer deserializer) {
@@ -2077,15 +1794,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return DkgRound2SecretOpaqueImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  DkgRound3Data
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return DkgRound3DataImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -2140,15 +1848,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return DkgRound2SecretOpaqueImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  DkgRound3Data
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return DkgRound3DataImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -2222,10 +1921,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_identifier =
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             deserializer);
     var var_commitment =
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
             deserializer);
     return DkgCommitmentForIdentifier(
         identifier: var_identifier, commitment: var_commitment);
@@ -2242,7 +1941,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return DkgRound2Error_General(message: var_message);
       case 1:
         var var_culprit =
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+            sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
                 deserializer);
         return DkgRound2Error_InvalidProofOfKnowledge(culprit: var_culprit);
       default:
@@ -2255,13 +1954,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_identifier =
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             deserializer);
     var var_secret =
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
             deserializer);
     return DkgRound2IdentifierAndShare(
         identifier: var_identifier, secret: var_secret);
+  }
+
+  @protected
+  DkgRound3Data sse_decode_dkg_round_3_data(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_identifier =
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+            deserializer);
+    var var_privateShare = sse_decode_list_prim_u_8_strict(deserializer);
+    var var_groupPk = sse_decode_list_prim_u_8_strict(deserializer);
+    var var_publicKeyShares =
+        sse_decode_list_identifier_and_public_share(deserializer);
+    var var_threshold = sse_decode_u_16(deserializer);
+    return DkgRound3Data(
+        identifier: var_identifier,
+        privateShare: var_privateShare,
+        groupPk: var_groupPk,
+        publicKeyShares: var_publicKeyShares,
+        threshold: var_threshold);
   }
 
   @protected
@@ -2269,7 +1987,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_identifier =
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             deserializer);
     var var_publicShare = sse_decode_list_prim_u_8_strict(deserializer);
     return IdentifierAndPublicShare(
@@ -2281,10 +1999,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_identifier =
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             deserializer);
     var var_share =
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
             deserializer);
     return IdentifierAndSignatureShare(
         identifier: var_identifier, share: var_share);
@@ -2295,7 +2013,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_identifier =
-        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             deserializer);
     var var_commitment =
         sse_decode_RustOpaque_frostround1SigningCommitments(deserializer);
@@ -2454,7 +2172,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return SignAggregationError_General(message: var_message);
       case 1:
         var var_culprit =
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+            sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
                 deserializer);
         return SignAggregationError_InvalidSignShare(culprit: var_culprit);
       default:
@@ -2506,6 +2224,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+          DkgPublicCommitmentOpaque self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+          DkgShareToGiveOpaque self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          IdentifierOpaque self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+          SignatureShareOpaque self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+        self, serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           DkgPublicCommitmentOpaque self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2532,16 +2286,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as DkgRound2SecretOpaqueImpl).frbInternalSseEncode(move: true),
-        serializer);
-  }
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          DkgRound3Data self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as DkgRound3DataImpl).frbInternalSseEncode(move: true),
         serializer);
   }
 
@@ -2577,16 +2321,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          DkgRound3Data self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as DkgRound3DataImpl).frbInternalSseEncode(move: false),
-        serializer);
-  }
-
-  @protected
-  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           DkgPublicCommitmentOpaque self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -2613,16 +2347,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as DkgRound2SecretOpaqueImpl).frbInternalSseEncode(move: false),
-        serializer);
-  }
-
-  @protected
-  void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          DkgRound3Data self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as DkgRound3DataImpl).frbInternalSseEncode(move: false),
         serializer);
   }
 
@@ -2684,16 +2408,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as DkgRound2SecretOpaqueImpl).frbInternalSseEncode(move: null),
-        serializer);
-  }
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          DkgRound3Data self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as DkgRound3DataImpl).frbInternalSseEncode(move: null),
         serializer);
   }
 
@@ -2770,9 +2484,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_dkg_commitment_for_identifier(
       DkgCommitmentForIdentifier self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
         self.identifier, serializer);
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
         self.commitment, serializer);
   }
 
@@ -2786,7 +2500,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(message, serializer);
       case DkgRound2Error_InvalidProofOfKnowledge(culprit: final culprit):
         sse_encode_i_32(1, serializer);
-        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             culprit, serializer);
     }
   }
@@ -2795,17 +2509,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_dkg_round_2_identifier_and_share(
       DkgRound2IdentifierAndShare self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
         self.identifier, serializer);
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
         self.secret, serializer);
+  }
+
+  @protected
+  void sse_encode_dkg_round_3_data(
+      DkgRound3Data self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        self.identifier, serializer);
+    sse_encode_list_prim_u_8_strict(self.privateShare, serializer);
+    sse_encode_list_prim_u_8_strict(self.groupPk, serializer);
+    sse_encode_list_identifier_and_public_share(
+        self.publicKeyShares, serializer);
+    sse_encode_u_16(self.threshold, serializer);
   }
 
   @protected
   void sse_encode_identifier_and_public_share(
       IdentifierAndPublicShare self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
         self.identifier, serializer);
     sse_encode_list_prim_u_8_strict(self.publicShare, serializer);
   }
@@ -2814,9 +2541,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_identifier_and_signature_share(
       IdentifierAndSignatureShare self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
         self.identifier, serializer);
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
         self.share, serializer);
   }
 
@@ -2824,7 +2551,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_identifier_and_signing_commitment(
       IdentifierAndSigningCommitment self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+    sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
         self.identifier, serializer);
     sse_encode_RustOpaque_frostround1SigningCommitments(
         self.commitment, serializer);
@@ -2950,7 +2677,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(message, serializer);
       case SignAggregationError_InvalidSignShare(culprit: final culprit):
         sse_encode_i_32(1, serializer);
-        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+        sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
             culprit, serializer);
     }
   }
@@ -3055,72 +2782,6 @@ class DkgRound2SecretOpaqueImpl extends RustOpaque
     rustArcDecrementStrongCountPtr: RustLib
         .instance.api.rust_arc_decrement_strong_count_DkgRound2SecretOpaquePtr,
   );
-}
-
-@sealed
-class DkgRound3DataImpl extends RustOpaque implements DkgRound3Data {
-  // Not to be used by end users
-  DkgRound3DataImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
-
-  // Not to be used by end users
-  DkgRound3DataImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_DkgRound3Data,
-    rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_DkgRound3Data,
-    rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_DkgRound3DataPtr,
-  );
-
-  Uint8List get groupPk =>
-      RustLib.instance.api.crateApiMainDkgRound3DataAutoAccessorGetGroupPk(
-        that: this,
-      );
-
-  IdentifierOpaque get identifier =>
-      RustLib.instance.api.crateApiMainDkgRound3DataAutoAccessorGetIdentifier(
-        that: this,
-      );
-
-  Uint8List get privateShare =>
-      RustLib.instance.api.crateApiMainDkgRound3DataAutoAccessorGetPrivateShare(
-        that: this,
-      );
-
-  List<IdentifierAndPublicShare> get publicKeyShares => RustLib.instance.api
-          .crateApiMainDkgRound3DataAutoAccessorGetPublicKeyShares(
-        that: this,
-      );
-
-  int get threshold =>
-      RustLib.instance.api.crateApiMainDkgRound3DataAutoAccessorGetThreshold(
-        that: this,
-      );
-
-  set groupPk(Uint8List groupPk) =>
-      RustLib.instance.api.crateApiMainDkgRound3DataAutoAccessorSetGroupPk(
-          that: this, groupPk: groupPk);
-
-  set identifier(IdentifierOpaque identifier) =>
-      RustLib.instance.api.crateApiMainDkgRound3DataAutoAccessorSetIdentifier(
-          that: this, identifier: identifier);
-
-  set privateShare(Uint8List privateShare) =>
-      RustLib.instance.api.crateApiMainDkgRound3DataAutoAccessorSetPrivateShare(
-          that: this, privateShare: privateShare);
-
-  set publicKeyShares(List<IdentifierAndPublicShare> publicKeyShares) =>
-      RustLib.instance.api
-          .crateApiMainDkgRound3DataAutoAccessorSetPublicKeyShares(
-              that: this, publicKeyShares: publicKeyShares);
-
-  set threshold(int threshold) =>
-      RustLib.instance.api.crateApiMainDkgRound3DataAutoAccessorSetThreshold(
-          that: this, threshold: threshold);
 }
 
 @sealed

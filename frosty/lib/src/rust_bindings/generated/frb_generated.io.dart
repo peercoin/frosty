@@ -31,10 +31,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaquePtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_DkgRound3DataPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3DataPtr;
-
-  CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_DkgShareToGiveOpaquePtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaquePtr;
 
@@ -59,6 +55,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DkgPublicCommitmentOpaque
+      dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+          dynamic raw);
+
+  @protected
+  DkgShareToGiveOpaque
+      dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+          dynamic raw);
+
+  @protected
+  IdentifierOpaque
+      dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          dynamic raw);
+
+  @protected
+  SignatureShareOpaque
+      dco_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+          dynamic raw);
+
+  @protected
+  DkgPublicCommitmentOpaque
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           dynamic raw);
 
@@ -70,11 +86,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgRound2SecretOpaque
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
-          dynamic raw);
-
-  @protected
-  DkgRound3Data
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
           dynamic raw);
 
   @protected
@@ -93,11 +104,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  DkgRound3Data
-      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          dynamic raw);
-
-  @protected
   DkgPublicCommitmentOpaque
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           dynamic raw);
@@ -110,11 +116,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgRound2SecretOpaque
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
-          dynamic raw);
-
-  @protected
-  DkgRound3Data
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
           dynamic raw);
 
   @protected
@@ -145,11 +146,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgRound2SecretOpaque
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
-          dynamic raw);
-
-  @protected
-  DkgRound3Data
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
           dynamic raw);
 
   @protected
@@ -193,6 +189,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgRound2IdentifierAndShare dco_decode_dkg_round_2_identifier_and_share(
       dynamic raw);
+
+  @protected
+  DkgRound3Data dco_decode_dkg_round_3_data(dynamic raw);
 
   @protected
   IdentifierAndPublicShare dco_decode_identifier_and_public_share(dynamic raw);
@@ -275,6 +274,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DkgPublicCommitmentOpaque
+      sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+          SseDeserializer deserializer);
+
+  @protected
+  DkgShareToGiveOpaque
+      sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+          SseDeserializer deserializer);
+
+  @protected
+  IdentifierOpaque
+      sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          SseDeserializer deserializer);
+
+  @protected
+  SignatureShareOpaque
+      sse_decode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+          SseDeserializer deserializer);
+
+  @protected
+  DkgPublicCommitmentOpaque
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           SseDeserializer deserializer);
 
@@ -286,11 +305,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgRound2SecretOpaque
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
-          SseDeserializer deserializer);
-
-  @protected
-  DkgRound3Data
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
           SseDeserializer deserializer);
 
   @protected
@@ -309,11 +323,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  DkgRound3Data
-      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          SseDeserializer deserializer);
-
-  @protected
   DkgPublicCommitmentOpaque
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           SseDeserializer deserializer);
@@ -326,11 +335,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgRound2SecretOpaque
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
-          SseDeserializer deserializer);
-
-  @protected
-  DkgRound3Data
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
           SseDeserializer deserializer);
 
   @protected
@@ -361,11 +365,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgRound2SecretOpaque
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
-          SseDeserializer deserializer);
-
-  @protected
-  DkgRound3Data
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
           SseDeserializer deserializer);
 
   @protected
@@ -411,6 +410,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   DkgRound2IdentifierAndShare sse_decode_dkg_round_2_identifier_and_share(
       SseDeserializer deserializer);
+
+  @protected
+  DkgRound3Data sse_decode_dkg_round_3_data(SseDeserializer deserializer);
 
   @protected
   IdentifierAndPublicShare sse_decode_identifier_and_public_share(
@@ -506,6 +508,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
+          DkgPublicCommitmentOpaque self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgShareToGiveOpaque(
+          DkgShareToGiveOpaque self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+          IdentifierOpaque self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_AutoExplicit_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSignatureShareOpaque(
+          SignatureShareOpaque self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           DkgPublicCommitmentOpaque self, SseSerializer serializer);
 
@@ -518,11 +540,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
           DkgRound2SecretOpaque self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          DkgRound3Data self, SseSerializer serializer);
 
   @protected
   void
@@ -541,11 +558,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          DkgRound3Data self, SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgPublicCommitmentOpaque(
           DkgPublicCommitmentOpaque self, SseSerializer serializer);
 
@@ -558,11 +570,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
           DkgRound2SecretOpaque self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          DkgRound3Data self, SseSerializer serializer);
 
   @protected
   void
@@ -593,11 +600,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
           DkgRound2SecretOpaque self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-          DkgRound3Data self, SseSerializer serializer);
 
   @protected
   void
@@ -644,6 +646,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_dkg_round_2_identifier_and_share(
       DkgRound2IdentifierAndShare self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_dkg_round_3_data(
+      DkgRound3Data self, SseSerializer serializer);
 
   @protected
   void sse_encode_identifier_and_public_share(
@@ -836,38 +842,6 @@ class RustLibWire implements BaseWire {
           'frbgen_frosty_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaquePtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3DataPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_frosty_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3DataPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3DataPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_frosty_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3Data =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound3DataPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void

@@ -1,0 +1,21 @@
+name: frosty_flutter_example
+description: "Demonstrates how to use the frosty_flutter plugin"
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ^3.2.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  frosty_flutter:
+    path: ../
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
