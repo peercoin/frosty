@@ -4,6 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'frosty_flutter'
+  s.module_name      = 'frosty_rust'
   s.version          = '1.1.0'
   s.summary          = 'Rust compilation for frosty_flutter'
   s.description      = <<-DESC
@@ -29,7 +30,7 @@ The native Rust code compiled for frosty_flutter
   s.script_phase = {
     :name => 'Build Rust library',
     # First argument is relative path to the `rust` folder, second is name of rust library
-    :script => 'sh "$PODS_TARGET_SRCROOT/../cargokit/build_pod.sh" ../rust frosty_rust',
+    :script => 'PRODUCT_NAME=frosty_flutter sh "$PODS_TARGET_SRCROOT/../cargokit/build_pod.sh" ../rust frosty_rust',
     :execution_position => :before_compile,
     :input_files => ['${BUILT_PRODUCTS_DIR}/cargokit_phony'],
     # Let XCode know that the static library referenced in -force_load below is
