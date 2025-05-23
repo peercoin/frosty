@@ -6,9 +6,10 @@ THISDIR=$(dirname "$(realpath "$0")")
 FRAMEWORKNAME=frosty_rust.xcframework
 DYLIBNAME=libfrosty_rust.dylib
 LIBNAME=libfrosty_rust.a
+RUSTDIR=../frosty_flutter/rust
 
-# Build all targets in native directory
-cd ../native/
+# Build all targets in rust directory
+cd $RUSTDIR
 for TARGET in \
     aarch64-apple-ios x86_64-apple-ios aarch64-apple-ios-sim \
     x86_64-apple-darwin aarch64-apple-darwin
@@ -24,7 +25,7 @@ mkdir mac-lipo ios-sim-lipo
 
 MAC_LIPO=mac-lipo/$LIBNAME
 IOS_SIM_LIPO=ios-sim-lipo/$LIBNAME
-TARGETDIR=../native/target
+TARGETDIR=$RUSTDIR/target
 
 lipo -create -output $IOS_SIM_LIPO \
         $TARGETDIR/aarch64-apple-ios-sim/release/$LIBNAME \

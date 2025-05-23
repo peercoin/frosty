@@ -41,6 +41,13 @@ for the armeabi-v7a and arm64-v8a architectures will be produced in
 `platform-build` as `jniLibs.tar.gz`. This can be extracted into the
 `android/app/src/main` directory of an Android flutter app.
 
+### Apple Builds
+
+The `scripts/build-apple.sh` script will produce a universal framework for macOS
+and iOS into `platform-build` and a dylib will be created in the `frosty/build`
+directory for local testing. This script does not use Podman or Docker and
+requires the host machine to have Rust.
+
 ## Development
 
 Tests require the Linux Rust library in the `$PWD/build` directory.
