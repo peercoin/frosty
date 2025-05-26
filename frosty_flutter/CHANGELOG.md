@@ -1,3 +1,7 @@
+## 2.0.1
+
+Fixes a regression with flutter 3.32.0
+
 ## 2.0.0
 
 Initial release providing flutter support for Linux, Android, iOS and macOS.
