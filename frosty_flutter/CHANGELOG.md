@@ -1,3 +1,4 @@
-## 0.0.1
+## 2.0.0
 
-* TODO: Describe initial release.
+Initial release providing flutter support for Linux, Android, iOS and macOS.
+Windows may work but hasn't been tested.
