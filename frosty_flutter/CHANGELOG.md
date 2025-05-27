@@ -1,3 +1,7 @@
+## 2.0.2
+
+Include Cargo.lock to support reproducible builds
+
 ## 2.0.1
 
 Fixes a regression with flutter 3.32.0
