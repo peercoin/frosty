@@ -71,6 +71,17 @@ class ParticipantKeyInfo extends KeyInfoWithGroupKey {
       );
   }
 
+  /// Constructs the private key of the FROST key using the participant's
+  /// private share with the shares of threshold-1 other participants that are
+  /// provided with [privateShares] containing the identifiers and associated
+  /// private key shares.
+  ///
+  /// See [AggregateKeyInfo.constructPrivateKey].
+  cl.ECPrivateKey constructPrivateKey(PrivateShareList privateShares)
+    => aggregate.constructPrivateKey(
+      [...privateShares, (private.identifier, private.share)],
+    );
+
   @override
   cl.ECCompressedPublicKey get groupKey => group.groupKey;
 

@@ -1,9 +1,14 @@
 import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart' as cl;
+import 'package:frosty/src/identifier.dart';
 import 'key_info_with_group_key.dart';
+import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'invalid_info.dart';
 import 'group.dart';
 import 'public_shares.dart';
+
+typedef PrivateShareList = List<(Identifier, cl.ECPrivateKey)>;
+class InvalidShares implements Exception {}
 
 /// Contains the group details and public shares used to aggregate a signature
 /// from shares.
@@ -56,6 +61,44 @@ class AggregateKeyInfo extends KeyInfoWithGroupKey {
     return newGroup == null || newShares == null
       ? null
       : AggregateKeyInfo(group: newGroup, publicShares: newShares);
+  }
+
+  /// Constructs the private key of the FROST key using a threshold number of
+  /// private shares with the identifiers and associated private key shares.
+  ///
+  /// Throws [InvalidShares] if the provided shares do not provide the correct
+  /// private key that matches the group public key.
+  ///
+  /// To avoid [InvalidShares] being thrown, it can be checked that a private
+  /// share matches the public share before it is included in the
+  /// [privateShares] list.
+  cl.ECPrivateKey constructPrivateKey(PrivateShareList privateShares) {
+
+    if (privateShares.length != group.threshold) {
+      throw ArgumentError.value(
+        privateShares.length,
+        "privateShares.length",
+        "not equal to the threshold",
+      );
+    }
+
+    final privateKey = cl.ECPrivateKey(
+      rust.constructPrivateKey(
+        privateShares: privateShares.map(
+          (share) => rust.IdentifierAndPrivateShare(
+            identifier: share.$1.underlying,
+            privateShare: share.$2.data,
+          ),
+        ).toList(),
+        groupPk: group.groupKey.data,
+        threshold: group.threshold,
+      ),
+    );
+
+    if (privateKey.pubkey != group.groupKey) throw InvalidShares();
+
+    return privateKey;
+
   }
 
   @override

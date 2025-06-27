@@ -26,6 +26,8 @@ final tweakedHex
   "0000000000000000000000000000000000000000000000000000000000000001"
   "${tweakedPrivateShareHex[0]}";
 
+final info = ParticipantKeyInfo.fromHex(validHex);
+
 void main() {
   group("ParticipantKeyInfo", () {
 
@@ -54,6 +56,34 @@ void main() {
       );
 
     });
+
+    test("invalid private key construct", () {
+
+      void expectSharesThrow<Err>(PrivateShareList shares) => expect(
+        () => info.constructPrivateKey(shares),
+        throwsA(isA<Err>()),
+      );
+
+      // Not enough shares
+      expectSharesThrow<ArgumentError>(PrivateShareList.empty());
+      // Too many
+      expectSharesThrow<ArgumentError>(
+        [for (var i = 0; i < 2; i++) (ids[i], privateShares[i]),],
+      );
+      // Wrong shares
+      expectSharesThrow<InvalidShares>(
+        [(ids[2], privateShares[1])],
+      );
+
+    });
+
+    test(
+      "can construct private key",
+      () => expect(
+        info.constructPrivateKey([(ids[1], privateShares[1])]).pubkey,
+        groupPublicKey,
+      ),
+    );
 
   });
 }

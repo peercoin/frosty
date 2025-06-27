@@ -662,6 +662,50 @@ pub fn aggregate_signature(
 
 }
 
+// Construction of private key for FROST key
+
+#[frb(non_opaque)]
+pub struct IdentifierAndPrivateShare {
+    pub identifier: RustAutoOpaque<IdentifierOpaque>,
+    pub private_share: Vec<u8>,
+}
+
+#[frb(sync)]
+pub fn construct_private_key(
+    private_shares: Vec<IdentifierAndPrivateShare>,
+    group_pk: Vec<u8>,
+    threshold: u16,
+) -> Result<Vec<u8>> {
+
+    let casted_threshold = threshold as usize;
+
+    if private_shares.len() != casted_threshold {
+        return Err(anyhow!("Require threshold shares to construct private key"));
+    }
+
+    let group_verifying_key = vector_to_group_key(group_pk)?;
+
+    let packages = (0..casted_threshold).map(
+        |i| {
+            let signing_share = vector_to_signing_share(
+                private_shares[i].private_share.clone()
+            )?;
+            Ok(
+                frost::keys::KeyPackage::new(
+                    private_shares[i].identifier.blocking_read().0,
+                    signing_share,
+                    signing_share.try_into()?,
+                    group_verifying_key,
+                    threshold,
+                )
+            )
+        }
+    ).collect::<Result<Vec<_>>>()?;
+
+    Ok(frost::keys::reconstruct(&packages)?.serialize())
+
+}
+
 // AES-GCM
 
 #[frb(non_opaque)]

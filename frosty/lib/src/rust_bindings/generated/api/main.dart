@@ -134,6 +134,13 @@ Uint8List aggregateSignature(
         groupPk: groupPk,
         publicShares: publicShares);
 
+Uint8List constructPrivateKey(
+        {required List<IdentifierAndPrivateShare> privateShares,
+        required List<int> groupPk,
+        required int threshold}) =>
+    RustLib.instance.api.crateApiMainConstructPrivateKey(
+        privateShares: privateShares, groupPk: groupPk, threshold: threshold);
+
 AesGcmCiphertext aesGcmEncrypt(
         {required List<int> key, required List<int> plaintext}) =>
     RustLib.instance.api
@@ -288,6 +295,27 @@ class DkgRound3Data {
           groupPk == other.groupPk &&
           publicKeyShares == other.publicKeyShares &&
           threshold == other.threshold;
+}
+
+class IdentifierAndPrivateShare {
+  final IdentifierOpaque identifier;
+  final Uint8List privateShare;
+
+  const IdentifierAndPrivateShare({
+    required this.identifier,
+    required this.privateShare,
+  });
+
+  @override
+  int get hashCode => identifier.hashCode ^ privateShare.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IdentifierAndPrivateShare &&
+          runtimeType == other.runtimeType &&
+          identifier == other.identifier &&
+          privateShare == other.privateShare;
 }
 
 class IdentifierAndPublicShare {

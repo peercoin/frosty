@@ -194,6 +194,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   DkgRound3Data dco_decode_dkg_round_3_data(dynamic raw);
 
   @protected
+  IdentifierAndPrivateShare dco_decode_identifier_and_private_share(
+      dynamic raw);
+
+  @protected
   IdentifierAndPublicShare dco_decode_identifier_and_public_share(dynamic raw);
 
   @protected
@@ -211,6 +215,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   List<DkgRound2IdentifierAndShare>
       dco_decode_list_dkg_round_2_identifier_and_share(dynamic raw);
+
+  @protected
+  List<IdentifierAndPrivateShare> dco_decode_list_identifier_and_private_share(
+      dynamic raw);
 
   @protected
   List<IdentifierAndPublicShare> dco_decode_list_identifier_and_public_share(
@@ -415,6 +423,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   DkgRound3Data sse_decode_dkg_round_3_data(SseDeserializer deserializer);
 
   @protected
+  IdentifierAndPrivateShare sse_decode_identifier_and_private_share(
+      SseDeserializer deserializer);
+
+  @protected
   IdentifierAndPublicShare sse_decode_identifier_and_public_share(
       SseDeserializer deserializer);
 
@@ -435,6 +447,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<DkgRound2IdentifierAndShare>
       sse_decode_list_dkg_round_2_identifier_and_share(
           SseDeserializer deserializer);
+
+  @protected
+  List<IdentifierAndPrivateShare> sse_decode_list_identifier_and_private_share(
+      SseDeserializer deserializer);
 
   @protected
   List<IdentifierAndPublicShare> sse_decode_list_identifier_and_public_share(
@@ -652,6 +668,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       DkgRound3Data self, SseSerializer serializer);
 
   @protected
+  void sse_encode_identifier_and_private_share(
+      IdentifierAndPrivateShare self, SseSerializer serializer);
+
+  @protected
   void sse_encode_identifier_and_public_share(
       IdentifierAndPublicShare self, SseSerializer serializer);
 
@@ -670,6 +690,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_dkg_round_2_identifier_and_share(
       List<DkgRound2IdentifierAndShare> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_identifier_and_private_share(
+      List<IdentifierAndPrivateShare> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_identifier_and_public_share(

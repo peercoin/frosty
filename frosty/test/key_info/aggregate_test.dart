@@ -22,6 +22,8 @@ final tweakedHex
   "0000000000000000000000000000000000000000000000000000000000000003"
   "${tweakedPublicShareKeyHex[2]}";
 
+final info = AggregateKeyInfo.fromHex(validHex);
+
 void main() {
   group("AggregateKeyInfo", () {
 
@@ -64,6 +66,37 @@ void main() {
       );
 
     });
+
+    test("invalid private key construct", () {
+
+      void expectSharesThrow<Err>(PrivateShareList shares) => expect(
+        () => info.constructPrivateKey(shares),
+        throwsA(isA<Err>()),
+      );
+
+      // Not enough shares
+      expectSharesThrow<ArgumentError>([(ids[0], privateShares[0])]);
+      // Too many
+      expectSharesThrow<ArgumentError>(
+        [for (var i = 0; i < 3; i++) (ids[i], privateShares[i]),],
+      );
+      // Wrong shares
+      expectSharesThrow<InvalidShares>(
+        [for (var i = 0; i < 2; i++) (ids[i+1], privateShares[i]),],
+      );
+
+    });
+
+    test(
+      "can construct private key",
+      () => expect(
+        info.constructPrivateKey([
+          (ids[0], privateShares[0]),
+          (ids[1], privateShares[1]),
+        ]).pubkey,
+        groupPublicKey,
+      ),
+    );
 
   });
 }
