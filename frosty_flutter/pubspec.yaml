@@ -1,6 +1,6 @@
 name: frosty_flutter
 description: FROST threshold Schnorr signatures using an underlying Rust library for flutter
-version: 2.0.2
+version: 3.0.0
 repository: https://github.com/peercoin/frosty
 
 environment:
@@ -10,14 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_rust_bridge: ^2.9.0
+  flutter_rust_bridge: 2.10.0
   plugin_platform_interface: ^2.0.2
   coinlib_flutter: ^4.0.0
-  frosty: ^2.0.0
+  frosty: ^3.0.0
 
 dev_dependencies:
   ffi: ^2.1.3
-  ffigen: ^13.0.0
+  ffigen: ^16.0.0
   flutter_lints: ^5.0.0
 
 flutter:

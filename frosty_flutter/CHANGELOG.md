@@ -1,3 +1,7 @@
+## 3.0.0
+
+Updates to underlying frosty 3.0.0
+
 ## 2.0.2
 
 Include Cargo.lock to support reproducible builds
