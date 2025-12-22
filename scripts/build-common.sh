@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OUTPUTDIR=$THISDIR/../platform-build
-VERSION=1.1.0
+VERSION=3.0.0
 LOCALBUILDDIR=$THISDIR/../frosty/build
 
 # Create build and output directories
