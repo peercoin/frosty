@@ -8,7 +8,7 @@ RUN apt-get update -y && apt-get upgrade -y \
 # Update RUST_VER if a higher version is required and the cache must be
 # invalidated. Using `rustup update stable` can fail, so best to install from
 # scratch
-ARG RUST_VER=1.85.1
+ARG RUST_VER=1.92.0
 
 # Install Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
