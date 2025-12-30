@@ -1,8 +1,6 @@
-## 3.0.0
+## 4.0.0
 
-- Add `constructPrivateKey` methods to `AggregateKeyInfo` and
-    `ParticipantKeyInfo`.
-- Update to flutter_rust_bridge 2.10.0 and fix to this version
+- Update to flutter_rust_bridge 2.11.0 and fix to this version
 
 ## 2.0.0
 
