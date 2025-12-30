@@ -6,9 +6,9 @@ export 'generated/api/main.dart';
 bool _loaded = false;
 
 /// Loads the underlying Rust library.
-Future<void> loadFrosty() async {
+Future<void> loadFrosty({String? webRoot}) async {
   if (_loaded) return;
   _loaded = true;
-  await loadFrostyImpl();
+  await loadFrostyImpl(webRoot: webRoot);
   await loadCoinlib();
 }

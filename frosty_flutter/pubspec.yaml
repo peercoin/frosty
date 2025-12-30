@@ -39,3 +39,6 @@ flutter:
       web:
         pluginClass: FrostyFlutterWeb
         fileName: frosty_flutter_web.dart
+  assets:
+    - web/pkg/frosty_rust.js
+    - web/pkg/frosty_rust_bg.wasm

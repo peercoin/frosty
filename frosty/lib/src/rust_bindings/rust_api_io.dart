@@ -32,7 +32,7 @@ String? _libraryPath() {
 
 }
 
-Future<void> loadFrostyImpl() {
+Future<void> loadFrostyImpl({String? webRoot}) {
   final libPath = _libraryPath();
   return RustLib.init(
     externalLibrary: libPath == null ? null : ExternalLibrary.open(libPath),
