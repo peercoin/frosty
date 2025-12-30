@@ -5,7 +5,10 @@ THISDIR=$(dirname "$(realpath "$0")")
 
 LIBNAME=frosty_rust.wasm
 WASM_BINDGEN_OUTNAME=frosty_rust
-WEB_OUTDIR=$THISDIR/../frosty_flutter/example/web/pkg
+WEB_OUTDIRS=(
+    "$THISDIR/../frosty_flutter/example/web/pkg"
+    "$THISDIR/../frosty_flutter/web/pkg"
+)
 
 # Build container image with the build context being the parent directory
 TAG=frosty_rust_wasm_build
@@ -31,10 +34,12 @@ build () {
     echo "Copying to frosty/build for local use"
     cp $2/$LIBNAME $LOCALBUILDDIR/$LIBNAME
     if [ "$2" = "wasm" ]; then
-        echo "Copying wasm-bindgen outputs to example web app"
-        mkdir -p "$WEB_OUTDIR"
-        cp "$2/pkg/$WASM_BINDGEN_OUTNAME.js" "$WEB_OUTDIR/"
-        cp "$2/pkg/${WASM_BINDGEN_OUTNAME}_bg.wasm" "$WEB_OUTDIR/"
+        for web_outdir in "${WEB_OUTDIRS[@]}"; do
+            echo "Copying wasm-bindgen outputs to $web_outdir"
+            mkdir -p "$web_outdir"
+            cp "$2/pkg/$WASM_BINDGEN_OUTNAME.js" "$web_outdir/"
+            cp "$2/pkg/${WASM_BINDGEN_OUTNAME}_bg.wasm" "$web_outdir/"
+        done
     fi
     echo "Archiving $1"
     tar -czvf frosty-$VERSION-$2.tar.gz -C $2 . 

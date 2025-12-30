@@ -32,4 +32,5 @@ export "ec_ciphertext.dart";
 export "identifier.dart";
 
 import "rust_bindings/rust_api.dart" as api;
-Future<void> loadFrosty() => api.loadFrosty();
+Future<void> loadFrosty({String? webRoot}) =>
+    api.loadFrosty(webRoot: webRoot);

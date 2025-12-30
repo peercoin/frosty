@@ -1,7 +1,16 @@
 library;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:frosty/frosty.dart';
-export 'package:frosty/frosty.dart';
+import 'package:frosty/frosty.dart' as frosty;
+export 'package:frosty/frosty.dart' hide loadFrosty;
+
+const _defaultWebRoot = 'assets/packages/frosty_flutter/web/pkg/frosty_rust';
+
+/// Loads the underlying Rust library, including web assets when needed.
+Future<void> loadFrosty({String? webRoot}) {
+  final effectiveWebRoot = kIsWeb ? (webRoot ?? _defaultWebRoot) : null;
+  return frosty.loadFrosty(webRoot: effectiveWebRoot);
+}
 
 /// A widget that ensures the frosty library is loaded before use.
 class FrostyLoader extends StatefulWidget {
