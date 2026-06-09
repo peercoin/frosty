@@ -3,6 +3,10 @@
 - Updates to underlying frosty 4.0.0
 - Works on flutter web platform with underlying rust code compiled to wasm.
 
+## 3.0.0
+
+Updates to underlying frosty 3.0.0
+
 ## 2.0.2
 
 Include Cargo.lock to support reproducible builds
