@@ -54,3 +54,6 @@ Tests require the Linux Rust library in the `$PWD/build` directory.
 
 If the Rust bindings need to be regenerated, `flutter_rust_bridge_codegen
 generate` should be run in the `frosty_flutter` directory.
+
+The `scripts/build-wasm.sh` script can be run to update the WASM output and web
+bindings for flutter use.
