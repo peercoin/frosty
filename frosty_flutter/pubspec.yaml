@@ -15,8 +15,7 @@ dependencies:
   flutter_rust_bridge: 2.11.1
   plugin_platform_interface: ^2.0.2
   coinlib_flutter: ^4.0.0
-  frosty:
-    path: ../frosty
+  frosty: ^4.0.0
 
 dev_dependencies:
   ffi: ^2.1.3
