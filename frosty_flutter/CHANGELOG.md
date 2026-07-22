@@ -1,3 +1,7 @@
+## 4.0.1
+
+Fix Android build
+
 ## 4.0.0
 
 - Updates to underlying frosty 4.0.0
