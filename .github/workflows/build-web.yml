@@ -1,0 +1,46 @@
+name: Build Web
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Set up Rust with WebAssembly target
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: frosty_flutter/rust -> target
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.23.0
+        with:
+          channel: stable
+          cache: true
+
+      - name: Check Rust WebAssembly build
+        run: cargo check --locked --target wasm32-unknown-unknown --manifest-path frosty_flutter/rust/Cargo.toml
+
+      - name: Resolve Flutter example dependencies
+        working-directory: frosty_flutter/example
+        run: flutter pub get
+
+      - name: Build Flutter web release
+        working-directory: frosty_flutter/example
+        run: flutter build web --release --no-pub

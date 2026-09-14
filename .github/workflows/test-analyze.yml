@@ -1,0 +1,71 @@
+name: Test and Analyze
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: frosty_flutter/rust -> target
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.23.0
+        with:
+          channel: stable
+          cache: true
+
+      - name: Resolve workspace dependencies
+        run: flutter pub get
+
+      - name: Verify Dart formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze Dart package
+        working-directory: frosty
+        run: dart analyze --fatal-infos
+
+      - name: Analyze Flutter plugin
+        working-directory: frosty_flutter
+        run: flutter analyze --fatal-infos
+
+      - name: Analyze Flutter example
+        working-directory: frosty_flutter/example
+        run: flutter analyze --fatal-infos
+
+      - name: Verify Rust formatting
+        run: cargo fmt --check --manifest-path frosty_flutter/rust/Cargo.toml
+
+      - name: Check Rust library
+        run: cargo check --locked --manifest-path frosty_flutter/rust/Cargo.toml
+
+      - name: Build native library for Dart tests
+        run: cargo build --locked --manifest-path frosty_flutter/rust/Cargo.toml
+
+      - name: Install native library for Dart tests
+        run: |
+          mkdir -p frosty/build
+          cp frosty_flutter/rust/target/debug/libfrosty_rust.so frosty/build/
+
+      - name: Run Dart tests
+        working-directory: frosty
+        run: dart test

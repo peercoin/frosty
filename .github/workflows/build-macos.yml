@@ -1,0 +1,49 @@
+name: Build macOS
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: frosty_flutter/rust -> target
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2.23.0
+        with:
+          channel: stable
+          cache: true
+
+      - name: Resolve frosty dependencies
+        working-directory: frosty
+        run: dart pub get
+
+      - name: Build Dart CLI release bundle
+        working-directory: frosty
+        run: dart build cli --target example/tweak_example.dart
+
+      - name: Resolve Flutter example dependencies
+        working-directory: frosty_flutter/example
+        run: flutter pub get
+
+      - name: Build Flutter macOS release
+        working-directory: frosty_flutter/example
+        run: flutter build macos --release --no-pub
