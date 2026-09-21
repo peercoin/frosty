@@ -44,6 +44,10 @@ jobs:
         working-directory: frosty_flutter/example
         run: flutter pub get
 
+      - name: Build secp256k1 for Windows
+        working-directory: frosty_flutter/example
+        run: dart run coinlib:build_windows
+
       - name: Build Flutter Windows release
         working-directory: frosty_flutter/example
         run: flutter build windows --release --no-pub
