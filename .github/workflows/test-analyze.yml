@@ -34,7 +34,16 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Resolve workspace dependencies
+      - name: Resolve Dart package dependencies
+        working-directory: frosty
+        run: dart pub get
+
+      - name: Resolve Flutter plugin dependencies
+        working-directory: frosty_flutter
+        run: flutter pub get
+
+      - name: Resolve Flutter example dependencies
+        working-directory: frosty_flutter/example
         run: flutter pub get
 
       - name: Verify Dart formatting
