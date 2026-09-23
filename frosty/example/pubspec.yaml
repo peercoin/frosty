@@ -12,7 +12,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  coinlib: '>=5.0.0 <7.0.0'
+  coinlib: '>=6.0.0 <7.0.0'
   frosty:
     path: ..
 

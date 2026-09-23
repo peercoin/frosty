@@ -25,7 +25,8 @@ dart analyze
 
 The repository workspace overrides Coinlib with its `dart-3.13` branch so the
 upcoming native-assets release is continuously exercised before publication.
-The published Frosty package accepts Coinlib 5 and 6.
+The published Frosty package requires Coinlib 6 so both native libraries are
+built and bundled through Dart code assets.
 
 The build hook compiles the native library before tests or application builds.
 The Flutter app under `frosty/example/` exercises the same package and hook on
