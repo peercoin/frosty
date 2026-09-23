@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
+
 import "rust_bindings/rust_api.dart" as rust;
 
 /// Provides an authenticated ciphertext with asymmetric ECC

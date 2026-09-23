@@ -1,6 +1,7 @@
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
+
 import 'public_commitment.dart';
 
 /// The secret from part 1 of the DKG that is to be kept for part 2. After part

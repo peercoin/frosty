@@ -1,6 +1,7 @@
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+
 import '../../data.dart';
 import '../helpers.dart';
 import '../participant_test.dart' as non_hd;
@@ -84,9 +85,8 @@ void main() {
 
       expect(
         sig.verify(
-          cl.Taproot(
-            internalKey: derivedParticipantInfos.first.groupKey,
-          ).tweakedKey,
+          cl.Taproot(internalKey: derivedParticipantInfos.first.groupKey)
+              .tweakedKey,
           signMsgHash,
         ),
         true,

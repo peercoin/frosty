@@ -1,6 +1,8 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:path/path.dart';
+
 import 'dart:io';
+
 import 'generated/frb_generated.dart';
 
 const _name = "frosty_rust";

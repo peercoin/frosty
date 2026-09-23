@@ -1,6 +1,8 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/identifier.dart';
+
 import 'key_info.dart';
 
 /// Contains the private share required for a participant to submit signature

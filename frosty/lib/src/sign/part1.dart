@@ -1,6 +1,7 @@
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/sign/commitment.dart';
+
 import 'nonces.dart';
 
 /// The first stage of the signing process where each signing participant

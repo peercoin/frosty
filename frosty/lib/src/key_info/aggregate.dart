@@ -1,8 +1,12 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/identifier.dart';
+
 import 'key_info_with_group_key.dart';
+
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
+
 import 'invalid_info.dart';
 import 'group.dart';
 import 'public_shares.dart';

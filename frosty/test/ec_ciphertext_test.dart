@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
@@ -84,9 +85,8 @@ void main() {
     test("decrypts from data", () {
       void expectDecrypts(Uint8List ciphertext, String plaintext) => expect(
         cl.bytesToHex(
-          ECCiphertext.fromReader(
-            cl.BytesReader(ciphertext),
-          ).decrypt(recipientKey: key2, senderKey: key1.pubkey)!,
+          ECCiphertext.fromReader(cl.BytesReader(ciphertext))
+              .decrypt(recipientKey: key2, senderKey: key1.pubkey)!,
         ),
         plaintext,
       );

@@ -1,5 +1,6 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart'
     show ExternalLibraryLoaderConfig, loadExternalLibrary;
+
 import 'generated/frb_generated.dart';
 
 Future<void> loadFrostyImpl({String? webRoot}) async {

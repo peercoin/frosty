@@ -1,6 +1,8 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/key_info/participant.dart';
+
 import 'aggregate.dart';
 import 'derivable.dart';
 import 'hd_key_info.dart';

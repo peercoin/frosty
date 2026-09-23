@@ -1,6 +1,7 @@
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/identifier.dart';
+
 import 'commitment.dart';
 
 typedef SigningCommitmentMap = Map<Identifier, SigningCommitment>;

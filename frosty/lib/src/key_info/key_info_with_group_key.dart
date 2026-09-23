@@ -1,4 +1,5 @@
 import 'package:coinlib/coinlib.dart' as cl;
+
 import 'key_info.dart';
 
 abstract class KeyInfoWithGroupKey extends KeyInfo

@@ -1,7 +1,10 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
+
 import 'public_commitment.dart';
+
 import 'package:frosty/src/identifier.dart';
 
 typedef DkgCommitmentPair = (Identifier, DkgPublicCommitment);

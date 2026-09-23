@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 
 /// Information in addition to the FROST key required for BIP32 derivation

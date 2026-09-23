@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
+
 import 'key_info_with_group_key.dart';
 import 'group.dart';
 import 'private.dart';
