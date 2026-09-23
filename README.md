@@ -1,59 +1,40 @@
 # Frosty
 
-Frosty is a Dart library for generating FROST threshold Schnorr Signatures for
-secp256k1.
+Frosty is a Dart and Flutter library for generating FROST threshold Schnorr
+signatures for secp256k1 and Taproot.
 
-The Dart package is found under `frosty` and a flutter package is found under
-`frosty_flutter` which includes a flutter build of the underlying Rust library.
-The native Rust code is found under `frosty_flutter/rust`. Scripts for
-building the native libraries for Linux and Android are found in `scripts`,
-however `frosty_flutter` provides automatic builds for Linux, Android, macOS and
-iOS.
+The published package lives in `frosty/`. Its Rust crate is in `frosty/rust`
+and is compiled and bundled automatically on Android, iOS, Linux, macOS, and
+Windows by the Dart build hook using `code_assets` and
+`native_toolchain_rust`. Consumers therefore depend on `frosty` directly;
+there is no separate Flutter plugin package.
 
-Please see below for build instructions.
-
-## Building and Installation
-
-If you are using Flutter, the `frosty_flutter` package contains support for
-automatic builds for different platforms. It requires Rust but otherwise should
-not require anything else.
-
-For pure Dart use, it is possible to build a Linux library. Library binaries
-must be built for the native Rust code.
-
-Podman or Docker can be used to build the binaries. This helps to provide a
-consistent and reliable build across machines.
-
-### Linux Builds
-
-The `scripts/build-linux.sh` script can be executed. An archive of the Linux
-library will be produced in `platform-build` and a copy will be placed in
-`frosty/build` so that the tests can be run in the `frosty` directory.
-
-During runtime, the shared library is expected to exist within a `$PWD/build/`
-directory or within the library paths.
-
-### Android Builds
-
-If you do not wish to use the automatic Android build with `frosty_flutter`, the
-`scripts/build-android.sh` script can be executed. An archive of the libraries
-for the armeabi-v7a and arm64-v8a architectures will be produced in
-`platform-build` as `jniLibs.tar.gz`. This can be extracted into the
-`android/app/src/main` directory of an Android flutter app.
-
-### Apple Builds
-
-The `scripts/build-apple.sh` script will produce a universal framework for macOS
-and iOS into `platform-build` and a dylib will be created in the `frosty/build`
-directory for local testing. This script does not use Podman or Docker and
-requires the host machine to have Rust.
+Rust and rustup must be available on the development machine. The toolchain
+and supported targets are pinned in `frosty/rust/rust-toolchain.toml`.
 
 ## Development
 
-Tests require the Linux Rust library in the `$PWD/build` directory.
+From the package directory:
 
-If the Rust bindings need to be regenerated, `flutter_rust_bridge_codegen
-generate` should be run in the `frosty_flutter` directory.
+```sh
+cd frosty
+dart pub get
+dart test
+dart analyze
+```
 
-The `scripts/build-wasm.sh` script can be run to update the WASM output and web
-bindings for flutter use.
+The repository workspace overrides Coinlib with its `dart-3.13` branch so the
+upcoming native-assets release is continuously exercised before publication.
+The published Frosty package accepts Coinlib 5 and 6.
+
+The build hook compiles the native library before tests or application builds.
+The Flutter app under `frosty/example/` exercises the same package and hook on
+all supported Flutter platforms. The Dart CLI examples live in that directory
+as well.
+
+Web continues to use the checked-in wasm-bindgen output in `frosty/web/pkg`.
+Run `scripts/build-wasm.sh` to refresh those files.
+
+To regenerate the bridge after changing the Rust API, run
+`flutter_rust_bridge_codegen generate` from `frosty/`. The WASM generator is
+the only remaining script because Dart code assets handle every native target.

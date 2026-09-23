@@ -10,5 +10,11 @@ The library uses the
 [frost-secp256k1-tr](https://crates.io/crates/frost-secp256k1-tr) Rust crate
 that implements that FROST scheme for Taproot.
 
-It requires a native Rust library to be loaded. A README.md for building this
-library can be found in the root of the repository.
+Call `await loadFrosty()` before using the API. On Android, iOS, Linux, macOS,
+and Windows, the package build hook compiles and bundles the Rust library
+automatically through Dart code assets. Rust and rustup must be installed on
+the development machine.
+
+Flutter applications depend on this package directly; a separate
+`frosty_flutter` plugin is not required. Web builds use the bundled
+wasm-bindgen files under `web/pkg`.
