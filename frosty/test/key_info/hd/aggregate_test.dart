@@ -16,9 +16,7 @@ final zeroTweakedHex = non_hd.validHex;
 final tweakedHex = non_hd.tweakedHex;
 
 void main() {
-
   group("HDParticipantKeyInfo", () {
-
     setUpAll(loadFrosty);
 
     basicInfoTests(
@@ -35,8 +33,5 @@ void main() {
       expectDerivedGroup(newHdAggregate.group);
       expectDerivedPublicShares(newHdAggregate.publicShares);
     });
-
   });
-
 }
-

@@ -12,25 +12,22 @@ class InvalidSignatureShare extends MessageException {
 /// The signature share to be sent to the aggregator/coordinator over an
 /// authenticated channel.
 class SignatureShare
-extends WritableRustObjectWrapper<rust.SignatureShareOpaque> {
-
+    extends WritableRustObjectWrapper<rust.SignatureShareOpaque> {
   SignatureShare.fromUnderlying(super._underlying);
 
   /// Reads the serialised share from a participant and throws
   /// [InvalidSignatureShare] if invalid.
-  SignatureShare.fromBytes(Uint8List data) : super(
-    handleGetObject(
-      () => rust.signatureShareFromBytes(bytes: data),
-      (e) => InvalidSignatureShare(e),
-    ),
-    data,
-  );
+  SignatureShare.fromBytes(Uint8List data)
+    : super(
+        handleGetObject(
+          () => rust.signatureShareFromBytes(bytes: data),
+          (e) => InvalidSignatureShare(e),
+        ),
+        data,
+      );
 
   /// Obtains serialised data for the signature share that can be shared with
   /// the signature aggregator.
   @override
-  Uint8List serializeImpl() => rust.signatureShareToBytes(
-    share: underlying,
-  );
-
+  Uint8List serializeImpl() => rust.signatureShareToBytes(share: underlying);
 }

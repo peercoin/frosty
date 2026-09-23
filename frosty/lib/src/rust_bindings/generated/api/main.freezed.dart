@@ -1,6 +1,6 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: type=lint
+// coverage:ignore-file
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'main.dart';
@@ -9,765 +9,599 @@ part of 'main.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
 /// @nodoc
 mixin _$DkgRound2Error {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message) general,
-    required TResult Function(IdentifierOpaque culprit) invalidProofOfKnowledge,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message)? general,
-    TResult? Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? general,
-    TResult Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(DkgRound2Error_General value) general,
-    required TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)
-    invalidProofOfKnowledge,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(DkgRound2Error_General value)? general,
-    TResult? Function(DkgRound2Error_InvalidProofOfKnowledge value)?
-    invalidProofOfKnowledge,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(DkgRound2Error_General value)? general,
-    TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)?
-    invalidProofOfKnowledge,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is DkgRound2Error);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+    return 'DkgRound2Error()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DkgRound2ErrorCopyWith<$Res> {
-  factory $DkgRound2ErrorCopyWith(
-    DkgRound2Error value,
-    $Res Function(DkgRound2Error) then,
-  ) = _$DkgRound2ErrorCopyWithImpl<$Res, DkgRound2Error>;
+class $DkgRound2ErrorCopyWith<$Res>  {
+$DkgRound2ErrorCopyWith(DkgRound2Error _, $Res Function(DkgRound2Error) __);
+}
+
+
+/// Adds pattern-matching-related methods to [DkgRound2Error].
+extension DkgRound2ErrorPatterns on DkgRound2Error {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( DkgRound2Error_General value)?  general,TResult Function( DkgRound2Error_InvalidProofOfKnowledge value)?  invalidProofOfKnowledge,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case DkgRound2Error_General() when general != null:
+return general(_that);case DkgRound2Error_InvalidProofOfKnowledge() when invalidProofOfKnowledge != null:
+return invalidProofOfKnowledge(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( DkgRound2Error_General value)  general,required TResult Function( DkgRound2Error_InvalidProofOfKnowledge value)  invalidProofOfKnowledge,}){
+final _that = this;
+switch (_that) {
+case DkgRound2Error_General():
+return general(_that);case DkgRound2Error_InvalidProofOfKnowledge():
+return invalidProofOfKnowledge(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( DkgRound2Error_General value)?  general,TResult? Function( DkgRound2Error_InvalidProofOfKnowledge value)?  invalidProofOfKnowledge,}){
+final _that = this;
+switch (_that) {
+case DkgRound2Error_General() when general != null:
+return general(_that);case DkgRound2Error_InvalidProofOfKnowledge() when invalidProofOfKnowledge != null:
+return invalidProofOfKnowledge(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  general,TResult Function( IdentifierOpaque culprit)?  invalidProofOfKnowledge,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case DkgRound2Error_General() when general != null:
+return general(_that.message);case DkgRound2Error_InvalidProofOfKnowledge() when invalidProofOfKnowledge != null:
+return invalidProofOfKnowledge(_that.culprit);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  general,required TResult Function( IdentifierOpaque culprit)  invalidProofOfKnowledge,}) {final _that = this;
+switch (_that) {
+case DkgRound2Error_General():
+return general(_that.message);case DkgRound2Error_InvalidProofOfKnowledge():
+return invalidProofOfKnowledge(_that.culprit);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  general,TResult? Function( IdentifierOpaque culprit)?  invalidProofOfKnowledge,}) {final _that = this;
+switch (_that) {
+case DkgRound2Error_General() when general != null:
+return general(_that.message);case DkgRound2Error_InvalidProofOfKnowledge() when invalidProofOfKnowledge != null:
+return invalidProofOfKnowledge(_that.culprit);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-class _$DkgRound2ErrorCopyWithImpl<$Res, $Val extends DkgRound2Error>
-    implements $DkgRound2ErrorCopyWith<$Res> {
-  _$DkgRound2ErrorCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
 
-  /// Create a copy of DkgRound2Error
-  /// with the given fields replaced by the non-null parameter values.
+class DkgRound2Error_General extends DkgRound2Error {
+  const DkgRound2Error_General({required this.message}): super._();
+
+
+ final  String message;
+
+/// Create a copy of DkgRound2Error
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DkgRound2Error_GeneralCopyWith<DkgRound2Error_General> get copyWith => _$DkgRound2Error_GeneralCopyWithImpl<DkgRound2Error_General>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is DkgRound2Error_General&&(identical(other.message, message) || other.message == message));
 }
 
-/// @nodoc
-abstract class _$$DkgRound2Error_GeneralImplCopyWith<$Res> {
-  factory _$$DkgRound2Error_GeneralImplCopyWith(
-    _$DkgRound2Error_GeneralImpl value,
-    $Res Function(_$DkgRound2Error_GeneralImpl) then,
-  ) = __$$DkgRound2Error_GeneralImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String message});
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,message);
 }
 
-/// @nodoc
-class __$$DkgRound2Error_GeneralImplCopyWithImpl<$Res>
-    extends _$DkgRound2ErrorCopyWithImpl<$Res, _$DkgRound2Error_GeneralImpl>
-    implements _$$DkgRound2Error_GeneralImplCopyWith<$Res> {
-  __$$DkgRound2Error_GeneralImplCopyWithImpl(
-    _$DkgRound2Error_GeneralImpl _value,
-    $Res Function(_$DkgRound2Error_GeneralImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of DkgRound2Error
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? message = null}) {
-    return _then(
-      _$DkgRound2Error_GeneralImpl(
-        message: null == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
-  }
-}
-
-/// @nodoc
-
-class _$DkgRound2Error_GeneralImpl extends DkgRound2Error_General {
-  const _$DkgRound2Error_GeneralImpl({required this.message}) : super._();
-
-  @override
-  final String message;
-
-  @override
-  String toString() {
+@override
+String toString() {
     return 'DkgRound2Error.general(message: $message)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DkgRound2Error_GeneralImpl &&
-            (identical(other.message, message) || other.message == message));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-
-  /// Create a copy of DkgRound2Error
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DkgRound2Error_GeneralImplCopyWith<_$DkgRound2Error_GeneralImpl>
-  get copyWith =>
-      __$$DkgRound2Error_GeneralImplCopyWithImpl<_$DkgRound2Error_GeneralImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message) general,
-    required TResult Function(IdentifierOpaque culprit) invalidProofOfKnowledge,
-  }) {
-    return general(message);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message)? general,
-    TResult? Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
-  }) {
-    return general?.call(message);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? general,
-    TResult Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
-    required TResult orElse(),
-  }) {
-    if (general != null) {
-      return general(message);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(DkgRound2Error_General value) general,
-    required TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)
-    invalidProofOfKnowledge,
-  }) {
-    return general(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(DkgRound2Error_General value)? general,
-    TResult? Function(DkgRound2Error_InvalidProofOfKnowledge value)?
-    invalidProofOfKnowledge,
-  }) {
-    return general?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(DkgRound2Error_General value)? general,
-    TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)?
-    invalidProofOfKnowledge,
-    required TResult orElse(),
-  }) {
-    if (general != null) {
-      return general(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class DkgRound2Error_General extends DkgRound2Error {
-  const factory DkgRound2Error_General({required final String message}) =
-      _$DkgRound2Error_GeneralImpl;
-  const DkgRound2Error_General._() : super._();
 
-  String get message;
-
-  /// Create a copy of DkgRound2Error
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DkgRound2Error_GeneralImplCopyWith<_$DkgRound2Error_GeneralImpl>
-  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<$Res> {
-  factory _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith(
-    _$DkgRound2Error_InvalidProofOfKnowledgeImpl value,
-    $Res Function(_$DkgRound2Error_InvalidProofOfKnowledgeImpl) then,
-  ) = __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({IdentifierOpaque culprit});
+abstract mixin class $DkgRound2Error_GeneralCopyWith<$Res> implements $DkgRound2ErrorCopyWith<$Res> {
+  factory $DkgRound2Error_GeneralCopyWith(DkgRound2Error_General value, $Res Function(DkgRound2Error_General) _then) = _$DkgRound2Error_GeneralCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$DkgRound2Error_GeneralCopyWithImpl<$Res>
+    implements $DkgRound2Error_GeneralCopyWith<$Res> {
+  _$DkgRound2Error_GeneralCopyWithImpl(this._self, this._then);
+
+  final DkgRound2Error_General _self;
+  final $Res Function(DkgRound2Error_General) _then;
+
+/// Create a copy of DkgRound2Error
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(DkgRound2Error_General(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-class __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<$Res>
-    extends
-        _$DkgRound2ErrorCopyWithImpl<
-          $Res,
-          _$DkgRound2Error_InvalidProofOfKnowledgeImpl
-        >
-    implements _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<$Res> {
-  __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl(
-    _$DkgRound2Error_InvalidProofOfKnowledgeImpl _value,
-    $Res Function(_$DkgRound2Error_InvalidProofOfKnowledgeImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of DkgRound2Error
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? culprit = null}) {
-    return _then(
-      _$DkgRound2Error_InvalidProofOfKnowledgeImpl(
-        culprit: null == culprit
-            ? _value.culprit
-            : culprit // ignore: cast_nullable_to_non_nullable
-                  as IdentifierOpaque,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$DkgRound2Error_InvalidProofOfKnowledgeImpl
-    extends DkgRound2Error_InvalidProofOfKnowledge {
-  const _$DkgRound2Error_InvalidProofOfKnowledgeImpl({required this.culprit})
-    : super._();
 
-  @override
-  final IdentifierOpaque culprit;
+class DkgRound2Error_InvalidProofOfKnowledge extends DkgRound2Error {
+  const DkgRound2Error_InvalidProofOfKnowledge({required this.culprit}): super._();
 
-  @override
-  String toString() {
+
+ final  IdentifierOpaque culprit;
+
+/// Create a copy of DkgRound2Error
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DkgRound2Error_InvalidProofOfKnowledgeCopyWith<DkgRound2Error_InvalidProofOfKnowledge> get copyWith => _$DkgRound2Error_InvalidProofOfKnowledgeCopyWithImpl<DkgRound2Error_InvalidProofOfKnowledge>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is DkgRound2Error_InvalidProofOfKnowledge&&(identical(other.culprit, culprit) || other.culprit == culprit));
+}
+
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,culprit);
+}
+
+@override
+String toString() {
     return 'DkgRound2Error.invalidProofOfKnowledge(culprit: $culprit)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DkgRound2Error_InvalidProofOfKnowledgeImpl &&
-            (identical(other.culprit, culprit) || other.culprit == culprit));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, culprit);
-
-  /// Create a copy of DkgRound2Error
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<
-    _$DkgRound2Error_InvalidProofOfKnowledgeImpl
-  >
-  get copyWith =>
-      __$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWithImpl<
-        _$DkgRound2Error_InvalidProofOfKnowledgeImpl
-      >(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message) general,
-    required TResult Function(IdentifierOpaque culprit) invalidProofOfKnowledge,
-  }) {
-    return invalidProofOfKnowledge(culprit);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message)? general,
-    TResult? Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
-  }) {
-    return invalidProofOfKnowledge?.call(culprit);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? general,
-    TResult Function(IdentifierOpaque culprit)? invalidProofOfKnowledge,
-    required TResult orElse(),
-  }) {
-    if (invalidProofOfKnowledge != null) {
-      return invalidProofOfKnowledge(culprit);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(DkgRound2Error_General value) general,
-    required TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)
-    invalidProofOfKnowledge,
-  }) {
-    return invalidProofOfKnowledge(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(DkgRound2Error_General value)? general,
-    TResult? Function(DkgRound2Error_InvalidProofOfKnowledge value)?
-    invalidProofOfKnowledge,
-  }) {
-    return invalidProofOfKnowledge?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(DkgRound2Error_General value)? general,
-    TResult Function(DkgRound2Error_InvalidProofOfKnowledge value)?
-    invalidProofOfKnowledge,
-    required TResult orElse(),
-  }) {
-    if (invalidProofOfKnowledge != null) {
-      return invalidProofOfKnowledge(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class DkgRound2Error_InvalidProofOfKnowledge extends DkgRound2Error {
-  const factory DkgRound2Error_InvalidProofOfKnowledge({
-    required final IdentifierOpaque culprit,
-  }) = _$DkgRound2Error_InvalidProofOfKnowledgeImpl;
-  const DkgRound2Error_InvalidProofOfKnowledge._() : super._();
 
-  IdentifierOpaque get culprit;
+}
 
-  /// Create a copy of DkgRound2Error
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DkgRound2Error_InvalidProofOfKnowledgeImplCopyWith<
-    _$DkgRound2Error_InvalidProofOfKnowledgeImpl
-  >
-  get copyWith => throw _privateConstructorUsedError;
+/// @nodoc
+abstract mixin class $DkgRound2Error_InvalidProofOfKnowledgeCopyWith<$Res> implements $DkgRound2ErrorCopyWith<$Res> {
+  factory $DkgRound2Error_InvalidProofOfKnowledgeCopyWith(DkgRound2Error_InvalidProofOfKnowledge value, $Res Function(DkgRound2Error_InvalidProofOfKnowledge) _then) = _$DkgRound2Error_InvalidProofOfKnowledgeCopyWithImpl;
+@useResult
+$Res call({
+ IdentifierOpaque culprit
+});
+
+
+
+
+}
+/// @nodoc
+class _$DkgRound2Error_InvalidProofOfKnowledgeCopyWithImpl<$Res>
+    implements $DkgRound2Error_InvalidProofOfKnowledgeCopyWith<$Res> {
+  _$DkgRound2Error_InvalidProofOfKnowledgeCopyWithImpl(this._self, this._then);
+
+  final DkgRound2Error_InvalidProofOfKnowledge _self;
+  final $Res Function(DkgRound2Error_InvalidProofOfKnowledge) _then;
+
+/// Create a copy of DkgRound2Error
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? culprit = null,}) {
+  return _then(DkgRound2Error_InvalidProofOfKnowledge(
+culprit: null == culprit ? _self.culprit : culprit // ignore: cast_nullable_to_non_nullable
+as IdentifierOpaque,
+  ));
+}
+
+
 }
 
 /// @nodoc
 mixin _$SignAggregationError {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message) general,
-    required TResult Function(IdentifierOpaque culprit) invalidSignShare,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message)? general,
-    TResult? Function(IdentifierOpaque culprit)? invalidSignShare,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? general,
-    TResult Function(IdentifierOpaque culprit)? invalidSignShare,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(SignAggregationError_General value) general,
-    required TResult Function(SignAggregationError_InvalidSignShare value)
-    invalidSignShare,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SignAggregationError_General value)? general,
-    TResult? Function(SignAggregationError_InvalidSignShare value)?
-    invalidSignShare,
-  }) => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(SignAggregationError_General value)? general,
-    TResult Function(SignAggregationError_InvalidSignShare value)?
-    invalidSignShare,
-    required TResult orElse(),
-  }) => throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SignAggregationError);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+    return 'SignAggregationError()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $SignAggregationErrorCopyWith<$Res> {
-  factory $SignAggregationErrorCopyWith(
-    SignAggregationError value,
-    $Res Function(SignAggregationError) then,
-  ) = _$SignAggregationErrorCopyWithImpl<$Res, SignAggregationError>;
+class $SignAggregationErrorCopyWith<$Res>  {
+$SignAggregationErrorCopyWith(SignAggregationError _, $Res Function(SignAggregationError) __);
+}
+
+
+/// Adds pattern-matching-related methods to [SignAggregationError].
+extension SignAggregationErrorPatterns on SignAggregationError {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( SignAggregationError_General value)?  general,TResult Function( SignAggregationError_InvalidSignShare value)?  invalidSignShare,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case SignAggregationError_General() when general != null:
+return general(_that);case SignAggregationError_InvalidSignShare() when invalidSignShare != null:
+return invalidSignShare(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( SignAggregationError_General value)  general,required TResult Function( SignAggregationError_InvalidSignShare value)  invalidSignShare,}){
+final _that = this;
+switch (_that) {
+case SignAggregationError_General():
+return general(_that);case SignAggregationError_InvalidSignShare():
+return invalidSignShare(_that);}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( SignAggregationError_General value)?  general,TResult? Function( SignAggregationError_InvalidSignShare value)?  invalidSignShare,}){
+final _that = this;
+switch (_that) {
+case SignAggregationError_General() when general != null:
+return general(_that);case SignAggregationError_InvalidSignShare() when invalidSignShare != null:
+return invalidSignShare(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String message)?  general,TResult Function( IdentifierOpaque culprit)?  invalidSignShare,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case SignAggregationError_General() when general != null:
+return general(_that.message);case SignAggregationError_InvalidSignShare() when invalidSignShare != null:
+return invalidSignShare(_that.culprit);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String message)  general,required TResult Function( IdentifierOpaque culprit)  invalidSignShare,}) {final _that = this;
+switch (_that) {
+case SignAggregationError_General():
+return general(_that.message);case SignAggregationError_InvalidSignShare():
+return invalidSignShare(_that.culprit);}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String message)?  general,TResult? Function( IdentifierOpaque culprit)?  invalidSignShare,}) {final _that = this;
+switch (_that) {
+case SignAggregationError_General() when general != null:
+return general(_that.message);case SignAggregationError_InvalidSignShare() when invalidSignShare != null:
+return invalidSignShare(_that.culprit);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-class _$SignAggregationErrorCopyWithImpl<
-  $Res,
-  $Val extends SignAggregationError
->
-    implements $SignAggregationErrorCopyWith<$Res> {
-  _$SignAggregationErrorCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
 
-  /// Create a copy of SignAggregationError
-  /// with the given fields replaced by the non-null parameter values.
+class SignAggregationError_General extends SignAggregationError {
+  const SignAggregationError_General({required this.message}): super._();
+
+
+ final  String message;
+
+/// Create a copy of SignAggregationError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SignAggregationError_GeneralCopyWith<SignAggregationError_General> get copyWith => _$SignAggregationError_GeneralCopyWithImpl<SignAggregationError_General>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SignAggregationError_General&&(identical(other.message, message) || other.message == message));
 }
 
-/// @nodoc
-abstract class _$$SignAggregationError_GeneralImplCopyWith<$Res> {
-  factory _$$SignAggregationError_GeneralImplCopyWith(
-    _$SignAggregationError_GeneralImpl value,
-    $Res Function(_$SignAggregationError_GeneralImpl) then,
-  ) = __$$SignAggregationError_GeneralImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String message});
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,message);
 }
 
-/// @nodoc
-class __$$SignAggregationError_GeneralImplCopyWithImpl<$Res>
-    extends
-        _$SignAggregationErrorCopyWithImpl<
-          $Res,
-          _$SignAggregationError_GeneralImpl
-        >
-    implements _$$SignAggregationError_GeneralImplCopyWith<$Res> {
-  __$$SignAggregationError_GeneralImplCopyWithImpl(
-    _$SignAggregationError_GeneralImpl _value,
-    $Res Function(_$SignAggregationError_GeneralImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of SignAggregationError
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? message = null}) {
-    return _then(
-      _$SignAggregationError_GeneralImpl(
-        message: null == message
-            ? _value.message
-            : message // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
-  }
-}
-
-/// @nodoc
-
-class _$SignAggregationError_GeneralImpl extends SignAggregationError_General {
-  const _$SignAggregationError_GeneralImpl({required this.message}) : super._();
-
-  @override
-  final String message;
-
-  @override
-  String toString() {
+@override
+String toString() {
     return 'SignAggregationError.general(message: $message)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SignAggregationError_GeneralImpl &&
-            (identical(other.message, message) || other.message == message));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-
-  /// Create a copy of SignAggregationError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SignAggregationError_GeneralImplCopyWith<
-    _$SignAggregationError_GeneralImpl
-  >
-  get copyWith =>
-      __$$SignAggregationError_GeneralImplCopyWithImpl<
-        _$SignAggregationError_GeneralImpl
-      >(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message) general,
-    required TResult Function(IdentifierOpaque culprit) invalidSignShare,
-  }) {
-    return general(message);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message)? general,
-    TResult? Function(IdentifierOpaque culprit)? invalidSignShare,
-  }) {
-    return general?.call(message);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? general,
-    TResult Function(IdentifierOpaque culprit)? invalidSignShare,
-    required TResult orElse(),
-  }) {
-    if (general != null) {
-      return general(message);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(SignAggregationError_General value) general,
-    required TResult Function(SignAggregationError_InvalidSignShare value)
-    invalidSignShare,
-  }) {
-    return general(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SignAggregationError_General value)? general,
-    TResult? Function(SignAggregationError_InvalidSignShare value)?
-    invalidSignShare,
-  }) {
-    return general?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(SignAggregationError_General value)? general,
-    TResult Function(SignAggregationError_InvalidSignShare value)?
-    invalidSignShare,
-    required TResult orElse(),
-  }) {
-    if (general != null) {
-      return general(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class SignAggregationError_General extends SignAggregationError {
-  const factory SignAggregationError_General({required final String message}) =
-      _$SignAggregationError_GeneralImpl;
-  const SignAggregationError_General._() : super._();
 
-  String get message;
-
-  /// Create a copy of SignAggregationError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SignAggregationError_GeneralImplCopyWith<
-    _$SignAggregationError_GeneralImpl
-  >
-  get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$SignAggregationError_InvalidSignShareImplCopyWith<$Res> {
-  factory _$$SignAggregationError_InvalidSignShareImplCopyWith(
-    _$SignAggregationError_InvalidSignShareImpl value,
-    $Res Function(_$SignAggregationError_InvalidSignShareImpl) then,
-  ) = __$$SignAggregationError_InvalidSignShareImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({IdentifierOpaque culprit});
+abstract mixin class $SignAggregationError_GeneralCopyWith<$Res> implements $SignAggregationErrorCopyWith<$Res> {
+  factory $SignAggregationError_GeneralCopyWith(SignAggregationError_General value, $Res Function(SignAggregationError_General) _then) = _$SignAggregationError_GeneralCopyWithImpl;
+@useResult
+$Res call({
+ String message
+});
+
+
+
+
+}
+/// @nodoc
+class _$SignAggregationError_GeneralCopyWithImpl<$Res>
+    implements $SignAggregationError_GeneralCopyWith<$Res> {
+  _$SignAggregationError_GeneralCopyWithImpl(this._self, this._then);
+
+  final SignAggregationError_General _self;
+  final $Res Function(SignAggregationError_General) _then;
+
+/// Create a copy of SignAggregationError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(SignAggregationError_General(
+message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-class __$$SignAggregationError_InvalidSignShareImplCopyWithImpl<$Res>
-    extends
-        _$SignAggregationErrorCopyWithImpl<
-          $Res,
-          _$SignAggregationError_InvalidSignShareImpl
-        >
-    implements _$$SignAggregationError_InvalidSignShareImplCopyWith<$Res> {
-  __$$SignAggregationError_InvalidSignShareImplCopyWithImpl(
-    _$SignAggregationError_InvalidSignShareImpl _value,
-    $Res Function(_$SignAggregationError_InvalidSignShareImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of SignAggregationError
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({Object? culprit = null}) {
-    return _then(
-      _$SignAggregationError_InvalidSignShareImpl(
-        culprit: null == culprit
-            ? _value.culprit
-            : culprit // ignore: cast_nullable_to_non_nullable
-                  as IdentifierOpaque,
-      ),
-    );
-  }
 }
 
 /// @nodoc
 
-class _$SignAggregationError_InvalidSignShareImpl
-    extends SignAggregationError_InvalidSignShare {
-  const _$SignAggregationError_InvalidSignShareImpl({required this.culprit})
-    : super._();
 
-  @override
-  final IdentifierOpaque culprit;
+class SignAggregationError_InvalidSignShare extends SignAggregationError {
+  const SignAggregationError_InvalidSignShare({required this.culprit}): super._();
 
-  @override
-  String toString() {
+
+ final  IdentifierOpaque culprit;
+
+/// Create a copy of SignAggregationError
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SignAggregationError_InvalidSignShareCopyWith<SignAggregationError_InvalidSignShare> get copyWith => _$SignAggregationError_InvalidSignShareCopyWithImpl<SignAggregationError_InvalidSignShare>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is SignAggregationError_InvalidSignShare&&(identical(other.culprit, culprit) || other.culprit == culprit));
+}
+
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,culprit);
+}
+
+@override
+String toString() {
     return 'SignAggregationError.invalidSignShare(culprit: $culprit)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SignAggregationError_InvalidSignShareImpl &&
-            (identical(other.culprit, culprit) || other.culprit == culprit));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, culprit);
-
-  /// Create a copy of SignAggregationError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SignAggregationError_InvalidSignShareImplCopyWith<
-    _$SignAggregationError_InvalidSignShareImpl
-  >
-  get copyWith =>
-      __$$SignAggregationError_InvalidSignShareImplCopyWithImpl<
-        _$SignAggregationError_InvalidSignShareImpl
-      >(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message) general,
-    required TResult Function(IdentifierOpaque culprit) invalidSignShare,
-  }) {
-    return invalidSignShare(culprit);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message)? general,
-    TResult? Function(IdentifierOpaque culprit)? invalidSignShare,
-  }) {
-    return invalidSignShare?.call(culprit);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message)? general,
-    TResult Function(IdentifierOpaque culprit)? invalidSignShare,
-    required TResult orElse(),
-  }) {
-    if (invalidSignShare != null) {
-      return invalidSignShare(culprit);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(SignAggregationError_General value) general,
-    required TResult Function(SignAggregationError_InvalidSignShare value)
-    invalidSignShare,
-  }) {
-    return invalidSignShare(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SignAggregationError_General value)? general,
-    TResult? Function(SignAggregationError_InvalidSignShare value)?
-    invalidSignShare,
-  }) {
-    return invalidSignShare?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(SignAggregationError_General value)? general,
-    TResult Function(SignAggregationError_InvalidSignShare value)?
-    invalidSignShare,
-    required TResult orElse(),
-  }) {
-    if (invalidSignShare != null) {
-      return invalidSignShare(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class SignAggregationError_InvalidSignShare
-    extends SignAggregationError {
-  const factory SignAggregationError_InvalidSignShare({
-    required final IdentifierOpaque culprit,
-  }) = _$SignAggregationError_InvalidSignShareImpl;
-  const SignAggregationError_InvalidSignShare._() : super._();
 
-  IdentifierOpaque get culprit;
-
-  /// Create a copy of SignAggregationError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SignAggregationError_InvalidSignShareImplCopyWith<
-    _$SignAggregationError_InvalidSignShareImpl
-  >
-  get copyWith => throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+abstract mixin class $SignAggregationError_InvalidSignShareCopyWith<$Res> implements $SignAggregationErrorCopyWith<$Res> {
+  factory $SignAggregationError_InvalidSignShareCopyWith(SignAggregationError_InvalidSignShare value, $Res Function(SignAggregationError_InvalidSignShare) _then) = _$SignAggregationError_InvalidSignShareCopyWithImpl;
+@useResult
+$Res call({
+ IdentifierOpaque culprit
+});
+
+
+
+
+}
+/// @nodoc
+class _$SignAggregationError_InvalidSignShareCopyWithImpl<$Res>
+    implements $SignAggregationError_InvalidSignShareCopyWith<$Res> {
+  _$SignAggregationError_InvalidSignShareCopyWithImpl(this._self, this._then);
+
+  final SignAggregationError_InvalidSignShare _self;
+  final $Res Function(SignAggregationError_InvalidSignShare) _then;
+
+/// Create a copy of SignAggregationError
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? culprit = null,}) {
+  return _then(SignAggregationError_InvalidSignShare(
+culprit: null == culprit ? _self.culprit : culprit // ignore: cast_nullable_to_non_nullable
+as IdentifierOpaque,
+  ));
+}
+
+
+}
+
+// dart format on

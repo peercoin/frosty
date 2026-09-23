@@ -15,9 +15,7 @@ final zeroTweakedHex = "${groupPublicKeyHex}0200";
 final tweakedHex = "${tweakedGroupKeyHex}0200";
 
 void main() {
-
   group("HDGroupKeyInfo", () {
-
     setUpAll(loadFrosty);
 
     basicInfoTests(
@@ -29,10 +27,9 @@ void main() {
       getValidObj: () => hdGroupInfo,
     );
 
-    test(".derive()", () => expectDerivedGroup(
-      hdGroupInfo.derive(0x7fffffff).derive(0),
-    ),);
-
+    test(
+      ".derive()",
+      () => expectDerivedGroup(hdGroupInfo.derive(0x7fffffff).derive(0)),
+    );
   });
-
 }

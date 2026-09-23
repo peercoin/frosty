@@ -1,14 +1,14 @@
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 
-final groupPublicKeyHex
-  = "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b2";
+final groupPublicKeyHex =
+    "027f2b9f6b67de76a624c750226221a73f79280d91f3e14b42e0994950605804b2";
 final groupPublicKey = cl.ECCompressedPublicKey.fromHex(groupPublicKeyHex);
 
 final chainCodeHex = cl.bytesToHex(HDKeyInfo.fixedChaincode);
 
-final tweakedGroupKeyHex
-  = "025cb7dcabf7173e27de4dae2944e2b9ba1153ef2af326a12ed1c71f11d8b53cc8";
+final tweakedGroupKeyHex =
+    "025cb7dcabf7173e27de4dae2944e2b9ba1153ef2af326a12ed1c71f11d8b53cc8";
 final tweakedGroupKey = cl.ECCompressedPublicKey.fromHex(tweakedGroupKeyHex);
 
 final privateSharesHex = [
@@ -23,9 +23,9 @@ final tweakedPrivateShareHex = [
   "20bcd4d53edc1a3cd82a6f2239e1dda8c56fa0fa2e273ba021c74e711422ce7d",
 ];
 
-final privateShares = privateSharesHex.map(
-  (hex) => cl.ECPrivateKey.fromHex(hex),
-).toList();
+final privateShares = privateSharesHex
+    .map((hex) => cl.ECPrivateKey.fromHex(hex))
+    .toList();
 
 final publicShareKeyHex = [
   "030251582b6921a9aba190a761740a8b07f2d1e11aa66ce2f2b039d387f802ba8b",
@@ -39,7 +39,7 @@ final tweakedPublicShareKeyHex = [
   "03eb98b2b9dfa0310af3bf100c61be10cebd1ba3ef50e303476f8d9e36f70aa3c4",
 ];
 
-final ids = List.generate(3, (i) => Identifier.fromUint16(i+1));
+final ids = List.generate(3, (i) => Identifier.fromUint16(i + 1));
 
 final publicShares = List.generate(
   3,
@@ -48,17 +48,14 @@ final publicShares = List.generate(
 
 // Determined as an invalid tweak for the underlying private key obtained via
 // Lagrange interpolation of private shares.
-final invalidGroupTweak
-  = "e1e1c694059fccb472e02f56340c5b3630d60b90121d0ee20d9f3ac85ac2d315";
+final invalidGroupTweak =
+    "e1e1c694059fccb472e02f56340c5b3630d60b90121d0ee20d9f3ac85ac2d315";
 
 // Invalid tweak for the first share that leads to scalar equal to 0
-final invalidShareTweak
-  = "4501b054be011c35ee7331e5063dbcdd31abcfd8acff69e43819776f2cb6658e";
+final invalidShareTweak =
+    "4501b054be011c35ee7331e5063dbcdd31abcfd8acff69e43819776f2cb6658e";
 
-final groupInfo = GroupKeyInfo(
-  groupKey: groupPublicKey,
-  threshold: 2,
-);
+final groupInfo = GroupKeyInfo(groupKey: groupPublicKey, threshold: 2);
 
 final publicSharesInfo = PublicSharesKeyInfo(publicShares: publicShares);
 final aggregateInfo = AggregateKeyInfo(
@@ -70,41 +67,38 @@ ParticipantKeyInfo getParticipantInfo(int i) => ParticipantKeyInfo(
   group: groupInfo,
   publicShares: publicSharesInfo,
   private: PrivateKeyInfo(
-    identifier: Identifier.fromUint16(i+1),
+    identifier: Identifier.fromUint16(i + 1),
     share: privateShares[i],
   ),
 );
 
-List<SignPart1> getPart1s() => List.generate(
-  3,
-  (i) => SignPart1(privateShare: privateShares[i]),
-);
+List<SignPart1> getPart1s() =>
+    List.generate(3, (i) => SignPart1(privateShare: privateShares[i]));
 
 final signMsgHash = cl.hexToBytes(
   "2514a6272f85cfa0f45eb907fcb0d121b808ed37c6ea160a5a9046ed5526d555",
 );
 
-SigningCommitmentSet getSignatureCommitments(
-  List<SignPart1> part1s,
-) => SigningCommitmentSet({
-  for (int i = 0; i < 2; i++)
-    Identifier.fromUint16(i+1): part1s[i].commitment,
-});
+SigningCommitmentSet getSignatureCommitments(List<SignPart1> part1s) =>
+    SigningCommitmentSet({
+      for (int i = 0; i < 2; i++)
+        Identifier.fromUint16(i + 1): part1s[i].commitment,
+    });
 
 SignatureShare getShare(
-  List<SignPart1> part1s, int i, {
-    Identifier? identifier,
-    SigningNonces? ourNonce,
-    SigningCommitmentMap? commitmentMap,
-    SigningKeyInfo? info,
-    SignDetails? details,
-  }
-) => SignPart2(
-  identifier: identifier ?? Identifier.fromUint16(i+1),
+  List<SignPart1> part1s,
+  int i, {
+  Identifier? identifier,
+  SigningNonces? ourNonce,
+  SigningCommitmentMap? commitmentMap,
+  SigningKeyInfo? info,
+  SignDetails? details,
+}) => SignPart2(
+  identifier: identifier ?? Identifier.fromUint16(i + 1),
   details: details ?? SignDetails.keySpend(message: signMsgHash),
   ourNonces: ourNonce ?? part1s[i].nonces,
   commitments: commitmentMap != null
-    ? SigningCommitmentSet(commitmentMap)
-    : getSignatureCommitments(part1s),
+      ? SigningCommitmentSet(commitmentMap)
+      : getSignatureCommitments(part1s),
   info: info ?? getParticipantInfo(i).signing,
 ).share;

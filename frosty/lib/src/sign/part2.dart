@@ -16,7 +16,6 @@ class InvalidSignPart2 extends MessageException {
 /// Generates the signature [share] to share with the signature
 /// aggregator/coordinator.
 class SignPart2 {
-
   late SignatureShare share;
 
   /// After the signature share is generated, the [ourNonces] should be
@@ -28,9 +27,7 @@ class SignPart2 {
     required SigningCommitmentSet commitments,
     required SigningKeyInfo info,
   }) {
-
     try {
-
       share = SignatureShare.fromUnderlying(
         rust.signPart2(
           noncesCommitments: commitments.nativeList,
@@ -43,11 +40,8 @@ class SignPart2 {
           threshold: info.group.threshold,
         ),
       );
-
-    } on AnyhowException catch(e) {
+    } on AnyhowException catch (e) {
       throw InvalidSignPart2(e.message);
     }
-
   }
-
 }

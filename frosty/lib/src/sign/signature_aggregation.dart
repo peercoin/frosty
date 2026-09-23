@@ -26,7 +26,6 @@ class InvalidAggregationShare implements Exception {
 /// Allows the coordinator to aggregate signature shares taken from selected
 /// participants.
 class SignatureAggregation {
-
   /// The final generated signature
   late cl.SchnorrSignature signature;
 
@@ -36,36 +35,35 @@ class SignatureAggregation {
     required ShareList shares,
     required AggregateKeyInfo info,
   }) {
-
     try {
-
       final bytes = rust.aggregateSignature(
         noncesCommitments: commitments.nativeList,
         message: details.message,
         merkleRoot: details.mastHash,
-        shares: shares.map(
-          (s) => rust.IdentifierAndSignatureShare.fromRefs(
-            identifier: s.$1.underlying,
-            share: s.$2.underlying,
-          ),
-        ).toList(),
+        shares: shares
+            .map(
+              (s) => rust.IdentifierAndSignatureShare.fromRefs(
+                identifier: s.$1.underlying,
+                share: s.$2.underlying,
+              ),
+            )
+            .toList(),
         groupPk: info.groupKey.data,
-        publicShares: info.publicShares.list.map(
-          (s) => rust.IdentifierAndPublicShare.fromRef(
-            identifier: s.$1.underlying,
-            publicShare: s.$2.data,
-          ),
-        ).toList(),
+        publicShares: info.publicShares.list
+            .map(
+              (s) => rust.IdentifierAndPublicShare.fromRef(
+                identifier: s.$1.underlying,
+                publicShare: s.$2.data,
+              ),
+            )
+            .toList(),
       );
 
       signature = cl.SchnorrSignature(bytes);
-
-    } on rust.SignAggregationError_General catch(e) {
+    } on rust.SignAggregationError_General catch (e) {
       throw InvalidAggregation(e.message);
-    } on rust.SignAggregationError_InvalidSignShare catch(e) {
+    } on rust.SignAggregationError_InvalidSignShare catch (e) {
       throw InvalidAggregationShare(Identifier.fromUnderlying(e.culprit));
     }
-
   }
-
 }

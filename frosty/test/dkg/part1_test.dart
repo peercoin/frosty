@@ -3,7 +3,6 @@ import 'package:test/test.dart';
 
 void main() {
   group("DkgPart1", () {
-
     late Identifier id;
     setUpAll(() async {
       await loadFrosty();
@@ -18,10 +17,8 @@ void main() {
     });
 
     test("commitment scales with threshold", () {
-
-      int getLen(int t, int n) => DkgPart1(
-        identifier: id, threshold: t, n: n,
-      ).public.toBytes().length;
+      int getLen(int t, int n) =>
+          DkgPart1(identifier: id, threshold: t, n: n).public.toBytes().length;
 
       final t1Len = getLen(2, 2);
       final t2Len = getLen(3, 5);
@@ -29,7 +26,6 @@ void main() {
 
       expect(t1Len, lessThan(t2Len));
       expect(t2Len, lessThan(t3Len));
-
     });
 
     test("invalid round 1", () {
@@ -42,6 +38,5 @@ void main() {
       expectError(2, 0x10000);
       expectError(3, 2);
     });
-
   });
 }

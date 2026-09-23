@@ -4,12 +4,11 @@ import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 import 'helpers.dart';
 
-final testIdHex
-  = "d10672c45e416c0e096ca08686e3f5226d3d7ed8fcc2d758624e396445bfdb9f";
+final testIdHex =
+    "d10672c45e416c0e096ca08686e3f5226d3d7ed8fcc2d758624e396445bfdb9f";
 
 void main() {
   group("Identifier", () {
-
     setUpAll(loadFrosty);
 
     writableRustObjTests<Identifier, InvalidIdentifier>(
@@ -28,23 +27,17 @@ void main() {
     );
 
     test("fromUint16 valid", () {
-      expect(
-        Identifier.fromUint16(1).toBytes(),
-        Uint8List(32)..last = 1,
-      );
+      expect(Identifier.fromUint16(1).toBytes(), Uint8List(32)..last = 1);
       expect(
         Identifier.fromUint16(0xfffd).toBytes(),
         Uint8List(32)
-        ..last = 0xfd
-        ..[30] = 0xff,
+          ..last = 0xfd
+          ..[30] = 0xff,
       );
     });
 
     test("fromString valid", () {
-      expect(
-        cl.bytesToHex(Identifier.fromSeed("test").toBytes()),
-        testIdHex,
-      );
+      expect(cl.bytesToHex(Identifier.fromSeed("test").toBytes()), testIdHex);
       expect(
         cl.bytesToHex(Identifier.fromSeed("TEST").toBytes()),
         "5d7a4e95f0c8bfc95cd7d834354cca30a94106a33701b621ad37f68636a7e654",
@@ -53,7 +46,10 @@ void main() {
 
     test("fromUint16 invalid", () {
       for (final bad in [0, 0x10000]) {
-        expect(() => Identifier.fromUint16(bad), throwsA(isA<InvalidIdentifier>()));
+        expect(
+          () => Identifier.fromUint16(bad),
+          throwsA(isA<InvalidIdentifier>()),
+        );
       }
     });
 
@@ -75,6 +71,5 @@ void main() {
         orderedEquals([id1, id2, id3, idffff]),
       );
     });
-
   });
 }

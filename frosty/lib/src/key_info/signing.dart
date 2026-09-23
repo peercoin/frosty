@@ -8,19 +8,16 @@ import 'private.dart';
 /// contains the [GroupKeyInfo] and [PrivateKeyInfo] but excludes the
 /// public shares which aren't needed.
 class SigningKeyInfo extends KeyInfoWithGroupKey {
-
   final GroupKeyInfo group;
   final PrivateKeyInfo private;
 
-  SigningKeyInfo({
-    required this.group,
-    required this.private,
-  });
+  SigningKeyInfo({required this.group, required this.private});
 
-  SigningKeyInfo.fromReader(cl.BytesReader reader) : this(
-    group: GroupKeyInfo.fromReader(reader),
-    private: PrivateKeyInfo.fromReader(reader),
-  );
+  SigningKeyInfo.fromReader(cl.BytesReader reader)
+    : this(
+        group: GroupKeyInfo.fromReader(reader),
+        private: PrivateKeyInfo.fromReader(reader),
+      );
 
   /// Convenience constructor to construct from serialised [bytes].
   SigningKeyInfo.fromBytes(Uint8List bytes)
@@ -42,11 +39,10 @@ class SigningKeyInfo extends KeyInfoWithGroupKey {
     final newGroup = group.tweak(scalar);
     final newPrivate = private.tweak(scalar);
     return newGroup == null || newPrivate == null
-      ? null
-      : SigningKeyInfo(group: newGroup, private: newPrivate);
+        ? null
+        : SigningKeyInfo(group: newGroup, private: newPrivate);
   }
 
   @override
   cl.ECCompressedPublicKey get groupKey => group.groupKey;
-
 }

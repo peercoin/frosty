@@ -4,15 +4,10 @@ import 'dart:typed_data';
 import 'package:test/test.dart';
 
 (List<Identifier>, List<DkgPart1>, DkgCommitmentSet) genPart1() {
-
-  final ids = List.generate(3, (i) => Identifier.fromUint16(1+i));
+  final ids = List.generate(3, (i) => Identifier.fromUint16(1 + i));
   final eachPart1 = List.generate(
     3,
-    (i) => DkgPart1(
-      identifier: ids[i],
-      threshold: 2,
-      n: 3,
-    ),
+    (i) => DkgPart1(identifier: ids[i], threshold: 2, n: 3),
   );
 
   final commitmentSet = DkgCommitmentSet([
@@ -20,7 +15,6 @@ import 'package:test/test.dart';
   ]);
 
   return (ids, eachPart1, commitmentSet);
-
 }
 
 void writableRustObjTests<
@@ -28,14 +22,13 @@ void writableRustObjTests<
   E extends MessageException
 >(
   Uint8List validBytes,
-  T Function(Uint8List) fromBytes,
-  [List<Uint8List> extraInvalid = const [],]
-) {
-
-  test("fromBytes valid", () => expect(
-      fromBytes(validBytes).toBytes(),
-      validBytes,
-  ),);
+  T Function(Uint8List) fromBytes, [
+  List<Uint8List> extraInvalid = const [],
+]) {
+  test(
+    "fromBytes valid",
+    () => expect(fromBytes(validBytes).toBytes(), validBytes),
+  );
 
   test("fromBytes invalid", () {
     for (final bytes in [
@@ -53,20 +46,19 @@ void writableRustObjTests<
     obj.dispose();
     expect(() => obj.toBytes(), throwsA(isA<UseAfterFree>()));
   });
-
 }
 
-Uint8List commitmentSetBytes(
-  List<Uint8List> commitBytes,
-) => Uint8List.fromList([
-  3, 0,
-  ...Uint8List(32)..last=1,
-  commitBytes[0].length,
-  ...commitBytes[0],
-  ...Uint8List(32)..last=2,
-  commitBytes[1].length,
-  ...commitBytes[1],
-  ...Uint8List(32)..last=3,
-  commitBytes[2].length,
-  ...commitBytes[2],
-]);
+Uint8List commitmentSetBytes(List<Uint8List> commitBytes) =>
+    Uint8List.fromList([
+      3,
+      0,
+      ...Uint8List(32)..last = 1,
+      commitBytes[0].length,
+      ...commitBytes[0],
+      ...Uint8List(32)..last = 2,
+      commitBytes[1].length,
+      ...commitBytes[1],
+      ...Uint8List(32)..last = 3,
+      commitBytes[2].length,
+      ...commitBytes[2],
+    ]);

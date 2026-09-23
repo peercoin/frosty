@@ -9,7 +9,6 @@ final tweakedHex = "${tweakedGroupKeyHex}0200";
 
 void main() {
   group("GroupKeyInfo", () {
-
     setUpAll(loadFrosty);
 
     basicInfoTests(
@@ -23,12 +22,9 @@ void main() {
     test("invalid group info arguments", () {
       // Invalid threshold
       expect(
-        () => GroupKeyInfo(
-          groupKey: groupPublicKey,
-          threshold: 1,
-        ), throwsA(isA<InvalidKeyInfo>()),
+        () => GroupKeyInfo(groupKey: groupPublicKey, threshold: 1),
+        throwsA(isA<InvalidKeyInfo>()),
       );
     });
-
   });
 }

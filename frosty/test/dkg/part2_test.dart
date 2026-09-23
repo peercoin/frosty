@@ -4,7 +4,6 @@ import '../helpers.dart';
 
 void main() {
   group("DkgPart2", () {
-
     late List<Identifier> ids;
     late List<DkgPart1> eachPart1;
     late DkgCommitmentSet commitmentSet;
@@ -14,7 +13,6 @@ void main() {
     });
 
     test("gives expected secrets to share", () {
-
       for (int i = 0; i < 3; i++) {
         final part2 = DkgPart2(
           identifier: ids[i],
@@ -25,12 +23,12 @@ void main() {
         // Should have other identifiers
         expect(
           part2.sharesToGive.keys,
-          unorderedEquals(
-            [for (final id in ids) if (id != ids[i]) id],
-          ),
+          unorderedEquals([
+            for (final id in ids)
+              if (id != ids[i]) id,
+          ]),
         );
       }
-
     });
 
     void expectUseAfterFree() {
@@ -55,7 +53,6 @@ void main() {
     });
 
     test("invalid round 2", () {
-
       // Wrong amount of commitments
       expect(
         () => DkgPart2(
@@ -78,12 +75,13 @@ void main() {
           ]),
         ),
         throwsA(
-          isA<InvalidPart2ProofOfKnowledge>()
-          .having((err) => err.culprit, "culprit", Identifier.fromUint16(2)),
+          isA<InvalidPart2ProofOfKnowledge>().having(
+            (err) => err.culprit,
+            "culprit",
+            Identifier.fromUint16(2),
+          ),
         ),
       );
-
     });
-
   });
 }

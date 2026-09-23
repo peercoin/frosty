@@ -13,7 +13,7 @@ import 'part2.dart';
 import 'share_to_give.dart';
 
 /// Thrown when data provided into part 3 is not valid
-class InvalidPart3 extends MessageException{
+class InvalidPart3 extends MessageException {
   InvalidPart3(super.message);
 }
 
@@ -24,7 +24,6 @@ class InvalidPart3 extends MessageException{
 /// afterwards. This includes the [DkgRound2Secret], [DkgCommitmentSet] and
 /// [DkgShareToGive] shares.
 class DkgPart3 {
-
   /// All the information required for a participant to begin producing
   /// signature shares.
   late ParticipantKeyInfo participantInfo;
@@ -40,22 +39,21 @@ class DkgPart3 {
     required DkgCommitmentSet commitments,
     required Map<Identifier, DkgShareToGive> receivedShares,
   }) {
-
     try {
-
       final record = rust.dkgPart3(
         round2Secret: round2Secret.underlying,
         round1Commitments: commitments.nativeListForId(identifier),
-        round2Shares: receivedShares.entries.map(
-          (v) => rust.DkgRound2IdentifierAndShare.fromRefs(
-            identifier: v.key.underlying,
-            secret: v.value.underlying,
-          ),
-        ).toList(),
+        round2Shares: receivedShares.entries
+            .map(
+              (v) => rust.DkgRound2IdentifierAndShare.fromRefs(
+                identifier: v.key.underlying,
+                secret: v.value.underlying,
+              ),
+            )
+            .toList(),
       );
 
       participantInfo = ParticipantKeyInfo(
-
         group: GroupKeyInfo(
           groupKey: cl.ECCompressedPublicKey(record.groupPk),
           threshold: record.threshold,
@@ -63,24 +61,21 @@ class DkgPart3 {
 
         publicShares: PublicSharesKeyInfo(
           publicShares: [
-            for (final share in record.publicKeyShares) (
-              Identifier.fromUnderlying(share.identifier),
-              cl.ECCompressedPublicKey(share.publicShare),
-            ),
+            for (final share in record.publicKeyShares)
+              (
+                Identifier.fromUnderlying(share.identifier),
+                cl.ECCompressedPublicKey(share.publicShare),
+              ),
           ],
         ),
 
         private: PrivateKeyInfo(
-           identifier: Identifier.fromUnderlying(record.identifier),
-           share: cl.ECPrivateKey(record.privateShare),
+          identifier: Identifier.fromUnderlying(record.identifier),
+          share: cl.ECPrivateKey(record.privateShare),
         ),
-
       );
-
-    } on AnyhowException catch(e) {
+    } on AnyhowException catch (e) {
       throw InvalidPart3(e.message);
     }
-
   }
-
 }

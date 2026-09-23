@@ -7,7 +7,6 @@ const _name = "frosty_rust";
 
 // Returns null if the path is to be handled by FRB instead
 String? _libraryPath() {
-
   final String? localLib, flutterLib;
 
   if (Platform.isLinux || Platform.isAndroid) {
@@ -29,7 +28,6 @@ String? _libraryPath() {
 
   // Try to load from flutter library name
   return flutterLib;
-
 }
 
 Future<void> loadFrostyImpl({String? webRoot}) {

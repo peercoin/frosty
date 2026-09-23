@@ -5,7 +5,6 @@ import '../helpers.dart';
 
 void main() {
   group("DkgShareToGive", () {
-
     setUpAll(loadFrosty);
 
     final validBytes = cl.hexToBytes(
@@ -16,6 +15,5 @@ void main() {
       validBytes,
       (b) => DkgShareToGive.fromBytes(b),
     );
-
   });
 }

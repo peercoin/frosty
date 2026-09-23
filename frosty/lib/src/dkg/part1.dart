@@ -13,11 +13,11 @@ class DkgRound1Secret extends RustObjectWrapper<rust.DkgRound1SecretOpaque> {
 /// and a public commitment, the latter of which is to be shared between all
 /// other participants.
 class DkgPart1 {
-
   /// The secret object that is required for round 2 but must be kept secret by
   /// the participant and shared with no-one else. `secret.dispose()` may
   /// be called once the secret is no longer needed.
   late final DkgRound1Secret secret;
+
   /// The public commitment that must be shared to all other participants
   late final DkgPublicCommitment public;
 
@@ -32,16 +32,15 @@ class DkgPart1 {
     required int threshold,
     required int n,
   }) {
-
     if (n < 2 || n > 0xffff) {
-      throw ArgumentError.value(
-        n, "n", "should be between 2 and 65535",
-      );
+      throw ArgumentError.value(n, "n", "should be between 2 and 65535");
     }
 
     if (threshold < 2 || threshold > n) {
       throw ArgumentError.value(
-        threshold, "threshold", "should be between 2 and $n",
+        threshold,
+        "threshold",
+        "should be between 2 and $n",
       );
     }
 
@@ -53,7 +52,5 @@ class DkgPart1 {
 
     secret = DkgRound1Secret.fromUnderlying(record.$1);
     public = DkgPublicCommitment.fromUnderlying(record.$2);
-
   }
-
 }

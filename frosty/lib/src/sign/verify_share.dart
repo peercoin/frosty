@@ -14,7 +14,6 @@ bool verifySignatureShare({
   required cl.ECCompressedPublicKey publicShare,
   required cl.ECCompressedPublicKey groupKey,
 }) {
-
   try {
     rust.verifySignatureShare(
       noncesCommitments: commitments.nativeList,
@@ -30,5 +29,4 @@ bool verifySignatureShare({
   }
 
   return true;
-
 }

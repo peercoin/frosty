@@ -10,7 +10,6 @@ import 'private.dart';
 /// Contains all details for a given participant, including the group key,
 /// threshold, public shares and private share.
 class ParticipantKeyInfo extends KeyInfoWithGroupKey {
-
   final GroupKeyInfo group;
   final PublicSharesKeyInfo publicShares;
   final PrivateKeyInfo private;
@@ -23,11 +22,12 @@ class ParticipantKeyInfo extends KeyInfoWithGroupKey {
     AggregateKeyInfo.validateGroupWithPublicShares(group, publicShares);
   }
 
-  ParticipantKeyInfo.fromReader(cl.BytesReader reader) : this(
-    group: GroupKeyInfo.fromReader(reader),
-    publicShares: PublicSharesKeyInfo.fromReader(reader),
-    private: PrivateKeyInfo.fromReader(reader),
-  );
+  ParticipantKeyInfo.fromReader(cl.BytesReader reader)
+    : this(
+        group: GroupKeyInfo.fromReader(reader),
+        publicShares: PublicSharesKeyInfo.fromReader(reader),
+        private: PrivateKeyInfo.fromReader(reader),
+      );
 
   /// Convenience constructor to construct from serialised [bytes].
   ParticipantKeyInfo.fromBytes(Uint8List bytes)
@@ -44,16 +44,11 @@ class ParticipantKeyInfo extends KeyInfoWithGroupKey {
   }
 
   /// Get only the information required for signing shares
-  SigningKeyInfo get signing => SigningKeyInfo(
-    group: group,
-    private: private,
-  );
+  SigningKeyInfo get signing => SigningKeyInfo(group: group, private: private);
 
   /// Get only the information required for signature aggregation
-  AggregateKeyInfo get aggregate => AggregateKeyInfo(
-    group: group,
-    publicShares: publicShares,
-  );
+  AggregateKeyInfo get aggregate =>
+      AggregateKeyInfo(group: group, publicShares: publicShares);
 
   @override
   /// Tweaks the signing key info by a scalar. null may be returned if the
@@ -63,12 +58,12 @@ class ParticipantKeyInfo extends KeyInfoWithGroupKey {
     final newShares = publicShares.tweak(scalar);
     final newPrivate = private.tweak(scalar);
     return newGroup == null || newShares == null || newPrivate == null
-      ? null
-      : ParticipantKeyInfo(
-        group: newGroup,
-        publicShares: newShares,
-        private: newPrivate,
-      );
+        ? null
+        : ParticipantKeyInfo(
+            group: newGroup,
+            publicShares: newShares,
+            private: newPrivate,
+          );
   }
 
   /// Constructs the private key of the FROST key using the participant's
@@ -77,12 +72,12 @@ class ParticipantKeyInfo extends KeyInfoWithGroupKey {
   /// private key shares.
   ///
   /// See [AggregateKeyInfo.constructPrivateKey].
-  cl.ECPrivateKey constructPrivateKey(PrivateShareList privateShares)
-    => aggregate.constructPrivateKey(
-      [...privateShares, (private.identifier, private.share)],
-    );
+  cl.ECPrivateKey constructPrivateKey(PrivateShareList privateShares) =>
+      aggregate.constructPrivateKey([
+        ...privateShares,
+        (private.identifier, private.share),
+      ]);
 
   @override
   cl.ECCompressedPublicKey get groupKey => group.groupKey;
-
 }

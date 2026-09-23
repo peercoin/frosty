@@ -6,8 +6,8 @@ import 'derivable.dart';
 import 'hd_key_info.dart';
 import 'signing.dart';
 
-class HDParticipantKeyInfo extends ParticipantKeyInfo implements HDDerivableInfo {
-
+class HDParticipantKeyInfo extends ParticipantKeyInfo
+    implements HDDerivableInfo {
   @override
   final HDKeyInfo hdInfo;
 
@@ -26,13 +26,14 @@ class HDParticipantKeyInfo extends ParticipantKeyInfo implements HDDerivableInfo
 
   HDParticipantKeyInfo.masterFromInfo(ParticipantKeyInfo info)
     : this.master(
-      group: info.group,
-      publicShares: info.publicShares,
-      private: info.private,
-    );
+        group: info.group,
+        publicShares: info.publicShares,
+        private: info.private,
+      );
 
   HDParticipantKeyInfo.fromReader(super.reader)
-    : hdInfo = HDKeyInfo.fromReader(reader), super.fromReader();
+    : hdInfo = HDKeyInfo.fromReader(reader),
+      super.fromReader();
 
   /// Convenience constructor to construct from serialised [bytes].
   HDParticipantKeyInfo.fromBytes(Uint8List bytes)
@@ -48,11 +49,8 @@ class HDParticipantKeyInfo extends ParticipantKeyInfo implements HDDerivableInfo
   }
 
   /// Get the singing information alongside the [HDKeyInfo].
-  HDSigningKeyInfo get hdSigning => HDSigningKeyInfo(
-    group: group,
-    private: private,
-    hdInfo: hdInfo,
-  );
+  HDSigningKeyInfo get hdSigning =>
+      HDSigningKeyInfo(group: group, private: private, hdInfo: hdInfo);
 
   /// Get the aggregation information alongside the [HDKeyInfo].
   HDAggregateKeyInfo get hdAggregate => HDAggregateKeyInfo(
@@ -71,5 +69,4 @@ class HDParticipantKeyInfo extends ParticipantKeyInfo implements HDDerivableInfo
       hdInfo: newHdInfo,
     );
   }
-
 }

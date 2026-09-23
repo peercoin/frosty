@@ -10,24 +10,22 @@ class InvalidSigningNonces extends MessageException {
 }
 
 /// The nonces share for signatures, to be kept by the signing participant.
-class SigningNonces
-extends WritableRustObjectWrapper<rust.SigningNonces> {
-
+class SigningNonces extends WritableRustObjectWrapper<rust.SigningNonces> {
   SigningNonces.fromUnderlying(super._underlying);
 
   /// Reads the serialised commitment from a participant and throws
   /// [InvalidSigningNonces] if invalid.
-  SigningNonces.fromBytes(Uint8List data) : super(
-    handleGetObject(
-      () => rust.signingNoncesFromBytes(bytes: data),
-      (e) => InvalidSigningNonces(e),
-    ),
-    data,
-  );
+  SigningNonces.fromBytes(Uint8List data)
+    : super(
+        handleGetObject(
+          () => rust.signingNoncesFromBytes(bytes: data),
+          (e) => InvalidSigningNonces(e),
+        ),
+        data,
+      );
 
   /// Obtains serialised data for the commitment that can be shared with
   /// the signature aggregator.
   @override
   Uint8List serializeImpl() => rust.signingNoncesToBytes(nonces: underlying);
-
 }

@@ -4,9 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group("SignDetails", () {
-
     test("succeeds", () {
-
       final scriptSpend = SignDetails.scriptSpend(message: Uint8List(32));
       expect(scriptSpend.message, Uint8List(32));
       expect(scriptSpend.mastHash, null);
@@ -18,12 +16,9 @@ void main() {
       expect(withMast.message, Uint8List(32));
       expect(withMast.mastHash, Uint8List(32)..last = 1);
 
-      final emptyMast = SignDetails.keySpend(
-        message: Uint8List(32),
-      );
+      final emptyMast = SignDetails.keySpend(message: Uint8List(32));
       expect(emptyMast.message, Uint8List(32));
       expect(emptyMast.mastHash, Uint8List(0));
-
     });
 
     test("fails", () {
@@ -40,7 +35,6 @@ void main() {
     final il32 = Uint8List(32);
 
     test("fromBytes valid", () {
-
       void expectDetails(List<int> bytes, Uint8List? mast) {
         final uintList = Uint8List.fromList(bytes);
         final obj = SignDetails.fromBytes(uintList);
@@ -55,13 +49,15 @@ void main() {
       final v3 = [...il32, 2, ...il32];
       expectDetails(v3, Uint8List(32));
 
-      expect({ v1, v2, v3, v1, v2, v3 }, hasLength(3));
-
+      expect({v1, v2, v3, v1, v2, v3}, hasLength(3));
     });
 
     test("fromBytes invalid", () {
       for (final bytes in [
-        [0], [...il32], [...il32, 2], [...il32, 3, ...il32],
+        [0],
+        [...il32],
+        [...il32, 2],
+        [...il32, 3, ...il32],
       ]) {
         expect(
           () => SignDetails.fromBytes(Uint8List.fromList(bytes)),
@@ -69,6 +65,5 @@ void main() {
         );
       }
     });
-
   });
 }

@@ -6,7 +6,6 @@ import '../helpers.dart';
 
 void main() {
   group("SigningCommitmentSet", () {
-
     final commitBytes = [
       cl.hexToBytes(
         "00230f8ab302de8e5cc1582be4b6b5a1e8be2d482dabe86d2e3368d1a98785fb27bfcdfdf72902ec04d9f8bb9b423927defe454295d07e0609c029f6c6778a218fe9d575c125d9",
@@ -26,8 +25,9 @@ void main() {
       await loadFrosty();
       map = {
         for (int i = 0; i < 3; i++)
-          Identifier.fromUint16(i+1):
-          SigningCommitment.fromBytes(commitBytes[i]),
+          Identifier.fromUint16(i + 1): SigningCommitment.fromBytes(
+            commitBytes[i],
+          ),
       };
     });
 
@@ -41,7 +41,6 @@ void main() {
     });
 
     test("invalid bytes", () {
-
       void expectThrows<T>(Uint8List invalid) => expect(
         () => SigningCommitmentSet.fromReader(cl.BytesReader(invalid)),
         throwsA(isA<T>()),
@@ -51,8 +50,6 @@ void main() {
       expectThrows<InvalidSigningCommitment>(
         Uint8List.fromList(List.from(validBytes)..removeAt(1)),
       );
-
     });
-
   });
 }

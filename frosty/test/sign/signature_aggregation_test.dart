@@ -5,7 +5,6 @@ import "../data.dart";
 
 void main() {
   group("SignatureAggregation + verifySignatureShare", () {
-
     late final List<SignPart1> part1s;
     late final SigningCommitmentSet commitments;
     late final SignDetails basicDetails;
@@ -24,14 +23,11 @@ void main() {
     });
 
     ShareList getShares(SignDetails? details) => List.generate(
-      2, (i) => (
-        ids[i],
-        getShare(part1s, i, details: details),
-      ),
+      2,
+      (i) => (ids[i], getShare(part1s, i, details: details)),
     );
 
     void expectValid(SignDetails details, cl.ECPublicKey pubkey) {
-
       final shares = getShares(details);
 
       final signature = SignatureAggregation(
@@ -51,15 +47,14 @@ void main() {
             details: details,
             id: share.$1,
             share: share.$2,
-            publicShare: aggregateInfo.publicShares.list.firstWhere(
-              (t) => t.$1 == share.$1,
-            ).$2,
+            publicShare: aggregateInfo.publicShares.list
+                .firstWhere((t) => t.$1 == share.$1)
+                .$2,
             groupKey: aggregateInfo.groupKey,
           ),
           true,
         );
       }
-
     }
 
     void expectValidKeySpend(cl.TapNode? mast) {
@@ -105,7 +100,6 @@ void main() {
     );
 
     test("identifiable invalid share", () {
-
       // Use incorrect share for participant 2
       final sharesWithInvalid = [
         (ids[0], getShare(part1s, 0)),
@@ -120,21 +114,20 @@ void main() {
           info: aggregateInfo,
         ),
         throwsA(
-          isA<InvalidAggregationShare>()
-          .having((err) => err.culprit, "culprit", ids[1]),
+          isA<InvalidAggregationShare>().having(
+            (err) => err.culprit,
+            "culprit",
+            ids[1],
+          ),
         ),
       );
-
     });
 
     test("invalid inputs", () {
-
       // Incorrect number of commitments
       expect(
         () => SignatureAggregation(
-          commitments: SigningCommitmentSet({
-            ids.first: part1s[0].commitment,
-          }),
+          commitments: SigningCommitmentSet({ids.first: part1s[0].commitment}),
           details: basicDetails,
           shares: getShares(null),
           info: aggregateInfo,
@@ -166,8 +159,6 @@ void main() {
         ),
         throwsA(isA<InvalidAggregation>()),
       );
-
     });
-
   });
 }

@@ -5,7 +5,6 @@ import 'derivable.dart';
 import 'hd_key_info.dart';
 
 class HDSigningKeyInfo extends SigningKeyInfo implements HDDerivableInfo {
-
   @override
   final HDKeyInfo hdInfo;
 
@@ -15,13 +14,12 @@ class HDSigningKeyInfo extends SigningKeyInfo implements HDDerivableInfo {
     required this.hdInfo,
   });
 
-  HDSigningKeyInfo.master({
-    required super.group,
-    required super.private,
-  }) : hdInfo = HDKeyInfo.master;
+  HDSigningKeyInfo.master({required super.group, required super.private})
+    : hdInfo = HDKeyInfo.master;
 
   HDSigningKeyInfo.fromReader(super.reader)
-    : hdInfo = HDKeyInfo.fromReader(reader), super.fromReader();
+    : hdInfo = HDKeyInfo.fromReader(reader),
+      super.fromReader();
 
   /// Convenience constructor to construct from serialised [bytes].
   HDSigningKeyInfo.fromBytes(Uint8List bytes)
@@ -45,5 +43,4 @@ class HDSigningKeyInfo extends SigningKeyInfo implements HDDerivableInfo {
       hdInfo: newHdInfo,
     );
   }
-
 }

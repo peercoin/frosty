@@ -16,9 +16,7 @@ final zeroTweakedHex = non_hd.validHex;
 final tweakedHex = non_hd.tweakedHex;
 
 void main() {
-
   group("HDSigningKeyInfo", () {
-
     setUpAll(loadFrosty);
 
     basicInfoTests(
@@ -35,7 +33,5 @@ void main() {
       expectDerivedGroup(newHdSigning.group);
       expectDerivedPrivate(newHdSigning.private);
     });
-
   });
-
 }

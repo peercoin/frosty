@@ -8,9 +8,9 @@ class InvalidSignDetails extends MessageException {
 }
 
 class SignDetails with cl.Writable {
-
   /// The message to sign
   final Uint8List message;
+
   /// The 32-byte hash of the MAST tree. This can be set to an empty list if a
   /// proof of an empty MAST tree is required, or null to avoid needing to tweak
   /// the internal Taproot key or when signing with a key in a Tapscript.
@@ -22,19 +22,16 @@ class SignDetails with cl.Writable {
   /// The [mastHash] should contain the root hash of the MAST tree. If null, no
   /// Taproot tweak will be used. If an empty list, a tweak without the MAST
   /// hash will be used.
-  SignDetails({
-    required this.message,
-    required this.mastHash,
-  }) {
-
+  SignDetails({required this.message, required this.mastHash}) {
     if (message.length != 32) {
       throw InvalidSignDetails("The message to sign must be 32 bytes");
     }
 
     if (mastHash != null && mastHash!.length != 32 && mastHash!.isNotEmpty) {
-      throw InvalidSignDetails("MAST root hash must be 32 bytes, empty or omitted");
+      throw InvalidSignDetails(
+        "MAST root hash must be 32 bytes, empty or omitted",
+      );
     }
-
   }
 
   factory SignDetails.fromReader(cl.BytesReader reader) {
@@ -44,63 +41,52 @@ class SignDetails with cl.Writable {
     return SignDetails(
       message: msg,
       mastHash: mastType == 0
-        ? null
-        : (mastType == 1 ? Uint8List(0) : reader.readSlice(32)),
+          ? null
+          : (mastType == 1 ? Uint8List(0) : reader.readSlice(32)),
     );
   }
 
   /// Convenience constructor to construct from serialised [bytes].
-  factory SignDetails.fromBytes(Uint8List bytes)
-    => SignDetails.fromReader(cl.BytesReader(bytes));
+  factory SignDetails.fromBytes(Uint8List bytes) =>
+      SignDetails.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
-  factory SignDetails.fromHex(String hex)
-    => SignDetails.fromBytes(cl.hexToBytes(hex));
+  factory SignDetails.fromHex(String hex) =>
+      SignDetails.fromBytes(cl.hexToBytes(hex));
 
   /// Used for key-spend signatures. This will always tweak the internal key. If
   /// there is no MAST root hash provided, the tweak will be done without a
   /// MAST hash for Taproot programs that only have a key-path.
-  SignDetails.keySpend({
-    required Uint8List message,
-    Uint8List? mastHash,
-  }) : this(message: message, mastHash: mastHash ?? Uint8List(0));
+  SignDetails.keySpend({required Uint8List message, Uint8List? mastHash})
+    : this(message: message, mastHash: mastHash ?? Uint8List(0));
 
   /// Used for script-spend signatures. This does not tweak the key allowing for
   /// direct signing with a key specified in a Tapscript.
-  SignDetails.scriptSpend({ required Uint8List message })
+  SignDetails.scriptSpend({required Uint8List message})
     : this(message: message, mastHash: null);
 
   @override
   void write(cl.Writer writer) {
-
-    final mastType = mastHash == null
-      ? 0
-      : (mastHash!.isEmpty ? 1 : 2);
+    final mastType = mastHash == null ? 0 : (mastHash!.isEmpty ? 1 : 2);
 
     writer.writeSlice(message);
     writer.writeUInt8(mastType);
     if (mastType == 2) writer.writeSlice(mastHash!);
-
   }
 
   @override
-  bool operator ==(Object other) => identical(this, other) || (
-    other is SignDetails
-    && cl.bytesEqual(message, other.message)
-    && (
-      mastHash == other.mastHash
-      || (
-        mastHash != null
-        && other.mastHash != null
-        && cl.bytesEqual(mastHash!, other.mastHash!)
-      )
-    )
-  );
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SignDetails &&
+          cl.bytesEqual(message, other.message) &&
+          (mastHash == other.mastHash ||
+              (mastHash != null &&
+                  other.mastHash != null &&
+                  cl.bytesEqual(mastHash!, other.mastHash!))));
 
   @override
   int get hashCode => Object.hash(
     Object.hashAll(message),
     mastHash == null ? 0 : Object.hashAll(mastHash!),
   );
-
 }
