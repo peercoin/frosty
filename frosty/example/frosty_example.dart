@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:coinlib/coinlib.dart';
 import 'package:frosty/frosty.dart';
 

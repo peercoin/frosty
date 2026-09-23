@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:typed_data';
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
@@ -11,7 +13,6 @@ import 'package:frosty/frosty.dart';
 // from the tx:
 //    004223970df85726b9d14312dc374b0c2899b1b67aeb0bf7501844eccf6fd505
 void main() async {
-
   await loadFrosty();
 
   // Key share information
@@ -34,7 +35,7 @@ void main() async {
 
   final publicShares = List.generate(
     3,
-    (i) => (Identifier.fromUint16(i+1), publicShareKeys[i]),
+    (i) => (Identifier.fromUint16(i + 1), publicShareKeys[i]),
   );
 
   final groupInfo = GroupKeyInfo(groupKey: groupKey, threshold: 2);
@@ -45,7 +46,7 @@ void main() async {
       group: groupInfo,
       publicShares: publicSharesInfo,
       private: PrivateKeyInfo(
-        identifier: Identifier.fromUint16(i+1),
+        identifier: Identifier.fromUint16(i + 1),
         share: privateShares[i],
       ),
     ),
@@ -68,11 +69,13 @@ void main() async {
   );
 
   final keyOnlyAddress = cl.P2TRAddress.fromTaproot(
-    taproot, hrp: cl.Network.testnet.bech32Hrp,
+    taproot,
+    hrp: cl.Network.testnet.bech32Hrp,
   );
 
   final scriptOnlyAddress = cl.P2TRAddress.fromTaproot(
-    taprootWithMast, hrp: cl.Network.testnet.bech32Hrp,
+    taprootWithMast,
+    hrp: cl.Network.testnet.bech32Hrp,
   );
 
   print("Key-path Taproot Address: $keyOnlyAddress");
@@ -80,8 +83,8 @@ void main() async {
 
   // Construct spending transaction and get signature hash
 
-  final prevTxHex
-    = "004223970df85726b9d14312dc374b0c2899b1b67aeb0bf7501844eccf6fd505";
+  final prevTxHex =
+      "004223970df85726b9d14312dc374b0c2899b1b67aeb0bf7501844eccf6fd505";
 
   final keyInput = cl.TaprootKeyInput(
     prevOut: cl.OutPoint.fromHex(prevTxHex, 0),
@@ -109,35 +112,32 @@ void main() async {
   // This is how the sigantures are constructed from each participants's shares
   // given the SignDetails
   cl.SchnorrSignature makeSignature(SignDetails details) {
-
     // Generate nonces for first two participants
-    final nonces = privateShares.take(2).map(
-      (share) => SignPart1(privateShare: share),
-    ).toList();
+    final nonces = privateShares
+        .take(2)
+        .map((share) => SignPart1(privateShare: share))
+        .toList();
 
     // Collect commitments
     final commitments = SigningCommitmentSet({
       for (int i = 0; i < 2; i++)
-        Identifier.fromUint16(i+1): nonces[i].commitment,
+        Identifier.fromUint16(i + 1): nonces[i].commitment,
     });
 
     // Generate signature shares
-    final shares = List.generate(
-      2,
-      (i) {
-        final id = Identifier.fromUint16(i+1);
-        return (
-          id,
-          SignPart2(
-            identifier: id,
-            details: details,
-            ourNonces: nonces[i].nonces,
-            commitments: commitments,
-            info: participantInfos[i].signing,
-          ).share
-        );
-      }
-    );
+    final shares = List.generate(2, (i) {
+      final id = Identifier.fromUint16(i + 1);
+      return (
+        id,
+        SignPart2(
+          identifier: id,
+          details: details,
+          ourNonces: nonces[i].nonces,
+          commitments: commitments,
+          info: participantInfos[i].signing,
+        ).share,
+      );
+    });
 
     // Aggregate signature shares into final signature
     return SignatureAggregation(
@@ -146,7 +146,6 @@ void main() async {
       shares: shares,
       info: participantInfos.first.aggregate,
     ).signature;
-
   }
 
   // Create signatures given the appropriate spending details
@@ -163,16 +162,10 @@ void main() async {
   ];
 
   final keyHash = cl.TaprootSignatureHasher(
-    cl.TaprootKeySignDetails(
-      tx: unsignedTx,
-      inputN: 0,
-      prevOuts: prevOuts,
-    ),
+    cl.TaprootKeySignDetails(tx: unsignedTx, inputN: 0, prevOuts: prevOuts),
   ).hash;
 
-  final keySignature = makeSignature(
-    SignDetails.keySpend(message: keyHash),
-  );
+  final keySignature = makeSignature(SignDetails.keySpend(message: keyHash));
 
   final scriptHash = cl.TaprootSignatureHasher(
     cl.TaprootScriptSignDetails(
@@ -189,16 +182,17 @@ void main() async {
 
   // Final transaction
   final completeTx = unsignedTx
-    .replaceInput(
-      keyInput.addSignature(cl.SchnorrInputSignature(keySignature)),
-      0,
-    )
-    .replaceInput(
-      scriptInput.updateStack([cl.SchnorrInputSignature(scriptSignature).bytes]),
-      1,
-    );
+      .replaceInput(
+        keyInput.addSignature(cl.SchnorrInputSignature(keySignature)),
+        0,
+      )
+      .replaceInput(
+        scriptInput.updateStack([
+          cl.SchnorrInputSignature(scriptSignature).bytes,
+        ]),
+        1,
+      );
 
   // Print hex of final signed transaction
   print("FROST signed transaction hex: ${completeTx.toHex()}");
-
 }
