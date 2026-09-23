@@ -1,15 +1,30 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-THISDIR=$(dirname "$(realpath "$0")")
-. $THISDIR/build-common-container.sh
+set -euo pipefail
 
-LIBNAME=frosty_rust.wasm
-WASM_BINDGEN_OUTNAME=frosty_rust
-WEB_OUTDIR=$THISDIR/../frosty_flutter/web/pkg
+script_dir=$(dirname "$(realpath "$0")")
+repo_dir=$(realpath "$script_dir/..")
+output_dir="$repo_dir/frosty/web/pkg"
+image_name=frosty_rust_wasm_build
 
-# Build container image with the build context being the parent directory
-TAG=frosty_rust_wasm_build
-$PROGCMD build -f $THISDIR/build_wasm.Dockerfile -t $TAG $THISDIR/.. || exit 1
+if command -v podman >/dev/null; then
+  container_engine=podman
+  volume_suffix=:Z
+elif command -v docker >/dev/null; then
+  container_engine=docker
+  volume_suffix=
+else
+  echo "Podman or Docker is required" >&2
+  exit 1
+fi
 
-# Build for wasm32-unknown-unknown
-build wasm32-unknown-unknown wasm
+mkdir -p "$output_dir"
+
+"$container_engine" build \
+  --file "$script_dir/build_wasm.Dockerfile" \
+  --tag "$image_name" \
+  "$repo_dir"
+
+"$container_engine" run --rm \
+  --volume "$output_dir:/output$volume_suffix" \
+  "$image_name"
