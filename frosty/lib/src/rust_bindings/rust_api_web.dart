@@ -3,10 +3,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart'
 import 'generated/frb_generated.dart';
 
 Future<void> loadFrostyImpl({String? webRoot}) async {
-  if (webRoot == null) {
-    await RustLib.init();
-    return;
-  }
+  webRoot ??= 'assets/packages/frosty/web/pkg/frosty_rust';
 
   final externalLibrary = await loadExternalLibrary(
     ExternalLibraryLoaderConfig(
