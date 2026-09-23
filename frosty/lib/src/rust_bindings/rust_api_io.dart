@@ -24,9 +24,15 @@ String? _libraryPath() {
     throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
   }
 
-  // Exists in build/?
-  final targetPath = join(Directory.current.path, "build", localLib);
-  if (File(targetPath).existsSync()) return targetPath;
+  // Dart build hooks place bundled native assets in .dart_tool/lib. Prefer
+  // that output over the legacy manually-built library in build/.
+  final localPaths = [
+    join(Directory.current.path, ".dart_tool", "lib", localLib),
+    join(Directory.current.path, "build", localLib),
+  ];
+  for (final path in localPaths) {
+    if (File(path).existsSync()) return path;
+  }
 
   // Try to load from flutter library name
   return flutterLib;
