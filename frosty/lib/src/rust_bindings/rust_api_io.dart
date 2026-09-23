@@ -2,6 +2,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:path/path.dart';
 
 import 'dart:io';
+import 'dart:isolate';
 
 import 'generated/frb_generated.dart';
 
@@ -24,9 +25,12 @@ String? _libraryPath() {
     throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
   }
 
-  // Dart build hooks place bundled native assets in .dart_tool/lib. Prefer
-  // that output over the legacy manually-built library in build/.
+  // Dart build hooks place bundled native assets alongside the active package
+  // configuration. This can be above Directory.current for workspace members.
+  final packageConfig = Isolate.packageConfigSync;
   final localPaths = [
+    if (packageConfig != null && packageConfig.scheme == 'file')
+      join(File.fromUri(packageConfig).parent.path, "lib", localLib),
     join(Directory.current.path, ".dart_tool", "lib", localLib),
     join(Directory.current.path, "build", localLib),
   ];
