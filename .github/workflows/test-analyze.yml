@@ -19,14 +19,14 @@ jobs:
       - uses: actions/checkout@v7.0.1
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.98.0
         with:
           components: rustfmt
 
       - name: Cache Rust build
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: frosty_flutter/rust -> target
+          workspaces: frosty/rust -> target
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2.23.0
@@ -38,12 +38,8 @@ jobs:
         working-directory: frosty
         run: dart pub get
 
-      - name: Resolve Flutter plugin dependencies
-        working-directory: frosty_flutter
-        run: flutter pub get
-
       - name: Resolve Flutter example dependencies
-        working-directory: frosty_flutter/example
+        working-directory: frosty/example
         run: flutter pub get
 
       - name: Verify Dart formatting
@@ -53,27 +49,15 @@ jobs:
         working-directory: frosty
         run: dart analyze --fatal-infos
 
-      - name: Analyze Flutter plugin
-        working-directory: frosty_flutter
-        run: flutter analyze --fatal-infos
-
       - name: Analyze Flutter example
-        working-directory: frosty_flutter/example
+        working-directory: frosty/example
         run: flutter analyze --fatal-infos
 
       - name: Verify Rust formatting
-        run: cargo fmt --check --manifest-path frosty_flutter/rust/Cargo.toml
+        run: cargo fmt --check --manifest-path frosty/rust/Cargo.toml
 
       - name: Check Rust library
-        run: cargo check --locked --manifest-path frosty_flutter/rust/Cargo.toml
-
-      - name: Build native library for Dart tests
-        run: cargo build --locked --manifest-path frosty_flutter/rust/Cargo.toml
-
-      - name: Install native library for Dart tests
-        run: |
-          mkdir -p frosty/build
-          cp frosty_flutter/rust/target/debug/libfrosty_rust.so frosty/build/
+        run: cargo check --locked --manifest-path frosty/rust/Cargo.toml
 
       - name: Run Dart tests
         working-directory: frosty

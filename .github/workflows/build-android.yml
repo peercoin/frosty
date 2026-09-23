@@ -22,15 +22,15 @@ jobs:
         uses: actions/setup-java@v6.0.1
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@1.98.0
 
       - name: Cache Rust build
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: frosty_flutter/rust -> target
+          workspaces: frosty/rust -> target
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2.23.0
@@ -39,9 +39,9 @@ jobs:
           cache: true
 
       - name: Resolve Flutter example dependencies
-        working-directory: frosty_flutter/example
+        working-directory: frosty/example
         run: flutter pub get
 
       - name: Build Flutter Android release APK
-        working-directory: frosty_flutter/example
+        working-directory: frosty/example
         run: flutter build apk --release --no-pub
