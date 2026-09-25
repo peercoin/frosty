@@ -1,13 +1,14 @@
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:path/path.dart';
+
 import 'dart:io';
+
 import 'generated/frb_generated.dart';
 
 const _name = "frosty_rust";
 
 // Returns null if the path is to be handled by FRB instead
 String? _libraryPath() {
-
   final String? localLib, flutterLib;
 
   if (Platform.isLinux || Platform.isAndroid) {
@@ -29,7 +30,6 @@ String? _libraryPath() {
 
   // Try to load from flutter library name
   return flutterLib;
-
 }
 
 Future<void> loadFrostyImpl({String? webRoot}) {

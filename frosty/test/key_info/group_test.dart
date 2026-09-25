@@ -1,6 +1,7 @@
 import 'package:frosty/frosty.dart';
 import 'package:frosty/src/frosty_base.dart';
 import 'package:test/test.dart';
+
 import '../data.dart';
 import 'helpers.dart';
 
@@ -9,7 +10,6 @@ final tweakedHex = "${tweakedGroupKeyHex}0200";
 
 void main() {
   group("GroupKeyInfo", () {
-
     setUpAll(loadFrosty);
 
     basicInfoTests(
@@ -23,12 +23,9 @@ void main() {
     test("invalid group info arguments", () {
       // Invalid threshold
       expect(
-        () => GroupKeyInfo(
-          groupKey: groupPublicKey,
-          threshold: 1,
-        ), throwsA(isA<InvalidKeyInfo>()),
+        () => GroupKeyInfo(groupKey: groupPublicKey, threshold: 1),
+        throwsA(isA<InvalidKeyInfo>()),
       );
     });
-
   });
 }

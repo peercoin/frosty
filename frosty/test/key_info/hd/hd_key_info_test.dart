@@ -1,16 +1,16 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+
 import '../../data.dart';
 
 final validHex = "${chainCodeHex}000000000000000000";
 
 void main() {
-
   group("HDKeyInfo", () {
-
     late HDKeyInfo hdInfo;
     setUpAll(() async {
       await loadFrosty();
@@ -18,7 +18,6 @@ void main() {
     });
 
     test("invalid parameters", () {
-
       void expectInvalid({
         Uint8List? cc,
         int depth = 0,
@@ -42,7 +41,6 @@ void main() {
       expectInvalid(index: cl.HDKey.hardenBit);
       expectInvalid(fingerprint: -1);
       expectInvalid(fingerprint: 0x100000000);
-
     });
 
     test("valid bytes", () {
@@ -60,7 +58,6 @@ void main() {
     });
 
     group(".deriveTweakAndInfo bytes", () {
-
       test("invalid index", () {
         void expectError(int index) => expect(
           () => hdInfo.deriveTweakAndInfo(groupPublicKey, index),
@@ -71,7 +68,10 @@ void main() {
       });
 
       test("provides correct info and tweak", () {
-        final (tweak, newInfo) = hdInfo.deriveTweakAndInfo(groupPublicKey, 0x7fffffff);
+        final (tweak, newInfo) = hdInfo.deriveTweakAndInfo(
+          groupPublicKey,
+          0x7fffffff,
+        );
         expect(
           cl.bytesToHex(tweak),
           "906127eab0867c7892e0354960914b759df12ba019bf11f8b97d4d1f6e9f4edb",
@@ -84,9 +84,6 @@ void main() {
         expect(newInfo.index, 0x7fffffff);
         expect(newInfo.parentFingerprint, 0x2b0dfb83);
       });
-
     });
-
   });
-
 }

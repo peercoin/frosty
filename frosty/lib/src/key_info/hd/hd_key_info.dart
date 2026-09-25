@@ -1,9 +1,9 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 
 /// Information in addition to the FROST key required for BIP32 derivation
 class HDKeyInfo with cl.Writable {
-
   /// This chaincode is the SHA256 hash of the string "FrostTaprootBIP32".
   /// This can be public without allowing people to derive any information
   /// without also knowing the master public key.
@@ -38,20 +38,23 @@ class HDKeyInfo with cl.Writable {
     RangeError.checkValueInInterval(depth, 0, 0xff, "depth");
     checkIndex(index);
     RangeError.checkValueInInterval(
-      parentFingerprint, 0, 0xffffffff, "parentFingerprint",
+      parentFingerprint,
+      0,
+      0xffffffff,
+      "parentFingerprint",
     );
   }
 
-  HDKeyInfo.fromReader(cl.BytesReader reader) : this(
-    chaincode: reader.readSlice(32),
-    depth: reader.readUInt8(),
-    index: reader.readUInt32(),
-    parentFingerprint: reader.readUInt32(),
-  );
+  HDKeyInfo.fromReader(cl.BytesReader reader)
+    : this(
+        chaincode: reader.readSlice(32),
+        depth: reader.readUInt8(),
+        index: reader.readUInt32(),
+        parentFingerprint: reader.readUInt32(),
+      );
 
   /// Convenience constructor to construct from serialised [bytes].
-  HDKeyInfo.fromBytes(Uint8List bytes)
-    : this.fromReader(cl.BytesReader(bytes));
+  HDKeyInfo.fromBytes(Uint8List bytes) : this.fromReader(cl.BytesReader(bytes));
 
   /// Convenience constructor to construct from encoded [hex].
   HDKeyInfo.fromHex(String hex) : this.fromBytes(cl.hexToBytes(hex));
@@ -70,7 +73,6 @@ class HDKeyInfo with cl.Writable {
     cl.ECCompressedPublicKey groupKey,
     int index,
   ) {
-
     checkIndex(index);
 
     Uint8List data = Uint8List(37);
@@ -88,12 +90,10 @@ class HDKeyInfo with cl.Writable {
       tweak,
       HDKeyInfo(
         chaincode: newChainCode,
-        depth: depth+1,
+        depth: depth + 1,
         index: index,
         parentFingerprint: fingerprint,
       ),
     );
-
   }
-
 }

@@ -1,11 +1,11 @@
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+
 import '../helpers.dart';
 
 void main() {
   group("SigningCommitment", () {
-
     setUpAll(loadFrosty);
 
     final validBytes = cl.hexToBytes(
@@ -16,6 +16,5 @@ void main() {
       validBytes,
       (b) => SigningCommitment.fromBytes(b),
     );
-
   });
 }

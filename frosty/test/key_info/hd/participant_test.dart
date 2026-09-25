@@ -1,6 +1,7 @@
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+
 import '../../data.dart';
 import '../helpers.dart';
 import '../participant_test.dart' as non_hd;
@@ -18,9 +19,7 @@ final zeroTweakedHex = non_hd.validHex;
 final tweakedHex = non_hd.tweakedHex;
 
 void main() {
-
   group("HDParticipantKeyInfo", () {
-
     setUpAll(loadFrosty);
 
     basicInfoTests(
@@ -40,7 +39,6 @@ void main() {
     });
 
     test("can produce valid signatures", () {
-
       final derivedParticipantInfos = List.generate(
         2, // Only need 2
         (i) => ParticipantKeyInfo(
@@ -50,9 +48,9 @@ void main() {
         ),
       );
 
-      final part1s = derivedParticipantInfos.map(
-        (info) => SignPart1(privateShare: info.private.share),
-      ).toList();
+      final part1s = derivedParticipantInfos
+          .map((info) => SignPart1(privateShare: info.private.share))
+          .toList();
 
       // Collect commitments
       final commitments = getSignatureCommitments(part1s);
@@ -63,22 +61,19 @@ void main() {
       final details = SignDetails.keySpend(message: signMsgHash);
 
       // Generate signature shares
-      final shares = List.generate(
-        2,
-        (i) {
-          final id = Identifier.fromUint16(i+1);
-          return (
-            id,
-            SignPart2(
-              identifier: id,
-              details: details,
-              ourNonces: part1s[i].nonces,
-              commitments: commitments,
-              info: derivedParticipantInfos[i].signing,
-            ).share
-          );
-        }
-      );
+      final shares = List.generate(2, (i) {
+        final id = Identifier.fromUint16(i + 1);
+        return (
+          id,
+          SignPart2(
+            identifier: id,
+            details: details,
+            ourNonces: part1s[i].nonces,
+            commitments: commitments,
+            info: derivedParticipantInfos[i].signing,
+          ).share,
+        );
+      });
 
       // Aggregate signature shares into final signature
       final sig = SignatureAggregation(
@@ -90,16 +85,12 @@ void main() {
 
       expect(
         sig.verify(
-          cl.Taproot(
-            internalKey: derivedParticipantInfos.first.groupKey,
-          ).tweakedKey,
+          cl.Taproot(internalKey: derivedParticipantInfos.first.groupKey)
+              .tweakedKey,
           signMsgHash,
         ),
         true,
       );
-
     });
-
   });
-
 }

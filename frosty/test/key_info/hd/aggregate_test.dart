@@ -1,5 +1,6 @@
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+
 import '../../data.dart';
 import '../helpers.dart';
 import '../aggregate_test.dart' as non_hd;
@@ -16,9 +17,7 @@ final zeroTweakedHex = non_hd.validHex;
 final tweakedHex = non_hd.tweakedHex;
 
 void main() {
-
   group("HDParticipantKeyInfo", () {
-
     setUpAll(loadFrosty);
 
     basicInfoTests(
@@ -35,8 +34,5 @@ void main() {
       expectDerivedGroup(newHdAggregate.group);
       expectDerivedPublicShares(newHdAggregate.publicShares);
     });
-
   });
-
 }
-

@@ -1,7 +1,10 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
+
 import 'public_commitment.dart';
+
 import 'package:frosty/src/identifier.dart';
 
 typedef DkgCommitmentPair = (Identifier, DkgPublicCommitment);
@@ -12,26 +15,24 @@ typedef DkgCommitmentList = List<DkgCommitmentPair>;
 /// that all other participants have the same set by receiving a signed [hash]
 /// of commitments from each participant and verifying that they are the same.
 class DkgCommitmentSet with cl.Writable {
-
   final DkgCommitmentList list;
 
   /// Takes a list of commitments with each element containing a tuple of the
   /// [Identifier] followed by the associated [DkgPublicCommitment].
   DkgCommitmentSet(DkgCommitmentList commitments)
     // Order commitments to ensure consistency
-    : list = List.from(commitments)..sort(
-      (a, b) => a.$1.compareTo(b.$1),
-    );
+    : list = List.from(commitments)..sort((a, b) => a.$1.compareTo(b.$1));
 
-  DkgCommitmentSet.fromReader(cl.BytesReader reader) : this(
-    List.generate(
-      reader.readUInt16(),
-      (i) => (
-        Identifier.fromBytes(reader.readSlice(32)),
-        DkgPublicCommitment.fromBytes(reader.readVarSlice()),
-      ),
-    ),
-  );
+  DkgCommitmentSet.fromReader(cl.BytesReader reader)
+    : this(
+        List.generate(
+          reader.readUInt16(),
+          (i) => (
+            Identifier.fromBytes(reader.readSlice(32)),
+            DkgPublicCommitment.fromBytes(reader.readVarSlice()),
+          ),
+        ),
+      );
 
   static final _hasher = cl.getTaggedHasher("DkgCommitmentSet");
 
@@ -42,18 +43,20 @@ class DkgCommitmentSet with cl.Writable {
         ...commitment.$1.toBytes(),
         ...commitment.$2.toBytes(),
       ],
-    ],),
+    ]),
   );
 
   /// Obtains the underlying native list to past to Rust with the entry removed
   /// for the calling participant given by [id].
-  List<rust.DkgCommitmentForIdentifier> nativeListForId(Identifier id)
-    => list.where((e) => e.$1 != id).map(
-      (v) => rust.DkgCommitmentForIdentifier.fromRefs(
-        identifier: v.$1.underlying,
-        commitment: v.$2.underlying,
-      ),
-    ).toList();
+  List<rust.DkgCommitmentForIdentifier> nativeListForId(Identifier id) => list
+      .where((e) => e.$1 != id)
+      .map(
+        (v) => rust.DkgCommitmentForIdentifier.fromRefs(
+          identifier: v.$1.underlying,
+          commitment: v.$2.underlying,
+        ),
+      )
+      .toList();
 
   @override
   void write(cl.Writer writer) {
@@ -63,5 +66,4 @@ class DkgCommitmentSet with cl.Writable {
       writer.writeVarSlice(pair.$2.toBytes());
     }
   }
-
 }

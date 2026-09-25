@@ -2,7 +2,6 @@ import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 
 void main() async {
-
   await loadFrosty();
 
   final groupKey = cl.ECCompressedPublicKey.fromHex(
@@ -23,7 +22,7 @@ void main() async {
 
   final publicShares = List.generate(
     3,
-    (i) => (Identifier.fromUint16(i+1), publicShareKeys[i]),
+    (i) => (Identifier.fromUint16(i + 1), publicShareKeys[i]),
   );
 
   final groupInfo = GroupKeyInfo(groupKey: groupKey, threshold: 2);
@@ -34,7 +33,7 @@ void main() async {
       group: groupInfo,
       publicShares: publicSharesInfo,
       private: PrivateKeyInfo(
-        identifier: Identifier.fromUint16(i+1),
+        identifier: Identifier.fromUint16(i + 1),
         share: privateShares[i],
       ),
     ),
@@ -42,14 +41,15 @@ void main() async {
 
   // Check signature without derivation first
 
-  final nonces = privateShares.take(2).map(
-    (share) => SignPart1(privateShare: share),
-  ).toList();
+  final nonces = privateShares
+      .take(2)
+      .map((share) => SignPart1(privateShare: share))
+      .toList();
 
   // Collect commitments
   final commitments = SigningCommitmentSet({
     for (int i = 0; i < 2; i++)
-      Identifier.fromUint16(i+1): nonces[i].commitment,
+      Identifier.fromUint16(i + 1): nonces[i].commitment,
   });
 
   final signMsgHash = cl.hexToBytes(
@@ -59,22 +59,19 @@ void main() async {
   final details = SignDetails.keySpend(message: signMsgHash);
 
   // Generate signature shares
-  final shares = List.generate(
-    2,
-    (i) {
-      final id = Identifier.fromUint16(i+1);
-      return (
-        id,
-        SignPart2(
-          identifier: id,
-          details: details,
-          ourNonces: nonces[i].nonces,
-          commitments: commitments,
-          info: participantInfos[i].signing,
-        ).share
-      );
-    }
-  );
+  final shares = List.generate(2, (i) {
+    final id = Identifier.fromUint16(i + 1);
+    return (
+      id,
+      SignPart2(
+        identifier: id,
+        details: details,
+        ourNonces: nonces[i].nonces,
+        commitments: commitments,
+        info: participantInfos[i].signing,
+      ).share,
+    );
+  });
 
   // Aggregate signature shares into final signature
   final sig = SignatureAggregation(
@@ -92,39 +89,36 @@ void main() async {
     "55a1a070b2d0d2c47e37854e969e8817151597e0d37d0b7ebb21026fb09c90bc",
   );
 
-  final tweakedInfos = participantInfos.map(
-    (info) => info.tweak(tweak)!,
-  ).toList();
+  final tweakedInfos = participantInfos
+      .map((info) => info.tweak(tweak)!)
+      .toList();
 
   {
-
-    final nonces = tweakedInfos.take(2).map(
-      (info) => SignPart1(privateShare: info.private.share),
-    ).toList();
+    final nonces = tweakedInfos
+        .take(2)
+        .map((info) => SignPart1(privateShare: info.private.share))
+        .toList();
 
     // Collect commitments
     final commitments = SigningCommitmentSet({
       for (int i = 0; i < 2; i++)
-        Identifier.fromUint16(i+1): nonces[i].commitment,
+        Identifier.fromUint16(i + 1): nonces[i].commitment,
     });
 
     // Generate signature shares
-    final shares = List.generate(
-      2,
-      (i) {
-        final id = Identifier.fromUint16(i+1);
-        return (
-          id,
-          SignPart2(
-            identifier: id,
-            details: details,
-            ourNonces: nonces[i].nonces,
-            commitments: commitments,
-            info: tweakedInfos[i].signing,
-          ).share
-        );
-      }
-    );
+    final shares = List.generate(2, (i) {
+      final id = Identifier.fromUint16(i + 1);
+      return (
+        id,
+        SignPart2(
+          identifier: id,
+          details: details,
+          ourNonces: nonces[i].nonces,
+          commitments: commitments,
+          info: tweakedInfos[i].signing,
+        ).share,
+      );
+    });
 
     // Aggregate signature shares into final signature
     final sig = SignatureAggregation(
@@ -140,7 +134,5 @@ void main() async {
         signMsgHash,
       ),
     );
-
   }
-
 }

@@ -1,11 +1,11 @@
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
+
 import '../helpers.dart';
 
 void main() {
   group("DkgPart3", () {
-
     late List<Identifier> ids;
     late List<DkgPart1> eachPart1;
     late DkgCommitmentSet commitmentSet;
@@ -13,7 +13,6 @@ void main() {
     late List<Map<Identifier, DkgShareToGive>> eachReceivedShares;
 
     setUp(() async {
-
       await loadFrosty();
       (ids, eachPart1, commitmentSet) = genPart1();
 
@@ -27,16 +26,15 @@ void main() {
       );
 
       eachReceivedShares = List.generate(
-        3, (i) => {
+        3,
+        (i) => {
           for (int j = 0; j < 3; j++)
-            if (j != i) ids[j] : eachPart2[j].sharesToGive[ids[i]]!,
+            if (j != i) ids[j]: eachPart2[j].sharesToGive[ids[i]]!,
         },
       );
-
     });
 
     test("gives different key shares to participants", () {
-
       final infos = List.generate(
         3,
         (i) => DkgPart3(
@@ -48,23 +46,15 @@ void main() {
       );
 
       for (int i = 0; i < 3; i++) {
-
         final info = infos[i];
         final pkShares = info.publicShares.list;
 
         expect(info.private.identifier, ids[i]);
-        expect(
-          info.private.identifier,
-          isIn(pkShares.map((e) => e.$1)),
-        );
-        expect(
-          info.private.share.pubkey,
-          isIn(pkShares.map((e) => e.$2)),
-        );
+        expect(info.private.identifier, isIn(pkShares.map((e) => e.$1)));
+        expect(info.private.share.pubkey, isIn(pkShares.map((e) => e.$2)));
         expect(info.group.threshold, 2);
         expect(info.groupKey.compressed, true);
         expect(pkShares.map((e) => e.$2.compressed), everyElement(true));
-
       }
 
       // Expect private shares to be unique
@@ -74,11 +64,7 @@ void main() {
       );
 
       // Expect public shares to be identical and encode to the same bytes
-      expect(
-        infos.map((i) => i.publicShares.toHex()).toSet().length,
-        1,
-      );
-
+      expect(infos.map((i) => i.publicShares.toHex()).toSet().length, 1);
     });
 
     void expectUseAfterFree() {
@@ -109,7 +95,6 @@ void main() {
     });
 
     test("invalid round 3", () {
-
       // Wrong amount of commitments
       expect(
         () => DkgPart3(
@@ -127,7 +112,7 @@ void main() {
           identifier: ids.first,
           round2Secret: eachPart2.first.secret,
           commitments: commitmentSet,
-          receivedShares: { ids[1] : eachPart2[1].sharesToGive[ids[0]]! },
+          receivedShares: {ids[1]: eachPart2[1].sharesToGive[ids[0]]!},
         ),
         throwsA(isA<InvalidPart3>()),
       );
@@ -141,13 +126,11 @@ void main() {
           receivedShares: {
             for (int i = 0; i < 2; i++)
               // Incorrect ID for share
-              ids[2-i] : eachReceivedShares.first[ids[i+1]]!,
+              ids[2 - i]: eachReceivedShares.first[ids[i + 1]]!,
           },
         ),
         throwsA(isA<InvalidPart3>()),
       );
-
     });
-
   });
 }

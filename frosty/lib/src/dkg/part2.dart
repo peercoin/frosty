@@ -2,6 +2,7 @@ import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
+
 import 'commitment_set.dart';
 import 'part1.dart';
 import 'share_to_give.dart';
@@ -34,9 +35,9 @@ class InvalidPart2ProofOfKnowledge implements Exception {
 /// After this step, the old [DkgPart1.secret] can be disposed and a new secret
 /// will be stored in preparation for part 3.
 class DkgPart2 {
-
   /// Secret to be kept for part 3
   late final DkgRound2Secret secret;
+
   /// Secret shares that are to be shared to participants given by each
   /// [Identifier]. They must be encrypted and authenticated and not shared with
   /// anyone else.
@@ -54,9 +55,7 @@ class DkgPart2 {
     required DkgRound1Secret round1Secret,
     required DkgCommitmentSet commitments,
   }) {
-
     try {
-
       final record = rust.dkgPart2(
         round1Secret: round1Secret.underlying,
         round1Commitments: commitments.nativeListForId(identifier),
@@ -65,16 +64,13 @@ class DkgPart2 {
       secret = DkgRound2Secret.fromUnderlying(record.$1);
       sharesToGive = {
         for (final s in record.$2)
-          Identifier.fromUnderlying(s.identifier)
-            : DkgShareToGive.fromUnderlying(s.secret),
+          Identifier.fromUnderlying(s.identifier):
+              DkgShareToGive.fromUnderlying(s.secret),
       };
-
-    } on rust.DkgRound2Error_General catch(e) {
+    } on rust.DkgRound2Error_General catch (e) {
       throw InvalidPart2(e.message);
-    } on rust.DkgRound2Error_InvalidProofOfKnowledge catch(e) {
+    } on rust.DkgRound2Error_InvalidProofOfKnowledge catch (e) {
       throw InvalidPart2ProofOfKnowledge(Identifier.fromUnderlying(e.culprit));
     }
-
   }
-
 }

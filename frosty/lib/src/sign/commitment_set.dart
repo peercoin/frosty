@@ -1,6 +1,7 @@
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/identifier.dart';
+
 import 'commitment.dart';
 
 typedef SigningCommitmentMap = Map<Identifier, SigningCommitment>;
@@ -13,7 +14,6 @@ typedef SigningCommitmentMap = Map<Identifier, SigningCommitment>;
 /// the message can be sent seperately and agreed upon before starting the
 /// signing process.
 class SigningCommitmentSet with cl.Writable {
-
   final SigningCommitmentMap map;
 
   /// Takes a list of signing commitments with each element containing a tuple
@@ -21,20 +21,21 @@ class SigningCommitmentSet with cl.Writable {
   SigningCommitmentSet(SigningCommitmentMap commitments)
     : map = Map.unmodifiable(commitments);
 
-  SigningCommitmentSet.fromReader(cl.BytesReader reader) : this(
-    {
-      for (int i = reader.readUInt16(); i > 0; i--)
-        Identifier.fromBytes(reader.readSlice(32)):
-        SigningCommitment.fromBytes(reader.readVarSlice()),
-    }
-  );
+  SigningCommitmentSet.fromReader(cl.BytesReader reader)
+    : this({
+        for (int i = reader.readUInt16(); i > 0; i--)
+          Identifier.fromBytes(reader.readSlice(32)):
+              SigningCommitment.fromBytes(reader.readVarSlice()),
+      });
 
-  List<rust.IdentifierAndSigningCommitment> get nativeList => map.entries.map(
-    (entry) => rust.IdentifierAndSigningCommitment.fromRefs(
-      identifier: entry.key.underlying,
-      commitment: entry.value.underlying,
-    ),
-  ).toList();
+  List<rust.IdentifierAndSigningCommitment> get nativeList => map.entries
+      .map(
+        (entry) => rust.IdentifierAndSigningCommitment.fromRefs(
+          identifier: entry.key.underlying,
+          commitment: entry.value.underlying,
+        ),
+      )
+      .toList();
 
   @override
   void write(cl.Writer writer) {
@@ -44,5 +45,4 @@ class SigningCommitmentSet with cl.Writable {
       writer.writeVarSlice(entry.value.toBytes());
     }
   }
-
 }

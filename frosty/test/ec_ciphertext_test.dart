@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
@@ -9,15 +10,14 @@ final key2 = cl.ECPrivateKey(Uint8List(32)..last = 3);
 
 void main() {
   group("ECCiphertext", () {
-
     setUpAll(loadFrosty);
 
     test("can encrypt and decrypt", () {
-
       void expectValid(Uint8List data) {
-
         void expectDecrypts(ECCiphertext ct) => expect(
-          cl.bytesToHex(ct.decrypt(recipientKey: key2, senderKey: key1.pubkey)!),
+          cl.bytesToHex(
+            ct.decrypt(recipientKey: key2, senderKey: key1.pubkey)!,
+          ),
           cl.bytesToHex(data),
         );
 
@@ -32,17 +32,14 @@ void main() {
         expectDecrypts(
           ECCiphertext.fromReader(cl.BytesReader(ciphertext.toBytes())),
         );
-
       }
 
       expectValid(Uint8List(1));
-      Uint8List genN(int i) => Uint8List.fromList(
-        List.generate(32, (i) => i & 0xff),
-      );
+      Uint8List genN(int i) =>
+          Uint8List.fromList(List.generate(32, (i) => i & 0xff));
       expectValid(genN(32));
       expectValid(genN(33));
       expectValid(genN(2000));
-
     });
 
     test(
@@ -60,7 +57,7 @@ void main() {
     final iv = "6108a5db7ebc35d530f9fb44";
 
     final plaintext =
-      "74686520717569636b2062726f776e20666f78206a756d7073206f76657220746865206c617a7920646f67";
+        "74686520717569636b2062726f776e20666f78206a756d7073206f76657220746865206c617a7920646f67";
 
     final ciphertextBytes = cl.hexToBytes(
       // IV
@@ -86,33 +83,31 @@ void main() {
     );
 
     test("decrypts from data", () {
-
       void expectDecrypts(Uint8List ciphertext, String plaintext) => expect(
         cl.bytesToHex(
           ECCiphertext.fromReader(cl.BytesReader(ciphertext))
-          .decrypt(recipientKey: key2, senderKey: key1.pubkey)!,
+              .decrypt(recipientKey: key2, senderKey: key1.pubkey)!,
         ),
         plaintext,
       );
 
       expectDecrypts(ciphertextBytes, plaintext);
       expectDecrypts(fullBlockCiphertextBytes, fullBlockPlaintext);
-
     });
 
     test("fails when unauthenticated or corrupted", () {
+      void expectInvalid(Uint8List ciphertext, cl.ECPublicKey senderKey) =>
+          expect(
+            ECCiphertext.fromReader(cl.BytesReader(ciphertext)).decrypt(
+              recipientKey: key2,
+              // Different sender
+              senderKey: senderKey,
+            ),
+            null,
+          );
 
-      void expectInvalid(Uint8List ciphertext, cl.ECPublicKey senderKey) => expect(
-        ECCiphertext.fromReader(cl.BytesReader(ciphertext)).decrypt(
-          recipientKey: key2,
-          // Different sender
-          senderKey: senderKey,
-        ),
-        null,
-      );
-
-      void expectDiffByte(int i)
-        => expectInvalid(ciphertextBytes.sublist(0)..[i] ^= 0xff, key1.pubkey);
+      void expectDiffByte(int i) =>
+          expectInvalid(ciphertextBytes.sublist(0)..[i] ^= 0xff, key1.pubkey);
 
       void expectArgumentError(Uint8List ciphertext) => expect(
         () => ECCiphertext.fromReader(cl.BytesReader(ciphertext)),
@@ -129,7 +124,7 @@ void main() {
       expectDiffByte(15);
 
       // Wrong tag
-      expectDiffByte(ciphertextBytes.length-1);
+      expectDiffByte(ciphertextBytes.length - 1);
 
       // Wrong size
       expectArgumentError(
@@ -176,8 +171,6 @@ void main() {
         ),
         key1.pubkey,
       );
-
     });
-
   });
 }

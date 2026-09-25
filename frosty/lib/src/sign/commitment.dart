@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
@@ -12,25 +13,23 @@ class InvalidSigningCommitment extends MessageException {
 /// The commitment to the signature nonce to be used for signing. This should be
 /// shared with the signature aggregator.
 class SigningCommitment
-extends WritableRustObjectWrapper<rust.SigningCommitments> {
-
+    extends WritableRustObjectWrapper<rust.SigningCommitments> {
   SigningCommitment.fromUnderlying(super._underlying);
 
   /// Reads the serialised commitment from a participant and throws
   /// [InvalidSigningCommitment] if invalid.
-  SigningCommitment.fromBytes(Uint8List data) : super(
-    handleGetObject(
-      () => rust.signingCommitmentFromBytes(bytes: data),
-      (e) => InvalidSigningCommitment(e),
-    ),
-    data,
-  );
+  SigningCommitment.fromBytes(Uint8List data)
+    : super(
+        handleGetObject(
+          () => rust.signingCommitmentFromBytes(bytes: data),
+          (e) => InvalidSigningCommitment(e),
+        ),
+        data,
+      );
 
   /// Obtains serialised data for the commitment that can be shared with
   /// the signature aggregator.
   @override
-  Uint8List serializeImpl() => rust.signingCommitmentToBytes(
-    commitment: underlying,
-  );
-
+  Uint8List serializeImpl() =>
+      rust.signingCommitmentToBytes(commitment: underlying);
 }

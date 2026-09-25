@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
@@ -15,27 +16,28 @@ void basicInfoTests<T extends KeyInfo>({
   required T Function(String reader) fromHex,
   required T Function() getValidObj,
 }) {
+  test("valid info", () {
+    expect(getValidObj().toHex(), validHex);
+    expect(fromHex(validHex).toHex(), validHex);
+  });
 
-    test("valid info", () {
-      expect(getValidObj().toHex(), validHex);
-      expect(fromHex(validHex).toHex(), validHex);
-    });
-
-    test("tweaks as expected", () {
-      expect(getValidObj().tweak(tweak)!.toHex(), tweakedHex);
-      expect(getValidObj().tweak(Uint8List(32))!.toHex(), zeroTweakedHex ?? validHex);
-    });
-
-    test(
-      "invalid tweak",
-      () => expect(getValidObj().tweak(cl.hexToBytes(invalidTweakHex)), null),
+  test("tweaks as expected", () {
+    expect(getValidObj().tweak(tweak)!.toHex(), tweakedHex);
+    expect(
+      getValidObj().tweak(Uint8List(32))!.toHex(),
+      zeroTweakedHex ?? validHex,
     );
+  });
 
-    test("invalid info bytes", () => expect(
-        () => fromHex(""),
-        throwsA(isA<cl.OutOfData>()),
-    ),);
+  test(
+    "invalid tweak",
+    () => expect(getValidObj().tweak(cl.hexToBytes(invalidTweakHex)), null),
+  );
 
+  test(
+    "invalid info bytes",
+    () => expect(() => fromHex(""), throwsA(isA<cl.OutOfData>())),
+  );
 }
 
 void expectDerivedGroup(GroupKeyInfo group) {
@@ -46,14 +48,12 @@ void expectDerivedGroup(GroupKeyInfo group) {
   expect(group.threshold, 2);
 }
 
-void expectDerivedPublicShares(PublicSharesKeyInfo public) => expect(
-  public.list.map((e) => e.$2.hex).toList(),
-  [
-    "02706a5f14dde3a0d9ac9ec1b678077f4f638b1428b78b0daeb544e2a40fade0b5",
-    "03f25232cfb18a16b9c258cd3ff4a085d03156fd80fe8e7c60d6ab99e371903c5f",
-    "0259a7f6b865cb7649851a2748520c191ae3708b9228ee444a03a46b42c76a0280",
-  ],
-);
+void expectDerivedPublicShares(PublicSharesKeyInfo public) =>
+    expect(public.list.map((e) => e.$2.hex).toList(), [
+      "02706a5f14dde3a0d9ac9ec1b678077f4f638b1428b78b0daeb544e2a40fade0b5",
+      "03f25232cfb18a16b9c258cd3ff4a085d03156fd80fe8e7c60d6ab99e371903c5f",
+      "0259a7f6b865cb7649851a2748520c191ae3708b9228ee444a03a46b42c76a0280",
+    ]);
 
 void expectDerivedPrivate(PrivateKeyInfo private) => expect(
   cl.bytesToHex(private.share.data),
