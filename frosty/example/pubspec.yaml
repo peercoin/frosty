@@ -13,8 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   coinlib: '>=6.0.0 <7.0.0'
-  frosty:
-    path: ..
+  frosty: ^5.0.0
 
 dev_dependencies:
   flutter_lints: ^6.0.0
