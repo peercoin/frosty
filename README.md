@@ -23,7 +23,7 @@ dart test
 dart analyze
 ```
 
-The package uses Coinlib 6 from pub.dev. Both native libraries are built and
+The package uses coinlib from pub.dev. Both native libraries are built and
 bundled through Dart code assets.
 
 The build hook compiles the native library before tests or application builds.

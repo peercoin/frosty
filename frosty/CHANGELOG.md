@@ -1,4 +1,4 @@
-## Next
+## 5.0.0
 
 - Replace the separate `frosty_flutter` plugin and Cargokit integration with a
   `code_assets` build hook powered by `native_toolchain_rust`.
