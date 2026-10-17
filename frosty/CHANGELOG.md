@@ -1,5 +1,6 @@
 ## 5.0.0
 
+- Update and pin flutter_rust_bridge to 2.13.0.
 - Replace the separate `frosty_flutter` plugin and Cargokit integration with a
   `code_assets` build hook powered by `native_toolchain_rust`.
 - Require Dart 3.13 and Coinlib 6 with its native code-assets build hook.
