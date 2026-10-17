@@ -4,7 +4,8 @@
 - Replace the separate `frosty_flutter` plugin and Cargokit integration with a
   `code_assets` build hook powered by `native_toolchain_rust`.
 - Require Dart 3.13 and Coinlib 6 with its native code-assets build hook.
-- Consolidate the Dart and Flutter examples under `frosty/example`.
+- Move the package to the repository root and consolidate the Dart and Flutter
+  examples under `example/`.
 - Remove obsolete native build scripts; retain only the reproducible WASM
   generator.
 

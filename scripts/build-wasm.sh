@@ -4,7 +4,7 @@ set -euo pipefail
 
 script_dir=$(dirname "$(realpath "$0")")
 repo_dir=$(realpath "$script_dir/..")
-output_dir="$repo_dir/frosty/web/pkg"
+output_dir="$repo_dir/web/pkg"
 image_name=frosty_rust_wasm_build
 
 if command -v podman >/dev/null; then

@@ -26,7 +26,7 @@ jobs:
       - name: Cache Rust build
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: frosty/rust -> target
+          workspaces: rust -> target
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2.23.0
@@ -35,12 +35,12 @@ jobs:
           cache: true
 
       - name: Check Rust WebAssembly build
-        run: cargo check --locked --target wasm32-unknown-unknown --manifest-path frosty/rust/Cargo.toml
+        run: cargo check --locked --target wasm32-unknown-unknown --manifest-path rust/Cargo.toml
 
       - name: Resolve Flutter example dependencies
-        working-directory: frosty/example
+        working-directory: example
         run: flutter pub get
 
       - name: Build Flutter web release
-        working-directory: frosty/example
+        working-directory: example
         run: flutter build web --release --no-pub

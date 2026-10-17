@@ -24,7 +24,7 @@ jobs:
       - name: Cache Rust build
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: frosty/rust -> target
+          workspaces: rust -> target
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2.23.0
@@ -33,17 +33,15 @@ jobs:
           cache: true
 
       - name: Resolve frosty dependencies
-        working-directory: frosty
         run: dart pub get
 
       - name: Build Dart CLI release bundle
-        working-directory: frosty
         run: dart build cli --target example/tweak_example.dart
 
       - name: Resolve Flutter example dependencies
-        working-directory: frosty/example
+        working-directory: example
         run: flutter pub get
 
       - name: Build Flutter Windows release
-        working-directory: frosty/example
+        working-directory: example
         run: flutter build windows --release --no-pub

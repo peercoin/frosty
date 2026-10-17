@@ -22,7 +22,7 @@ RUN rustup target add wasm32-unknown-unknown \
         --locked
 
 WORKDIR /build
-COPY frosty/rust/ ./
+COPY rust/ ./
 
 RUN cargo build --release --locked --target wasm32-unknown-unknown \
     && mkdir /wasm \
