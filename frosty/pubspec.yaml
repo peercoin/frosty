@@ -11,7 +11,7 @@ resolution: workspace
 dependencies:
   code_assets: ^2.1.0
   ffi: ^2.2.0
-  flutter_rust_bridge: 2.12.0
+  flutter_rust_bridge: 2.13.0
   hooks: ^2.2.0
   native_toolchain_rust: ^1.0.7
   path: ^1.9.1
