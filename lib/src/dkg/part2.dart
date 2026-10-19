@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
+import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
 
@@ -7,10 +10,34 @@ import 'commitment_set.dart';
 import 'part1.dart';
 import 'share_to_give.dart';
 
-/// The secret from part 2 that is to be held until part 3. After part 3 this
-/// can be disposed of with [dispose()].
-class DkgRound2Secret extends RustObjectWrapper<rust.DkgRound2SecretOpaque> {
+/// Thrown when bytes are not a valid round-two DKG secret.
+class InvalidDkgRound2Secret extends MessageException {
+  InvalidDkgRound2Secret(super.message);
+}
+
+/// The secret from part 2 that is to be held until part 3.
+///
+/// Bytes returned by [toBytes] contain sensitive secret material. Callers that
+/// persist them must protect them with encrypted storage and delete them when
+/// they are no longer needed. After part 3 this object can be disposed with
+/// [dispose()].
+class DkgRound2Secret
+    extends WritableRustObjectWrapper<rust.DkgRound2SecretOpaque> {
   DkgRound2Secret.fromUnderlying(super._underlying);
+
+  /// Restores a round-two secret previously obtained from [toBytes].
+  DkgRound2Secret.fromBytes(Uint8List data)
+    : super(
+        handleGetObject(
+          () => rust.dkgRound2SecretFromBytes(bytes: data),
+          (e) => InvalidDkgRound2Secret(e),
+        ),
+        data,
+      );
+
+  /// Exports sensitive secret material so this DKG round can be resumed.
+  @override
+  Uint8List serializeImpl() => rust.dkgRound2SecretToBytes(secret: underlying);
 }
 
 /// Thrown when data provided into part 2 is not valid

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
@@ -65,6 +67,30 @@ void main() {
 
       // Expect public shares to be identical and encode to the same bytes
       expect(infos.map((i) => i.publicShares.toHex()).toSet().length, 1);
+    });
+
+    test("round-two secret round trips and remains usable", () {
+      final bytes = eachPart2.first.secret.toBytes();
+      final restored = DkgRound2Secret.fromBytes(bytes);
+      eachPart2.first.secret.dispose();
+      final info = DkgPart3(
+        identifier: ids.first,
+        round2Secret: restored,
+        commitments: commitmentSet,
+        receivedShares: eachReceivedShares.first,
+      ).participantInfo;
+
+      expect(info.private.identifier, ids.first);
+      for (final invalid in [
+        Uint8List(0),
+        Uint8List.sublistView(bytes, 1),
+        Uint8List.fromList([...bytes, 0]),
+      ]) {
+        expect(
+          () => DkgRound2Secret.fromBytes(invalid),
+          throwsA(isA<InvalidDkgRound2Secret>()),
+        );
+      }
     });
 
     void expectUseAfterFree() {

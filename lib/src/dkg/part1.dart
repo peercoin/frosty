@@ -1,13 +1,41 @@
+import 'dart:typed_data';
+
+import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
+import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
 
 import 'public_commitment.dart';
 
-/// The secret from part 1 of the DKG that is to be kept for part 2. After part
-/// 2 this can be disposed with [dispose()].
-class DkgRound1Secret extends RustObjectWrapper<rust.DkgRound1SecretOpaque> {
+/// Thrown when bytes are not a valid round-one DKG secret.
+class InvalidDkgRound1Secret extends MessageException {
+  InvalidDkgRound1Secret(super.message);
+}
+
+/// The secret from part 1 of the DKG that is to be kept for part 2.
+///
+/// Bytes returned by [toBytes] contain sensitive secret material. Callers that
+/// persist them must protect them with encrypted storage and delete them when
+/// they are no longer needed. After part 2 this object can be disposed with
+/// [dispose()].
+class DkgRound1Secret
+    extends WritableRustObjectWrapper<rust.DkgRound1SecretOpaque> {
   DkgRound1Secret.fromUnderlying(super._underlying);
+
+  /// Restores a round-one secret previously obtained from [toBytes].
+  DkgRound1Secret.fromBytes(Uint8List data)
+    : super(
+        handleGetObject(
+          () => rust.dkgRound1SecretFromBytes(bytes: data),
+          (e) => InvalidDkgRound1Secret(e),
+        ),
+        data,
+      );
+
+  /// Exports sensitive secret material so this DKG round can be resumed.
+  @override
+  Uint8List serializeImpl() => rust.dkgRound1SecretToBytes(secret: underlying);
 }
 
 /// The first step to generate a distributed FROST key. This contains a secret

@@ -34,6 +34,12 @@ Uint8List identifierToBytes({required IdentifierOpaque identifier}) =>
   minSigners: minSigners,
 );
 
+DkgRound1SecretOpaque dkgRound1SecretFromBytes({required List<int> bytes}) =>
+    RustLib.instance.api.crateApiMainDkgRound1SecretFromBytes(bytes: bytes);
+
+Uint8List dkgRound1SecretToBytes({required DkgRound1SecretOpaque secret}) =>
+    RustLib.instance.api.crateApiMainDkgRound1SecretToBytes(secret: secret);
+
 DkgPublicCommitmentOpaque publicCommitmentFromBytes({
   required List<int> bytes,
 }) => RustLib.instance.api.crateApiMainPublicCommitmentFromBytes(bytes: bytes);
@@ -43,6 +49,12 @@ Uint8List publicCommitmentToBytes({
 }) => RustLib.instance.api.crateApiMainPublicCommitmentToBytes(
   commitment: commitment,
 );
+
+DkgRound2SecretOpaque dkgRound2SecretFromBytes({required List<int> bytes}) =>
+    RustLib.instance.api.crateApiMainDkgRound2SecretFromBytes(bytes: bytes);
+
+Uint8List dkgRound2SecretToBytes({required DkgRound2SecretOpaque secret}) =>
+    RustLib.instance.api.crateApiMainDkgRound2SecretToBytes(secret: secret);
 
 (DkgRound2SecretOpaque, List<DkgRound2IdentifierAndShare>) dkgPart2({
   required DkgRound1SecretOpaque round1Secret,

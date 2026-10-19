@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
 
@@ -26,6 +28,43 @@ void main() {
 
       expect(t1Len, lessThan(t2Len));
       expect(t2Len, lessThan(t3Len));
+    });
+
+    test("secret round trips and remains usable", () {
+      final parts = List.generate(
+        3,
+        (i) => DkgPart1(
+          identifier: Identifier.fromUint16(i + 1),
+          threshold: 2,
+          n: 3,
+        ),
+      );
+      final bytes = parts.first.secret.toBytes();
+      final restored = DkgRound1Secret.fromBytes(bytes);
+      parts.first.secret.dispose();
+      final commitments = DkgCommitmentSet([
+        for (var i = 0; i < parts.length; i++)
+          (Identifier.fromUint16(i + 1), parts[i].public),
+      ]);
+
+      expect(
+        DkgPart2(
+          identifier: id,
+          round1Secret: restored,
+          commitments: commitments,
+        ).sharesToGive,
+        hasLength(2),
+      );
+      for (final invalid in [
+        Uint8List(0),
+        Uint8List.sublistView(bytes, 1),
+        Uint8List.fromList([...bytes, 0]),
+      ]) {
+        expect(
+          () => DkgRound1Secret.fromBytes(invalid),
+          throwsA(isA<InvalidDkgRound1Secret>()),
+        );
+      }
     });
 
     test("invalid round 1", () {

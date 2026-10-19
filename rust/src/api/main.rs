@@ -135,6 +135,21 @@ pub fn dkg_part_1(
 }
 
 #[frb(sync)]
+pub fn dkg_round_1_secret_from_bytes(bytes: Vec<u8>) -> Result<DkgRound1SecretOpaque> {
+    Ok(DkgRound1SecretOpaque(from_bytes(
+        bytes,
+        dkg::round1::SecretPackage::deserialize,
+        dkg::round1::SecretPackage::serialize,
+        "Round-one DKG secret",
+    )?))
+}
+
+#[frb(sync)]
+pub fn dkg_round_1_secret_to_bytes(secret: &DkgRound1SecretOpaque) -> Result<Vec<u8>> {
+    Ok(secret.0.serialize()?)
+}
+
+#[frb(sync)]
 pub fn public_commitment_from_bytes(bytes: Vec<u8>) -> Result<DkgPublicCommitmentOpaque> {
     Ok(DkgPublicCommitmentOpaque(from_bytes(
         bytes,
@@ -172,6 +187,22 @@ impl DkgCommitmentForIdentifier {
 
 #[frb(opaque)]
 pub struct DkgRound2SecretOpaque(dkg::round2::SecretPackage);
+
+#[frb(sync)]
+pub fn dkg_round_2_secret_from_bytes(bytes: Vec<u8>) -> Result<DkgRound2SecretOpaque> {
+    Ok(DkgRound2SecretOpaque(from_bytes(
+        bytes,
+        dkg::round2::SecretPackage::deserialize,
+        dkg::round2::SecretPackage::serialize,
+        "Round-two DKG secret",
+    )?))
+}
+
+#[frb(sync)]
+pub fn dkg_round_2_secret_to_bytes(secret: &DkgRound2SecretOpaque) -> Result<Vec<u8>> {
+    Ok(secret.0.serialize()?)
+}
+
 #[frb(opaque)]
 #[derive(Clone)]
 pub struct DkgShareToGiveOpaque(dkg::round2::Package);

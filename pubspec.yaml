@@ -1,6 +1,6 @@
 name: frosty
 description: FROST threshold Schnorr signatures using an underlying Rust library
-version: 5.0.1
+version: 5.1.0
 repository: https://github.com/peerchemist/frosty
 
 environment:
