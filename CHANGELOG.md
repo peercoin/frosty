@@ -1,6 +1,9 @@
 ## 5.1.0
 
 - Add byte export/import for round-one and round-two DKG secrets.
+- Validate restored DKG secrets against their commitments and check the final
+  private/public share pair. Avoid caching secret bytes and zeroize native DKG
+  secrets and temporary import buffers when released.
 
 ## 5.0.1
 

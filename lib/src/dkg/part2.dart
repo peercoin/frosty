@@ -18,24 +18,29 @@ class InvalidDkgRound2Secret extends MessageException {
 /// The secret from part 2 that is to be held until part 3.
 ///
 /// Bytes returned by [toBytes] contain sensitive secret material. Callers that
-/// persist them must protect them with encrypted storage and delete them when
-/// they are no longer needed. After part 3 this object can be disposed with
-/// [dispose()].
+/// persist them must use authenticated encryption and delete them when they are
+/// no longer needed. Clear plaintext byte buffers after use. After part 3 this
+/// object can be disposed with [dispose()], which does not erase exported
+/// buffers or other copies made by the runtime.
 class DkgRound2Secret
     extends WritableRustObjectWrapper<rust.DkgRound2SecretOpaque> {
   DkgRound2Secret.fromUnderlying(super._underlying);
 
-  /// Restores a round-two secret previously obtained from [toBytes].
+  /// Restores a round-two secret previously obtained from [toBytes]. The input
+  /// buffer is not retained and can be cleared after this constructor returns.
   DkgRound2Secret.fromBytes(Uint8List data)
     : super(
         handleGetObject(
           () => rust.dkgRound2SecretFromBytes(bytes: data),
           (e) => InvalidDkgRound2Secret(e),
         ),
-        data,
       );
 
-  /// Exports sensitive secret material so this DKG round can be resumed.
+  /// Exports a fresh, uncached buffer of sensitive secret material so this DKG
+  /// round can be resumed with the same participant and commitment set.
+  @override
+  Uint8List toBytes() => serializeImpl();
+
   @override
   Uint8List serializeImpl() => rust.dkgRound2SecretToBytes(secret: underlying);
 }

@@ -77,5 +77,25 @@ void main() {
       expectError(2, 0x10000);
       expectError(3, 2);
     });
+
+    test("secret buffers can be cleared without corrupting later exports", () {
+      final secret = DkgPart1(identifier: id, threshold: 2, n: 3).secret;
+      final bytes = secret.toBytes();
+      final expected = Uint8List.fromList(bytes);
+      final restored = DkgRound1Secret.fromBytes(bytes);
+
+      bytes.fillRange(0, bytes.length, 0);
+      expect(secret.toBytes(), expected);
+      expect(restored.toBytes(), expected);
+
+      final exported = restored.toBytes();
+      exported.fillRange(0, exported.length, 0);
+      expect(restored.toBytes(), expected);
+
+      secret.dispose();
+      restored.dispose();
+      expect(() => secret.toBytes(), throwsA(isA<UseAfterFree>()));
+      expect(() => restored.toBytes(), throwsA(isA<UseAfterFree>()));
+    });
   });
 }

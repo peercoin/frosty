@@ -54,8 +54,8 @@ jobs:
       - name: Verify Rust formatting
         run: cargo fmt --check --manifest-path rust/Cargo.toml
 
-      - name: Check Rust library
-        run: cargo check --locked --manifest-path rust/Cargo.toml
+      - name: Run Rust tests
+        run: cargo test --locked --manifest-path rust/Cargo.toml
 
       - name: Run Dart tests
         run: dart test

@@ -81,6 +81,10 @@ void main() {
       ).participantInfo;
 
       expect(info.private.identifier, ids.first);
+      expect(
+        info.private.share.pubkey,
+        info.publicShares.list.singleWhere((entry) => entry.$1 == ids.first).$2,
+      );
       for (final invalid in [
         Uint8List(0),
         Uint8List.sublistView(bytes, 1),
@@ -91,6 +95,39 @@ void main() {
           throwsA(isA<InvalidDkgRound2Secret>()),
         );
       }
+    });
+
+    test("secret buffers can be cleared without corrupting later exports", () {
+      final secret = eachPart2.first.secret;
+      final bytes = secret.toBytes();
+      final expected = Uint8List.fromList(bytes);
+      final restored = DkgRound2Secret.fromBytes(bytes);
+
+      bytes.fillRange(0, bytes.length, 0);
+      expect(secret.toBytes(), expected);
+      expect(restored.toBytes(), expected);
+
+      final exported = restored.toBytes();
+      exported.fillRange(0, exported.length, 0);
+      expect(restored.toBytes(), expected);
+
+      secret.dispose();
+      restored.dispose();
+      expect(() => secret.toBytes(), throwsA(isA<UseAfterFree>()));
+      expect(() => restored.toBytes(), throwsA(isA<UseAfterFree>()));
+    });
+
+    test("rejects a checkpoint with an altered private scalar", () {
+      final bytes = eachPart2.first.secret.toBytes();
+      // This fixture ends in the 32-byte scalar followed by the single-byte
+      // threshold (2) and participant count (3) in the upstream postcard format.
+      expect(bytes[bytes.length - 2], 2);
+      expect(bytes.last, 3);
+      bytes[bytes.length - 3] ^= 1;
+      expect(
+        () => DkgRound2Secret.fromBytes(bytes),
+        throwsA(isA<InvalidDkgRound2Secret>()),
+      );
     });
 
     void expectUseAfterFree() {
