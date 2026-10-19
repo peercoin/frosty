@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:frosty/src/helpers/message_exception.dart';
 import 'package:frosty/src/identifier.dart';
+import 'package:frosty/src/rust_bindings/invalid_object.dart';
 import 'package:frosty/src/rust_bindings/rust_api.dart' as rust;
 import 'package:frosty/src/rust_bindings/rust_object_wrapper.dart';
 
@@ -7,10 +10,43 @@ import 'commitment_set.dart';
 import 'part1.dart';
 import 'share_to_give.dart';
 
-/// The secret from part 2 that is to be held until part 3. After part 3 this
-/// can be disposed of with [dispose()].
-class DkgRound2Secret extends RustObjectWrapper<rust.DkgRound2SecretOpaque> {
+/// Thrown when bytes are not a valid round-two DKG secret.
+class InvalidDkgRound2Secret extends MessageException {
+  InvalidDkgRound2Secret(super.message);
+}
+
+/// The secret from part 2 that is to be held until part 3.
+///
+/// Bytes returned by [toBytes] contain sensitive secret material. Callers that
+/// persist them must use authenticated encryption and delete them when they are
+/// no longer needed. Clear plaintext byte buffers after use. After part 3 this
+/// object can be disposed with [dispose()], which does not erase exported
+/// buffers or other copies made by the runtime.
+/// Store the ceremony ID, participant identity, and agreed commitment-set hash
+/// together with the secret under authenticated encryption. On restore, verify
+/// that context and reject completed or abandoned ceremonies; these bytes alone
+/// do not provide replay protection.
+class DkgRound2Secret
+    extends WritableRustObjectWrapper<rust.DkgRound2SecretOpaque> {
   DkgRound2Secret.fromUnderlying(super._underlying);
+
+  /// Restores a round-two secret previously obtained from [toBytes]. The input
+  /// buffer is not retained and can be cleared after this constructor returns.
+  DkgRound2Secret.fromBytes(Uint8List data)
+    : super(
+        handleGetObject(
+          () => rust.dkgRound2SecretFromBytes(bytes: data),
+          (e) => InvalidDkgRound2Secret(e),
+        ),
+      );
+
+  /// Exports a fresh, uncached buffer of sensitive secret material so this DKG
+  /// round can be resumed with the same participant and commitment set.
+  @override
+  Uint8List toBytes() => serializeImpl();
+
+  @override
+  Uint8List serializeImpl() => rust.dkgRound2SecretToBytes(secret: underlying);
 }
 
 /// Thrown when data provided into part 2 is not valid
@@ -49,7 +85,8 @@ class DkgPart2 {
   ///
   /// The [commitments] must be the same as received by all other participants.
   /// The participant should verify signatures from each participant for the
-  /// commitment set hash.
+  /// commitment set hash. The secret's identifier and public commitment must
+  /// match this participant's entry in the set.
   DkgPart2({
     required Identifier identifier,
     required DkgRound1Secret round1Secret,
@@ -57,8 +94,9 @@ class DkgPart2 {
   }) {
     try {
       final record = rust.dkgPart2(
+        identifier: identifier.underlying,
         round1Secret: round1Secret.underlying,
-        round1Commitments: commitments.nativeListForId(identifier),
+        round1Commitments: commitments.nativeList,
       );
 
       secret = DkgRound2Secret.fromUnderlying(record.$1);

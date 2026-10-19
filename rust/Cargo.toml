@@ -13,8 +13,10 @@ anyhow = "1.0.75"
 aes-gcm = "0.10.3"
 flutter_rust_bridge = "=2.13.0"
 frost-secp256k1-tr = "2.1.0"
-frost-core = "2.2.0"
+# Access polynomial coefficients to validate restored DKG secrets.
+frost-core = { version = "2.2.0", features = ["internals"] }
 getrandom = { version = "0.2", features = ["js"] }
+zeroize = "1.8.2"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = "=0.2.106"

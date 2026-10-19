@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:coinlib/coinlib.dart' as cl;
 import 'package:frosty/frosty.dart';
 import 'package:test/test.dart';
@@ -65,6 +67,137 @@ void main() {
 
       // Expect public shares to be identical and encode to the same bytes
       expect(infos.map((i) => i.publicShares.toHex()).toSet().length, 1);
+    });
+
+    test("round-two secret round trips and remains usable", () {
+      final bytes = eachPart2.first.secret.toBytes();
+      final restored = DkgRound2Secret.fromBytes(bytes);
+      eachPart2.first.secret.dispose();
+      final info = DkgPart3(
+        identifier: ids.first,
+        round2Secret: restored,
+        commitments: commitmentSet,
+        receivedShares: eachReceivedShares.first,
+      ).participantInfo;
+
+      expect(info.private.identifier, ids.first);
+      expect(
+        info.private.share.pubkey,
+        info.publicShares.list.singleWhere((entry) => entry.$1 == ids.first).$2,
+      );
+      for (final invalid in [
+        Uint8List(0),
+        Uint8List.sublistView(bytes, 1),
+        Uint8List.fromList([...bytes, 0]),
+      ]) {
+        expect(
+          () => DkgRound2Secret.fromBytes(invalid),
+          throwsA(isA<InvalidDkgRound2Secret>()),
+        );
+      }
+    });
+
+    test("secret buffers can be cleared without corrupting later exports", () {
+      final secret = eachPart2.first.secret;
+      final bytes = secret.toBytes();
+      final expected = Uint8List.fromList(bytes);
+      final restored = DkgRound2Secret.fromBytes(bytes);
+
+      bytes.fillRange(0, bytes.length, 0);
+      expect(secret.toBytes(), expected);
+      expect(restored.toBytes(), expected);
+
+      final exported = restored.toBytes();
+      exported.fillRange(0, exported.length, 0);
+      expect(restored.toBytes(), expected);
+
+      secret.dispose();
+      restored.dispose();
+      expect(() => secret.toBytes(), throwsA(isA<UseAfterFree>()));
+      expect(() => restored.toBytes(), throwsA(isA<UseAfterFree>()));
+    });
+
+    test("rejects a checkpoint with an altered private scalar", () {
+      final bytes = eachPart2.first.secret.toBytes();
+      // This fixture ends in the 32-byte scalar followed by the single-byte
+      // threshold (2) and participant count (3) in the upstream postcard format.
+      expect(bytes[bytes.length - 2], 2);
+      expect(bytes.last, 3);
+      bytes[bytes.length - 3] ^= 1;
+      expect(
+        () => DkgRound2Secret.fromBytes(bytes),
+        throwsA(isA<InvalidDkgRound2Secret>()),
+      );
+    });
+
+    test("rejects a restored secret from another ceremony", () {
+      final (otherIds, otherParts, otherCommitments) = genPart1();
+      final otherPart2 = DkgPart2(
+        identifier: otherIds.first,
+        round1Secret: otherParts.first.secret,
+        commitments: otherCommitments,
+      );
+      final restored = DkgRound2Secret.fromBytes(otherPart2.secret.toBytes());
+      addTearDown(restored.dispose);
+
+      expect(
+        () => DkgPart3(
+          identifier: ids.first,
+          round2Secret: restored,
+          commitments: commitmentSet,
+          receivedShares: eachReceivedShares.first,
+        ),
+        throwsA(
+          isA<InvalidPart3>().having(
+            (e) => e.message,
+            "message",
+            "DKG secret does not match the participant's commitment",
+          ),
+        ),
+      );
+    });
+
+    test("rejects a restored secret for another participant", () {
+      final restored = DkgRound2Secret.fromBytes(eachPart2[1].secret.toBytes());
+      addTearDown(restored.dispose);
+
+      expect(
+        () => DkgPart3(
+          identifier: ids.first,
+          round2Secret: restored,
+          commitments: commitmentSet,
+          receivedShares: eachReceivedShares.first,
+        ),
+        throwsA(
+          isA<InvalidPart3>().having(
+            (e) => e.message,
+            "message",
+            "DKG secret identifier does not match the participant",
+          ),
+        ),
+      );
+    });
+
+    test("requires the participant's commitment exactly once", () {
+      for (final pairs in [
+        commitmentSet.list.sublist(1),
+        [...commitmentSet.list, commitmentSet.list.first],
+        [
+          commitmentSet.list.first,
+          commitmentSet.list.first,
+          commitmentSet.list[1],
+        ],
+      ]) {
+        expect(
+          () => DkgPart3(
+            identifier: ids.first,
+            round2Secret: eachPart2.first.secret,
+            commitments: DkgCommitmentSet(pairs),
+            receivedShares: eachReceivedShares.first,
+          ),
+          throwsA(isA<InvalidPart3>()),
+        );
+      }
     });
 
     void expectUseAfterFree() {

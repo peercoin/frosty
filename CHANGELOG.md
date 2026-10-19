@@ -1,3 +1,8 @@
+## 5.1.0
+
+- Add secure byte export and import for round-one and round-two DKG secrets so
+  ceremonies can be resumed.
+
 ## 5.0.1
 
 - Update flutter_rust_bridge to ^2.13.0.

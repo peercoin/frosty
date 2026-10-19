@@ -40,7 +40,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.13.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1500927368;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -865786198;
 
 // Section: executor
 
@@ -344,6 +344,9 @@ fn wire__crate__api__main__dkg_part_2_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_identifier = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IdentifierOpaque>,
+            >>::sse_decode(&mut deserializer);
             let api_round_1_secret = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgRound1SecretOpaque>,
             >>::sse_decode(&mut deserializer);
@@ -351,26 +354,35 @@ fn wire__crate__api__main__dkg_part_2_impl(
                 <Vec<crate::api::main::DkgCommitmentForIdentifier>>::sse_decode(&mut deserializer);
             deserializer.end();
             transform_result_sse::<_, crate::api::main::DkgRound2Error>((move || {
+                let mut api_identifier_guard = None;
                 let mut api_round_1_secret_guard = None;
                 let decode_indices_ =
                     flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
                         flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                            &api_round_1_secret,
+                            &api_identifier,
                             0,
+                            false,
+                        ),
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_round_1_secret,
+                            1,
                             false,
                         ),
                     ]);
                 for i in decode_indices_ {
                     match i {
-                        0 => {
+                        0 => api_identifier_guard = Some(api_identifier.lockable_decode_sync_ref()),
+                        1 => {
                             api_round_1_secret_guard =
                                 Some(api_round_1_secret.lockable_decode_sync_ref())
                         }
                         _ => unreachable!(),
                     }
                 }
+                let api_identifier_guard = api_identifier_guard.unwrap();
                 let api_round_1_secret_guard = api_round_1_secret_guard.unwrap();
                 let output_ok = crate::api::main::dkg_part_2(
+                    &*api_identifier_guard,
                     &*api_round_1_secret_guard,
                     api_round_1_commitments,
                 )?;
@@ -400,6 +412,9 @@ fn wire__crate__api__main__dkg_part_3_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_identifier = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IdentifierOpaque>,
+            >>::sse_decode(&mut deserializer);
             let api_round_2_secret = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgRound2SecretOpaque>,
             >>::sse_decode(&mut deserializer);
@@ -410,30 +425,125 @@ fn wire__crate__api__main__dkg_part_3_impl(
             deserializer.end();
             transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                 (move || {
+                    let mut api_identifier_guard = None;
                     let mut api_round_2_secret_guard = None;
                     let decode_indices_ =
                         flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
                             flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                &api_round_2_secret,
+                                &api_identifier,
                                 0,
+                                false,
+                            ),
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_round_2_secret,
+                                1,
                                 false,
                             ),
                         ]);
                     for i in decode_indices_ {
                         match i {
                             0 => {
+                                api_identifier_guard =
+                                    Some(api_identifier.lockable_decode_sync_ref())
+                            }
+                            1 => {
                                 api_round_2_secret_guard =
                                     Some(api_round_2_secret.lockable_decode_sync_ref())
                             }
                             _ => unreachable!(),
                         }
                     }
+                    let api_identifier_guard = api_identifier_guard.unwrap();
                     let api_round_2_secret_guard = api_round_2_secret_guard.unwrap();
                     let output_ok = crate::api::main::dkg_part_3(
+                        &*api_identifier_guard,
                         &*api_round_2_secret_guard,
                         api_round_1_commitments,
                         api_round_2_shares,
                     )?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__main__dkg_round_1_secret_from_bytes_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dkg_round_1_secret_from_bytes",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_bytes = <Vec<u8>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::main::dkg_round_1_secret_from_bytes(api_bytes)?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__main__dkg_round_1_secret_to_bytes_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dkg_round_1_secret_to_bytes",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_secret = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgRound1SecretOpaque>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let mut api_secret_guard = None;
+                    let decode_indices_ =
+                        flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_secret,
+                                0,
+                                false,
+                            ),
+                        ]);
+                    for i in decode_indices_ {
+                        match i {
+                            0 => api_secret_guard = Some(api_secret.lockable_decode_sync_ref()),
+                            _ => unreachable!(),
+                        }
+                    }
+                    let api_secret_guard = api_secret_guard.unwrap();
+                    let output_ok =
+                        crate::api::main::dkg_round_1_secret_to_bytes(&*api_secret_guard)?;
                     std::result::Result::Ok(output_ok)
                 })(),
             )
@@ -500,6 +610,89 @@ fn wire__crate__api__main__dkg_round_2_identifier_and_share_from_refs_impl(
                     ))?;
                 std::result::Result::Ok(output_ok)
             })())
+        },
+    )
+}
+fn wire__crate__api__main__dkg_round_2_secret_from_bytes_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dkg_round_2_secret_from_bytes",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_bytes = <Vec<u8>>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let output_ok = crate::api::main::dkg_round_2_secret_from_bytes(api_bytes)?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
+        },
+    )
+}
+fn wire__crate__api__main__dkg_round_2_secret_to_bytes_impl(
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "dkg_round_2_secret_to_bytes",
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_secret = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgRound2SecretOpaque>,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                (move || {
+                    let mut api_secret_guard = None;
+                    let decode_indices_ =
+                        flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_secret,
+                                0,
+                                false,
+                            ),
+                        ]);
+                    for i in decode_indices_ {
+                        match i {
+                            0 => api_secret_guard = Some(api_secret.lockable_decode_sync_ref()),
+                            _ => unreachable!(),
+                        }
+                    }
+                    let api_secret_guard = api_secret_guard.unwrap();
+                    let output_ok =
+                        crate::api::main::dkg_round_2_secret_to_bytes(&*api_secret_guard)?;
+                    std::result::Result::Ok(output_ok)
+                })(),
+            )
         },
     )
 }
@@ -1972,47 +2165,55 @@ fn pde_ffi_dispatcher_sync_impl(
         6 => wire__crate__api__main__dkg_part_1_impl(ptr, rust_vec_len, data_len),
         7 => wire__crate__api__main__dkg_part_2_impl(ptr, rust_vec_len, data_len),
         8 => wire__crate__api__main__dkg_part_3_impl(ptr, rust_vec_len, data_len),
-        9 => wire__crate__api__main__dkg_round_2_identifier_and_share_from_refs_impl(
+        9 => {
+            wire__crate__api__main__dkg_round_1_secret_from_bytes_impl(ptr, rust_vec_len, data_len)
+        }
+        10 => wire__crate__api__main__dkg_round_1_secret_to_bytes_impl(ptr, rust_vec_len, data_len),
+        11 => wire__crate__api__main__dkg_round_2_identifier_and_share_from_refs_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        10 => wire__crate__api__main__identifier_and_public_share_from_ref_impl(
+        12 => {
+            wire__crate__api__main__dkg_round_2_secret_from_bytes_impl(ptr, rust_vec_len, data_len)
+        }
+        13 => wire__crate__api__main__dkg_round_2_secret_to_bytes_impl(ptr, rust_vec_len, data_len),
+        14 => wire__crate__api__main__identifier_and_public_share_from_ref_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        11 => wire__crate__api__main__identifier_and_signature_share_from_refs_impl(
+        15 => wire__crate__api__main__identifier_and_signature_share_from_refs_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        12 => wire__crate__api__main__identifier_and_signing_commitment_from_refs_impl(
+        16 => wire__crate__api__main__identifier_and_signing_commitment_from_refs_impl(
             ptr,
             rust_vec_len,
             data_len,
         ),
-        13 => wire__crate__api__main__identifier_from_bytes_impl(ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__main__identifier_from_string_impl(ptr, rust_vec_len, data_len),
-        15 => wire__crate__api__main__identifier_from_u16_impl(ptr, rust_vec_len, data_len),
-        16 => wire__crate__api__main__identifier_to_bytes_impl(ptr, rust_vec_len, data_len),
-        17 => {
+        17 => wire__crate__api__main__identifier_from_bytes_impl(ptr, rust_vec_len, data_len),
+        18 => wire__crate__api__main__identifier_from_string_impl(ptr, rust_vec_len, data_len),
+        19 => wire__crate__api__main__identifier_from_u16_impl(ptr, rust_vec_len, data_len),
+        20 => wire__crate__api__main__identifier_to_bytes_impl(ptr, rust_vec_len, data_len),
+        21 => {
             wire__crate__api__main__public_commitment_from_bytes_impl(ptr, rust_vec_len, data_len)
         }
-        18 => wire__crate__api__main__public_commitment_to_bytes_impl(ptr, rust_vec_len, data_len),
-        19 => wire__crate__api__main__share_to_give_from_bytes_impl(ptr, rust_vec_len, data_len),
-        20 => wire__crate__api__main__share_to_give_to_bytes_impl(ptr, rust_vec_len, data_len),
-        21 => wire__crate__api__main__sign_part_1_impl(ptr, rust_vec_len, data_len),
-        22 => wire__crate__api__main__sign_part_2_impl(ptr, rust_vec_len, data_len),
-        23 => wire__crate__api__main__signature_share_from_bytes_impl(ptr, rust_vec_len, data_len),
-        24 => wire__crate__api__main__signature_share_to_bytes_impl(ptr, rust_vec_len, data_len),
-        25 => {
+        22 => wire__crate__api__main__public_commitment_to_bytes_impl(ptr, rust_vec_len, data_len),
+        23 => wire__crate__api__main__share_to_give_from_bytes_impl(ptr, rust_vec_len, data_len),
+        24 => wire__crate__api__main__share_to_give_to_bytes_impl(ptr, rust_vec_len, data_len),
+        25 => wire__crate__api__main__sign_part_1_impl(ptr, rust_vec_len, data_len),
+        26 => wire__crate__api__main__sign_part_2_impl(ptr, rust_vec_len, data_len),
+        27 => wire__crate__api__main__signature_share_from_bytes_impl(ptr, rust_vec_len, data_len),
+        28 => wire__crate__api__main__signature_share_to_bytes_impl(ptr, rust_vec_len, data_len),
+        29 => {
             wire__crate__api__main__signing_commitment_from_bytes_impl(ptr, rust_vec_len, data_len)
         }
-        26 => wire__crate__api__main__signing_commitment_to_bytes_impl(ptr, rust_vec_len, data_len),
-        27 => wire__crate__api__main__signing_nonces_from_bytes_impl(ptr, rust_vec_len, data_len),
-        28 => wire__crate__api__main__signing_nonces_to_bytes_impl(ptr, rust_vec_len, data_len),
-        29 => wire__crate__api__main__verify_signature_share_impl(ptr, rust_vec_len, data_len),
+        30 => wire__crate__api__main__signing_commitment_to_bytes_impl(ptr, rust_vec_len, data_len),
+        31 => wire__crate__api__main__signing_nonces_from_bytes_impl(ptr, rust_vec_len, data_len),
+        32 => wire__crate__api__main__signing_nonces_to_bytes_impl(ptr, rust_vec_len, data_len),
+        33 => wire__crate__api__main__verify_signature_share_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }

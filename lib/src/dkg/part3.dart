@@ -33,7 +33,9 @@ class DkgPart3 {
   /// the commitments from [DkgPart1] and all received shares from [DkgPart2].
   ///
   /// The received shares should be authenticated via a signature from the
-  /// sending participant.
+  /// sending participant. The secret's identifier and public commitment must
+  /// match this participant's entry in [commitments], which must be the same
+  /// set used in part 2.
   DkgPart3({
     required Identifier identifier,
     required DkgRound2Secret round2Secret,
@@ -42,8 +44,9 @@ class DkgPart3 {
   }) {
     try {
       final record = rust.dkgPart3(
+        identifier: identifier.underlying,
         round2Secret: round2Secret.underlying,
-        round1Commitments: commitments.nativeListForId(identifier),
+        round1Commitments: commitments.nativeList,
         round2Shares: receivedShares.entries
             .map(
               (v) => rust.DkgRound2IdentifierAndShare.fromRefs(
