@@ -46,7 +46,18 @@ class DkgCommitmentSet with cl.Writable {
     ]),
   );
 
-  /// Obtains the underlying native list to past to Rust with the entry removed
+  /// Obtains all native commitments, including the calling participant's entry
+  /// so it can be checked against the DKG secret.
+  List<rust.DkgCommitmentForIdentifier> get nativeList => list
+      .map(
+        (v) => rust.DkgCommitmentForIdentifier.fromRefs(
+          identifier: v.$1.underlying,
+          commitment: v.$2.underlying,
+        ),
+      )
+      .toList();
+
+  /// Obtains the underlying native list to pass to Rust with the entry removed
   /// for the calling participant given by [id].
   List<rust.DkgCommitmentForIdentifier> nativeListForId(Identifier id) => list
       .where((e) => e.$1 != id)

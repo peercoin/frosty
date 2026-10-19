@@ -130,6 +130,76 @@ void main() {
       );
     });
 
+    test("rejects a restored secret from another ceremony", () {
+      final (otherIds, otherParts, otherCommitments) = genPart1();
+      final otherPart2 = DkgPart2(
+        identifier: otherIds.first,
+        round1Secret: otherParts.first.secret,
+        commitments: otherCommitments,
+      );
+      final restored = DkgRound2Secret.fromBytes(otherPart2.secret.toBytes());
+      addTearDown(restored.dispose);
+
+      expect(
+        () => DkgPart3(
+          identifier: ids.first,
+          round2Secret: restored,
+          commitments: commitmentSet,
+          receivedShares: eachReceivedShares.first,
+        ),
+        throwsA(
+          isA<InvalidPart3>().having(
+            (e) => e.message,
+            "message",
+            "DKG secret does not match the participant's commitment",
+          ),
+        ),
+      );
+    });
+
+    test("rejects a restored secret for another participant", () {
+      final restored = DkgRound2Secret.fromBytes(eachPart2[1].secret.toBytes());
+      addTearDown(restored.dispose);
+
+      expect(
+        () => DkgPart3(
+          identifier: ids.first,
+          round2Secret: restored,
+          commitments: commitmentSet,
+          receivedShares: eachReceivedShares.first,
+        ),
+        throwsA(
+          isA<InvalidPart3>().having(
+            (e) => e.message,
+            "message",
+            "DKG secret identifier does not match the participant",
+          ),
+        ),
+      );
+    });
+
+    test("requires the participant's commitment exactly once", () {
+      for (final pairs in [
+        commitmentSet.list.sublist(1),
+        [...commitmentSet.list, commitmentSet.list.first],
+        [
+          commitmentSet.list.first,
+          commitmentSet.list.first,
+          commitmentSet.list[1],
+        ],
+      ]) {
+        expect(
+          () => DkgPart3(
+            identifier: ids.first,
+            round2Secret: eachPart2.first.secret,
+            commitments: DkgCommitmentSet(pairs),
+            receivedShares: eachReceivedShares.first,
+          ),
+          throwsA(isA<InvalidPart3>()),
+        );
+      }
+    });
+
     void expectUseAfterFree() {
       expect(
         () => DkgPart3(

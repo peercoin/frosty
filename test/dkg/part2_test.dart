@@ -32,6 +32,70 @@ void main() {
       }
     });
 
+    test("rejects a restored secret from another ceremony", () {
+      final (_, otherParts, _) = genPart1();
+      final restored = DkgRound1Secret.fromBytes(
+        otherParts.first.secret.toBytes(),
+      );
+      addTearDown(restored.dispose);
+
+      expect(
+        () => DkgPart2(
+          identifier: ids.first,
+          round1Secret: restored,
+          commitments: commitmentSet,
+        ),
+        throwsA(
+          isA<InvalidPart2>().having(
+            (e) => e.message,
+            "message",
+            "DKG secret does not match the participant's commitment",
+          ),
+        ),
+      );
+    });
+
+    test("rejects a restored secret for another participant", () {
+      final restored = DkgRound1Secret.fromBytes(eachPart1[1].secret.toBytes());
+      addTearDown(restored.dispose);
+
+      expect(
+        () => DkgPart2(
+          identifier: ids.first,
+          round1Secret: restored,
+          commitments: commitmentSet,
+        ),
+        throwsA(
+          isA<InvalidPart2>().having(
+            (e) => e.message,
+            "message",
+            "DKG secret identifier does not match the participant",
+          ),
+        ),
+      );
+    });
+
+    test("requires the participant's commitment exactly once", () {
+      for (final pairs in [
+        commitmentSet.list.sublist(1),
+        [...commitmentSet.list, commitmentSet.list.first],
+        [
+          commitmentSet.list.first,
+          commitmentSet.list.first,
+          commitmentSet.list[1],
+        ],
+      ]) {
+        expect(
+          () => DkgPart2(
+            identifier: ids.first,
+            round1Secret: eachPart1.first.secret,
+            commitments: DkgCommitmentSet(pairs),
+          ),
+          throwsA(isA<InvalidPart2>()),
+        );
+      }
+    });
+
     void expectUseAfterFree() {
       expect(
         () => DkgPart2(

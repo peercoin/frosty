@@ -294,21 +294,53 @@ pub enum DkgRound2Error {
 
 type DkgRound2Data = (DkgRound2SecretOpaque, Vec<DkgRound2IdentifierAndShare>);
 
+// Validate the local entry before passing only the peers' commitments upstream.
+fn dkg_peer_commitments(
+    identifier: &IdentifierOpaque,
+    secret_identifier: &frost::Identifier,
+    secret_commitment: &frost::keys::VerifiableSecretSharingCommitment,
+    commitments: Vec<DkgCommitmentForIdentifier>,
+) -> Result<BTreeMap<frost::Identifier, dkg::round1::Package>> {
+    if &identifier.0 != secret_identifier {
+        return Err(anyhow!(
+            "DKG secret identifier does not match the participant"
+        ));
+    }
+
+    let mut map = BTreeMap::new();
+    for entry in commitments {
+        let id = entry.identifier.blocking_read().0;
+        let package = entry.commitment.blocking_read().0.clone();
+        if map.insert(id, package).is_some() {
+            return Err(anyhow!("Duplicate DKG participant identifier"));
+        }
+    }
+    let own = map
+        .remove(secret_identifier)
+        .ok_or_else(|| anyhow!("Missing the participant's DKG commitment"))?;
+    if own.commitment() != secret_commitment {
+        return Err(anyhow!(
+            "DKG secret does not match the participant's commitment"
+        ));
+    }
+    Ok(map)
+}
+
 #[frb(sync)]
 pub fn dkg_part_2(
+    identifier: &IdentifierOpaque,
     round_1_secret: &DkgRound1SecretOpaque,
     round_1_commitments: Vec<DkgCommitmentForIdentifier>,
 ) -> Result<DkgRound2Data, DkgRound2Error> {
-    // Convert vector into hashmap
-    let commitment_map = round_1_commitments
-        .into_iter()
-        .map(|v| {
-            (
-                v.identifier.blocking_read().0.clone(),
-                v.commitment.blocking_read().0.clone(),
-            )
-        })
-        .collect();
+    let commitment_map = dkg_peer_commitments(
+        identifier,
+        round_1_secret.0.identifier(),
+        round_1_secret.0.commitment(),
+        round_1_commitments,
+    )
+    .map_err(|e| DkgRound2Error::General {
+        message: e.to_string(),
+    })?;
 
     let result = dkg::part2(round_1_secret.0.clone(), &commitment_map).map_err(|e| match e {
         frost::Error::InvalidProofOfKnowledge {
@@ -380,21 +412,17 @@ type DkgPart3Result = Result<DkgRound3Data>;
 
 #[frb(sync)]
 pub fn dkg_part_3(
+    identifier: &IdentifierOpaque,
     round_2_secret: &DkgRound2SecretOpaque,
     round_1_commitments: Vec<DkgCommitmentForIdentifier>,
     round_2_shares: Vec<DkgRound2IdentifierAndShare>,
 ) -> DkgPart3Result {
-    // Convert vectors into hashmaps
-
-    let commitment_map = round_1_commitments
-        .into_iter()
-        .map(|v| {
-            (
-                v.identifier.blocking_read().0.clone(),
-                v.commitment.blocking_read().0.clone(),
-            )
-        })
-        .collect();
+    let commitment_map = dkg_peer_commitments(
+        identifier,
+        round_2_secret.0.identifier(),
+        round_2_secret.0.commitment(),
+        round_1_commitments,
+    )?;
 
     let secrets_map = round_2_shares
         .into_iter()
@@ -892,10 +920,9 @@ mod tests {
                 let commitments = first
                     .iter()
                     .enumerate()
-                    .filter(|(j, _)| i != *j)
                     .map(|(j, (_, public))| DkgCommitmentForIdentifier::from_refs(&ids[j], public))
                     .collect();
-                dkg_part_2(secret, commitments).ok().unwrap()
+                dkg_part_2(&ids[i], secret, commitments).ok().unwrap()
             })
             .collect();
         let secret = &second[0].0 .0;
@@ -907,7 +934,7 @@ mod tests {
             *secret.min_signers(),
             *secret.max_signers(),
         ));
-        let commitments = (1..3)
+        let commitments = (0..3)
             .map(|i| DkgCommitmentForIdentifier::from_refs(&ids[i], &first[i].1))
             .collect();
         let shares = (1..3)
@@ -920,7 +947,9 @@ mod tests {
                 DkgRound2IdentifierAndShare::from_refs(&ids[i], &share.secret.blocking_read())
             })
             .collect();
-        let error = dkg_part_3(&invalid, commitments, shares).err().unwrap();
+        let error = dkg_part_3(&ids[0], &invalid, commitments, shares)
+            .err()
+            .unwrap();
         assert_eq!(
             error.to_string(),
             "DKG private share does not match its public share"

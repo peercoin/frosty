@@ -344,6 +344,9 @@ fn wire__crate__api__main__dkg_part_2_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_identifier = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IdentifierOpaque>,
+            >>::sse_decode(&mut deserializer);
             let api_round_1_secret = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgRound1SecretOpaque>,
             >>::sse_decode(&mut deserializer);
@@ -351,26 +354,35 @@ fn wire__crate__api__main__dkg_part_2_impl(
                 <Vec<crate::api::main::DkgCommitmentForIdentifier>>::sse_decode(&mut deserializer);
             deserializer.end();
             transform_result_sse::<_, crate::api::main::DkgRound2Error>((move || {
+                let mut api_identifier_guard = None;
                 let mut api_round_1_secret_guard = None;
                 let decode_indices_ =
                     flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
                         flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                            &api_round_1_secret,
+                            &api_identifier,
                             0,
+                            false,
+                        ),
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                            &api_round_1_secret,
+                            1,
                             false,
                         ),
                     ]);
                 for i in decode_indices_ {
                     match i {
-                        0 => {
+                        0 => api_identifier_guard = Some(api_identifier.lockable_decode_sync_ref()),
+                        1 => {
                             api_round_1_secret_guard =
                                 Some(api_round_1_secret.lockable_decode_sync_ref())
                         }
                         _ => unreachable!(),
                     }
                 }
+                let api_identifier_guard = api_identifier_guard.unwrap();
                 let api_round_1_secret_guard = api_round_1_secret_guard.unwrap();
                 let output_ok = crate::api::main::dkg_part_2(
+                    &*api_identifier_guard,
                     &*api_round_1_secret_guard,
                     api_round_1_commitments,
                 )?;
@@ -400,6 +412,9 @@ fn wire__crate__api__main__dkg_part_3_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_identifier = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IdentifierOpaque>,
+            >>::sse_decode(&mut deserializer);
             let api_round_2_secret = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<DkgRound2SecretOpaque>,
             >>::sse_decode(&mut deserializer);
@@ -410,26 +425,38 @@ fn wire__crate__api__main__dkg_part_3_impl(
             deserializer.end();
             transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                 (move || {
+                    let mut api_identifier_guard = None;
                     let mut api_round_2_secret_guard = None;
                     let decode_indices_ =
                         flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
                             flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                &api_round_2_secret,
+                                &api_identifier,
                                 0,
+                                false,
+                            ),
+                            flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                &api_round_2_secret,
+                                1,
                                 false,
                             ),
                         ]);
                     for i in decode_indices_ {
                         match i {
                             0 => {
+                                api_identifier_guard =
+                                    Some(api_identifier.lockable_decode_sync_ref())
+                            }
+                            1 => {
                                 api_round_2_secret_guard =
                                     Some(api_round_2_secret.lockable_decode_sync_ref())
                             }
                             _ => unreachable!(),
                         }
                     }
+                    let api_identifier_guard = api_identifier_guard.unwrap();
                     let api_round_2_secret_guard = api_round_2_secret_guard.unwrap();
                     let output_ok = crate::api::main::dkg_part_3(
+                        &*api_identifier_guard,
                         &*api_round_2_secret_guard,
                         api_round_1_commitments,
                         api_round_2_shares,

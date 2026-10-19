@@ -117,11 +117,13 @@ abstract class RustLibApi extends BaseApi {
 
   (DkgRound2SecretOpaque, List<DkgRound2IdentifierAndShare>)
   crateApiMainDkgPart2({
+    required IdentifierOpaque identifier,
     required DkgRound1SecretOpaque round1Secret,
     required List<DkgCommitmentForIdentifier> round1Commitments,
   });
 
   DkgRound3Data crateApiMainDkgPart3({
+    required IdentifierOpaque identifier,
     required DkgRound2SecretOpaque round2Secret,
     required List<DkgCommitmentForIdentifier> round1Commitments,
     required List<DkgRound2IdentifierAndShare> round2Shares,
@@ -538,6 +540,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @override
   (DkgRound2SecretOpaque, List<DkgRound2IdentifierAndShare>)
   crateApiMainDkgPart2({
+    required IdentifierOpaque identifier,
     required DkgRound1SecretOpaque round1Secret,
     required List<DkgCommitmentForIdentifier> round1Commitments,
   }) {
@@ -545,6 +548,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SyncTask(
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+            identifier,
+            serializer,
+          );
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound1SecretOpaque(
             round1Secret,
             serializer,
@@ -561,7 +568,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeErrorData: sse_decode_dkg_round_2_error,
         ),
         constMeta: kCrateApiMainDkgPart2ConstMeta,
-        argValues: [round1Secret, round1Commitments],
+        argValues: [identifier, round1Secret, round1Commitments],
         apiImpl: this,
       ),
     );
@@ -569,11 +576,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiMainDkgPart2ConstMeta => const TaskConstMeta(
     debugName: "dkg_part_2",
-    argNames: ["round1Secret", "round1Commitments"],
+    argNames: ["identifier", "round1Secret", "round1Commitments"],
   );
 
   @override
   DkgRound3Data crateApiMainDkgPart3({
+    required IdentifierOpaque identifier,
     required DkgRound2SecretOpaque round2Secret,
     required List<DkgCommitmentForIdentifier> round1Commitments,
     required List<DkgRound2IdentifierAndShare> round2Shares,
@@ -582,6 +590,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SyncTask(
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIdentifierOpaque(
+            identifier,
+            serializer,
+          );
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerDkgRound2SecretOpaque(
             round2Secret,
             serializer,
@@ -601,7 +613,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeErrorData: sse_decode_AnyhowException,
         ),
         constMeta: kCrateApiMainDkgPart3ConstMeta,
-        argValues: [round2Secret, round1Commitments, round2Shares],
+        argValues: [identifier, round2Secret, round1Commitments, round2Shares],
         apiImpl: this,
       ),
     );
@@ -609,7 +621,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiMainDkgPart3ConstMeta => const TaskConstMeta(
     debugName: "dkg_part_3",
-    argNames: ["round2Secret", "round1Commitments", "round2Shares"],
+    argNames: [
+      "identifier",
+      "round2Secret",
+      "round1Commitments",
+      "round2Shares",
+    ],
   );
 
   @override

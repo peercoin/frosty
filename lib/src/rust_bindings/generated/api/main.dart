@@ -9,8 +9,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'main.freezed.dart';
 
-// These functions are ignored because they are not marked as `pub`: `construct_signing_package`, `from_bytes`, `get_cipher`, `vec_to_array`, `vector_to_group_key`, `vector_to_signing_share`, `vector_to_verifying_share`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`
+// These functions are ignored because they are not marked as `pub`: `construct_signing_package`, `dkg_peer_commitments`, `from_bytes`, `get_cipher`, `validate_dkg_parameters`, `vec_to_array`, `vector_to_group_key`, `vector_to_signing_share`, `vector_to_verifying_share`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `drop`, `drop`
 
 IdentifierOpaque identifierFromString({required String s}) =>
     RustLib.instance.api.crateApiMainIdentifierFromString(s: s);
@@ -57,9 +57,11 @@ Uint8List dkgRound2SecretToBytes({required DkgRound2SecretOpaque secret}) =>
     RustLib.instance.api.crateApiMainDkgRound2SecretToBytes(secret: secret);
 
 (DkgRound2SecretOpaque, List<DkgRound2IdentifierAndShare>) dkgPart2({
+  required IdentifierOpaque identifier,
   required DkgRound1SecretOpaque round1Secret,
   required List<DkgCommitmentForIdentifier> round1Commitments,
 }) => RustLib.instance.api.crateApiMainDkgPart2(
+  identifier: identifier,
   round1Secret: round1Secret,
   round1Commitments: round1Commitments,
 );
@@ -71,10 +73,12 @@ Uint8List shareToGiveToBytes({required DkgShareToGiveOpaque share}) =>
     RustLib.instance.api.crateApiMainShareToGiveToBytes(share: share);
 
 DkgRound3Data dkgPart3({
+  required IdentifierOpaque identifier,
   required DkgRound2SecretOpaque round2Secret,
   required List<DkgCommitmentForIdentifier> round1Commitments,
   required List<DkgRound2IdentifierAndShare> round2Shares,
 }) => RustLib.instance.api.crateApiMainDkgPart3(
+  identifier: identifier,
   round2Secret: round2Secret,
   round1Commitments: round1Commitments,
   round2Shares: round2Shares,

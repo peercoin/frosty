@@ -20,6 +20,10 @@ class InvalidDkgRound1Secret extends MessageException {
 /// no longer needed. Clear plaintext byte buffers after use. After part 2 this
 /// object can be disposed with [dispose()], which does not erase exported
 /// buffers or other copies made by the runtime.
+/// Store the ceremony ID, participant identity, and agreed commitment-set hash
+/// together with the secret under authenticated encryption. On restore, verify
+/// that context and reject completed or abandoned ceremonies; these bytes alone
+/// do not provide replay protection.
 class DkgRound1Secret
     extends WritableRustObjectWrapper<rust.DkgRound1SecretOpaque> {
   DkgRound1Secret.fromUnderlying(super._underlying);

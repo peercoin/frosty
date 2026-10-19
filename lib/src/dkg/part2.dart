@@ -22,6 +22,10 @@ class InvalidDkgRound2Secret extends MessageException {
 /// no longer needed. Clear plaintext byte buffers after use. After part 3 this
 /// object can be disposed with [dispose()], which does not erase exported
 /// buffers or other copies made by the runtime.
+/// Store the ceremony ID, participant identity, and agreed commitment-set hash
+/// together with the secret under authenticated encryption. On restore, verify
+/// that context and reject completed or abandoned ceremonies; these bytes alone
+/// do not provide replay protection.
 class DkgRound2Secret
     extends WritableRustObjectWrapper<rust.DkgRound2SecretOpaque> {
   DkgRound2Secret.fromUnderlying(super._underlying);
@@ -81,7 +85,8 @@ class DkgPart2 {
   ///
   /// The [commitments] must be the same as received by all other participants.
   /// The participant should verify signatures from each participant for the
-  /// commitment set hash.
+  /// commitment set hash. The secret's identifier and public commitment must
+  /// match this participant's entry in the set.
   DkgPart2({
     required Identifier identifier,
     required DkgRound1Secret round1Secret,
@@ -89,8 +94,9 @@ class DkgPart2 {
   }) {
     try {
       final record = rust.dkgPart2(
+        identifier: identifier.underlying,
         round1Secret: round1Secret.underlying,
-        round1Commitments: commitments.nativeListForId(identifier),
+        round1Commitments: commitments.nativeList,
       );
 
       secret = DkgRound2Secret.fromUnderlying(record.$1);
